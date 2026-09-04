@@ -675,7 +675,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 모바일 좌/우 스와이프(Swipe) 제어 로직
+        // 📌 모바일 좌/우 스와이프(Swipe) 제어 및 표 스크롤 예외 처리 로직
         var touchstartX = 0;
         var touchendX = 0;
         var touchstartY = 0;
@@ -687,6 +687,10 @@
         }, false);
 
         document.addEventListener('touchend', function(event) {
+            // 📌 표(table) 영역 안에서 터치 동작이 발생한 경우 페이지 스와이프 방지
+            if (event.target.closest('.table-wrapper') || event.target.closest('.table')) {
+                return;
+            }
             touchendX = event.changedTouches[0].screenX;
             touchendY = event.changedTouches[0].screenY;
             handleSwipe();
