@@ -167,7 +167,7 @@
             padding: 8px 8px;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 0.78em;
+            font-size: 0.75em;
             cursor: pointer;
             white-space: nowrap;
             min-height: 40px;
@@ -190,7 +190,7 @@
             cursor: pointer;
             outline: none;
             min-height: 40px;
-            max-width: 125px;
+            max-width: 120px;
         }
 
         .tab-content { display: none; }
@@ -462,7 +462,6 @@
 </head>
 <body>
 
-    <!-- 🔒 인증 레이어 -->
     <div id="sys-auth-layer" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; z-index:99999; display:flex; justify-content:center; align-items:center; padding:20px;">
         <div style="background:#ffffff; padding:28px 24px; border-radius:18px; width:100%; max-width:320px; text-align:center; box-shadow:0 12px 30px rgba(0,0,0,0.25);">
             <div style="font-size:32px; margin-bottom:8px;">📌</div>
@@ -474,7 +473,6 @@
         </div>
     </div>
 
-    <!-- 📱 메인 앱 뷰포트 -->
     <div class="container" id="app-viewport">
         
         <div class="control-bar-group">
@@ -504,20 +502,19 @@
             </div>
         </div>
 
-        <!-- 📑 상단 탭 메뉴 -->
         <div class="tab-menu">
             <div class="tab-menu-left">
                 <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">Ch.01</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">Ch.01-1</button>
-                <button class="tab-btn" onclick="alert('Chapter 02는 준비 중입니다!');">Ch.02</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">Ch.03</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">복습예제</button>
+                <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!');">II. 설비 및 구조의 이해</button>
+                <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!');">III. 복합개념 정리</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
             </div>
             <select class="changelog-select" onchange="handleChangelogSelect(this)">
-                <option value="" disabled selected>📌 V2.0.0 내역</option>
-                <option value="v20">📂 V2.0.0: Ch.01 대단원 파트별 구조 개편</option>
+                <option value="" disabled selected>📌 V2.1.0 내역</option>
+                <option value="v21">📂 V2.1.0: 대단원 명칭 및 파트별 구조 개편</option>
                 <option value="v191">🔄 V1.9.1: 기출문제 초기화 오류 수정</option>
-                <option value="v18">💡 V1.8.0: Ch.01-1 복습 예제 추가</option>
             </select>
         </div>
 
@@ -529,19 +526,17 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>수정일: 2026.09.04</p>
-                    <p>버전: V2.0.0 (대단원 파트 개편)</p>
+                    <p>버전: V2.1.0 (대단원 구조 개편 완료)</p>
                 </div>
             </div>
         </div>
 
-        <!-- Chapter 01 대단원 탭 (파트별 목차 메뉴) -->
         <div id="tab-ch1" class="tab-content">
-            <h1>소방안전관리자 2급 - <br>Chapter 01. 과목별 핵심 요약</h1>
+            <h1>소방안전관리자 2급 - <br>I. 이론과 개념</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
                 <span>만든이: 꾸누</span> | <span>수정일: 2026.09.04</span>
             </div>
 
-            <!-- Ch.01 메인 파트 선택 그리드 -->
             <div id="ch1-main-menu">
                 <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 학습 파트 선택</div>
                 <div class="sub-nav-grid">
@@ -556,7 +551,6 @@
                 </div>
             </div>
 
-            <!-- Part1-1 내부 상세 목차 및 소페이지 1~9 -->
             <div id="ch1-part1-1-container" style="display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <button class="font-btn" onclick="showCh1MainMenu()" style="font-size: 0.8em;">◀ 파트 목록으로</button>
@@ -577,7 +571,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 1 ~ 9 -->
                 <div id="sub-page-1" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">1 / 9 PAGE</div>
@@ -852,17 +845,15 @@
             </div>
         </div>
 
-        <!-- Chapter 01-1 복습 예제 탭 -->
         <div id="tab-ch1-1" class="tab-content">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #3b82f6; padding-bottom: 8px; margin-top: 5px;">
-                <h1 style="margin: 0; border: none; padding: 0;">Chapter 01-1. 복습 예제</h1>
+                <h1 style="margin: 0; border: none; padding: 0;">복습 예제</h1>
                 <button class="font-btn" onclick="resetAllQuestions('ch11-', 2)" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff; border-color: #dc2626;">🔄 전체 초기화</button>
             </div>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V2.0.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V2.1.0</span>
             </div>
 
-            <!-- Q1 -->
             <div class="box" style="margin-top: 15px; position: relative;">
                 <button class="font-btn" onclick="resetAnswer('ch11-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
                 <p style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 화재를 진압하고 화재, 재난·재해 그 밖의 위급한 상황에서 구조·구급활동 등을 하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 뜻하는 용어를 고르시오.</p>
@@ -879,7 +870,6 @@
                 </div>
             </div>
 
-            <!-- Q2 -->
             <div class="box" style="margin-top: 15px; position: relative;">
                 <button class="font-btn" onclick="resetAnswer('ch11-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
                 <p style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 아파트를 제외하고 연면적이 35,000m²인 특정소방대상물의 소방안전관리보조자 최소 선임 인원수를 구하시오.</p>
@@ -900,22 +890,19 @@
             </div>
         </div>
 
-        <!-- Chapter 03 기출문제 탭 -->
         <div id="tab-ch3" class="tab-content">
-            <h1>소방안전관리자 2급 - <br>Chapter 03. 기출문제 (모의고사)</h1>
+            <h1>소방안전관리자 2급 - <br>모의고사</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V2.0.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V2.1.0</span>
             </div>
 
-            <!-- 📑 기출문제 목차 메뉴 -->
             <div id="ch3-page-menu">
                 <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 모의고사 회차 선택</div>
                 <div class="sub-nav-grid">
-                    <div class="sub-nav-card" onclick="showCh3Page(1)"><span>01. Test (Chapter 01 실전 모의고사 10선)</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="showCh3Page(1)"><span>01. Test (실전 모의고사 10선)</span><span>➔</span></div>
                 </div>
             </div>
 
-            <!-- 📝 01. Test 상세 페이지 (기출문제 10문항) -->
             <div id="ch3-sub-page-1" class="sub-page">
                 <div class="sub-page-header">
                     <div class="page-indicator" style="display: flex; align-items: center; gap: 10px;">
@@ -925,7 +912,6 @@
                     <button class="font-btn" onclick="showCh3Menu()" style="font-size: 0.8em;">📋 회차 목록</button>
                 </div>
 
-                <!-- Q1 -->
                 <div class="box" style="margin-top: 15px; position: relative;">
                     <button class="font-btn" onclick="resetAnswer('ch3-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
                     <p style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 소방기본법의 제정 목적으로 가장 적절한 것은?</p>
@@ -941,7 +927,6 @@
                     </div>
                 </div>
 
-                <!-- Q2 -->
                 <div class="box" style="margin-top: 15px; position: relative;">
                     <button class="font-btn" onclick="resetAnswer('ch3-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
                     <p style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 다음 중 소방관계법령상 '관계인'의 범위에 원칙적으로 포함되지 않는 사람은?</p>
@@ -956,8 +941,6 @@
                         <b>💡 해설:</b> 관계인은 소유자, 관리자, 점유자이며 소방안전관리자는 원칙상 포함되지 않습니다.
                     </div>
                 </div>
-
-                <!-- Q3 ~ Q10은 기존 문항 구조와 동일 -->
 
                 <div style="margin-top: 25px; text-align: center;">
                     <button class="page-nav-btn main-btn" onclick="showCh3Menu()" style="display: inline-block; width: auto; padding: 10px 24px;">📋 회차 목록으로</button>
@@ -1087,7 +1070,7 @@
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
         }
 
-        // 📂 Ch.01 파트 전환 함수
+        // 📂 Ch.1 파트 전환 함수
         function showCh1Part(partName) {
             if (partName === 'part1-1') {
                 document.getElementById("ch1-main-menu").style.display = "none";
@@ -1189,9 +1172,8 @@
         function handleChangelogSelect(selectEl) {
             var val = selectEl.value;
             var msg = "";
-            if (val === "v20") msg = "📂 [V2.0.0 업데이트 내역]\n- Chapter 01 대단원 파트별 구조 개편 완료!";
+            if (val === "v21") msg = "📂 [V2.1.0 업데이트 내역]\n- 대단원 명칭 변경 및 파트별 계층 구조 개편 완료!";
             else if (val === "v191") msg = "🔄 [V1.9.1 업데이트 내역]\n- 기출문제 초기화 오류 수정";
-            else if (val === "v18") msg = "💡 [V1.8.0 업데이트 내역]\n- Ch.01-1 복습 예제 추가";
             
             if (msg) alert(msg);
             selectEl.selectedIndex = 0;
@@ -1326,7 +1308,8 @@
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
             if (tabName === 'tab-ch1') {
-                showCh1MainMenu();
+                document.getElementById("ch1-main-menu").style.display = "block";
+                document.getElementById("ch1-part1-1-container").style.display = "none";
             }
             if (evt && evt.currentTarget) evt.currentTarget.classList.add("active");
         }
