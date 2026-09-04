@@ -9,28 +9,45 @@
     <style>
 		:root {
 			--base-font-size: 15px;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-sub: #475569;
+            --border-color: #cbd5e1;
+            --box-bg: #f8fafc;
 		}
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-sub: #94a3b8;
+            --border-color: #334155;
+            --box-bg: #334155;
+        }
+
 		html, body {
 			margin: 0 !important;
 			padding: 0 !important;
 			width: 100%;
 			box-sizing: border-box;
 			overflow-x: hidden;
-            background-color: #f1f5f9;
+            background-color: var(--bg-color);
             -webkit-text-size-adjust: 100%;
+            transition: background-color 0.3s;
 		}
         * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
             line-height: 1.65;
-            color: #1e293b;
+            color: var(--text-color);
             padding: 8px !important;
 			word-break: keep-all;
 			font-size: var(--base-font-size);
         }
 
         .container {
-            background: #ffffff;
+            background: var(--card-bg);
             padding: 16px;
             border-radius: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -40,60 +57,105 @@
             position: relative;
         }
 
+        .control-bar-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
         .font-control-bar {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background-color: var(--box-bg);
+            border: 1px solid var(--border-color);
             padding: 8px 12px;
             border-radius: 10px;
-            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .font-control-title {
-            font-size: 0.9em;
+            font-size: 0.85em;
             font-weight: bold;
-            color: #475569;
+            color: var(--text-sub);
         }
         .font-btn-group {
             display: flex;
-            gap: 6px;
+            gap: 4px;
+            flex-wrap: wrap;
         }
         .font-btn {
-            background-color: #ffffff;
-            color: #1e293b;
-            border: 1px solid #cbd5e1;
-            padding: 5px 10px;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 5px 8px;
             border-radius: 6px;
-            font-size: 0.85em;
+            font-size: 0.8em;
             cursor: pointer;
             font-weight: bold;
-            min-height: 36px;
+            min-height: 34px;
         }
-        .font-btn:active {
-            background-color: #eff6ff;
+        .font-btn.active {
+            background-color: #2563eb;
+            color: #ffffff;
             border-color: #2563eb;
-            color: #2563eb;
         }
+
+        .search-box-container {
+            position: relative;
+            margin-bottom: 12px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--box-bg);
+            color: var(--text-color);
+            font-size: 0.9em;
+            outline: none;
+        }
+        .search-results-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 500;
+            display: none;
+        }
+        .search-result-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.88em;
+            cursor: pointer;
+        }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:active { background-color: #eff6ff; }
 
         .tab-menu {
             position: sticky;
             top: 0;
-            background-color: #ffffff;
+            background-color: var(--card-bg);
             z-index: 100;
             display: flex;
             gap: 8px;
             margin-bottom: 16px;
-            border-bottom: 2px solid #e2e8f0;
+            border-bottom: 2px solid var(--border-color);
             padding: 8px 0 12px 0;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
         .tab-menu::-webkit-scrollbar { display: none; }
         .tab-btn {
-            background-color: #f8fafc;
-            color: #475569;
-            border: 1px solid #cbd5e1;
+            background-color: var(--box-bg);
+            color: var(--text-sub);
+            border: 1px solid var(--border-color);
             padding: 10px 16px;
             border-radius: 10px;
             font-weight: 700;
@@ -119,19 +181,18 @@
             margin: 15px 0;
         }
         .sub-nav-card {
-            background-color: #f8fafc;
-            border: 1px solid #cbd5e1;
+            background-color: var(--box-bg);
+            border: 1px solid var(--border-color);
             padding: 14px 16px;
             border-radius: 12px;
             font-size: 1em;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--text-color);
             text-align: left;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background-color 0.2s;
             min-height: 52px;
         }
         .sub-nav-card:active {
@@ -139,17 +200,38 @@
             border-color: #3b82f6;
             color: #2563eb;
         }
-        .sub-nav-card::after {
-            content: "➔";
-            font-size: 0.9em;
-            color: #94a3b8;
-        }
 
         .sub-page { 
             display: none; 
             touch-action: pan-y;
         }
         .sub-page.active { display: block; }
+
+        .sub-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .bookmark-btn {
+            background: none;
+            border: none;
+            font-size: 1.4em;
+            cursor: pointer;
+            color: #cbd5e1;
+            padding: 0 4px;
+        }
+        .bookmark-btn.active { color: #f59e0b; }
+
+        .complete-check-label {
+            font-size: 0.82em;
+            font-weight: bold;
+            color: var(--text-sub);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
 
         .page-indicator {
             font-size: 0.85em;
@@ -159,7 +241,10 @@
             padding: 4px 10px;
             border-radius: 20px;
             display: inline-block;
-            margin-bottom: 8px;
+        }
+        body.dark-mode .page-indicator {
+            background-color: #1e3a8a;
+            color: #93c5fd;
         }
 
         .page-nav-bar {
@@ -168,17 +253,17 @@
             gap: 6px;
             margin-top: 30px;
             padding-top: 15px;
-            border-top: 2px dashed #e2e8f0;
+            border-top: 2px dashed var(--border-color);
         }
         .page-nav-btn {
             flex: 1;
-            background-color: #f1f5f9;
-            border: 1px solid #cbd5e1;
+            background-color: var(--box-bg);
+            border: 1px solid var(--border-color);
             padding: 10px 6px;
             border-radius: 8px;
             font-size: 0.85em;
             font-weight: 700;
-            color: #334155;
+            color: var(--text-color);
             text-align: center;
             cursor: pointer;
             min-height: 44px;
@@ -216,8 +301,9 @@
             z-index: 999;
         }
 
-        h1 { font-size: 1.35em; color: #0f172a; border-bottom: 3px solid #3b82f6; padding-bottom: 8px; margin-top: 5px; }
+        h1 { font-size: 1.35em; color: var(--text-color); border-bottom: 3px solid #3b82f6; padding-bottom: 8px; margin-top: 5px; }
         h2 { font-size: 1.15em; color: #1d4ed8; background: #eff6ff; padding: 10px 12px; border-left: 5px solid #3b82f6; border-radius: 6px; margin-top: 10px; }
+        body.dark-mode h2 { background: #1e3a8a; color: #93c5fd; }
         ul { padding-left: 18px; margin-bottom: 15px; }
         li { margin-bottom: 10px; font-size: 1em; }
         
@@ -231,6 +317,30 @@
         .mint_nb { color: #0d9488; font-weight: 400; }
         .orange { color: #ea580c; font-weight: 700; }
         .orange_nb { color: #ea580c; font-weight: 400; }
+
+        body.memorize-mode .red,
+        body.memorize-mode .blue,
+        body.memorize-mode .yellow,
+        body.memorize-mode .mint,
+        body.memorize-mode .orange,
+        body.memorize-mode .highlight {
+            background-color: #1e293b !important;
+            color: #1e293b !important;
+            border-radius: 3px;
+            padding: 0 4px;
+            user-select: none;
+            cursor: pointer;
+            transition: color 0.15s, background-color 0.15s;
+        }
+        body.memorize-mode .red:active,
+        body.memorize-mode .blue:active,
+        body.memorize-mode .yellow:active,
+        body.memorize-mode .mint:active,
+        body.memorize-mode .orange:active,
+        body.memorize-mode .highlight:active {
+            background-color: #fef08a !important;
+            color: #dc2626 !important;
+        }
 
         .badge {
             display: inline-block;
@@ -251,20 +361,32 @@
             padding: 2px 4px;
             border-radius: 4px;
             font-weight: 700;
+            color: #0f172a;
         }
 
-        .box { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 14px; border-radius: 10px; margin: 14px 0; font-size: 0.95em; }
-        .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; border-radius: 8px; border: 1px solid #cbd5e1; }
+        .box { background-color: var(--box-bg); border: 1px solid var(--border-color); padding: 14px; border-radius: 10px; margin: 14px 0; font-size: 0.95em; }
+        .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; border-radius: 8px; border: 1px solid var(--border-color); }
         .table { width: 100%; min-width: 480px; border-collapse: collapse; }
-        .table th, .table td { border: 1px solid #cbd5e1; padding: 10px; text-align: left; font-size: 0.9em; }
-        .table th { background-color: #f1f5f9; color: #0f172a; font-weight: 700; }
+        .table th, .table td { border: 1px solid var(--border-color); padding: 10px; text-align: left; font-size: 0.9em; }
+        .table th { background-color: var(--box-bg); color: var(--text-color); font-weight: 700; }
         .note { background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; color: #991b1b; margin: 14px 0; border-radius: 6px; font-size: 0.9em; }
+        body.dark-mode .note { background-color: #450a0a; color: #fca5a5; }
 
         .cover-page { min-height: 65vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .cover-title { font-size: 2em; font-weight: 800; color: #1e3a8a; margin-bottom: 8px; }
-        .cover-subtitle { font-size: 1.25em; color: #475569; margin-bottom: 20px; }
+        body.dark-mode .cover-title { color: #93c5fd; }
+        .cover-subtitle { font-size: 1.25em; color: var(--text-sub); margin-bottom: 20px; }
         .cover-divider { width: 60px; height: 4px; background-color: #2563eb; margin-bottom: 25px; border-radius: 2px; }
-        .cover-info { font-size: 0.9em; color: #64748b; line-height: 1.8; }
+        .cover-info { font-size: 0.9em; color: var(--text-sub); line-height: 1.8; }
+
+        .search-match-flash {
+            animation: flash-animation 1.5s ease-in-out;
+        }
+        @keyframes flash-animation {
+            0% { background-color: #fef08a; }
+            50% { background-color: #fde047; }
+            100% { background-color: transparent; }
+        }
     </style>
 </head>
 <body>
@@ -281,12 +403,22 @@
     </div>
 
     <div class="container" id="app-viewport">
-        <div class="font-control-bar">
-            <span class="font-control-title">🔤 글자 크기</span>
-            <div class="font-btn-group">
-                <button class="font-btn" onclick="changeFontSize(-1)">가- (축소)</button>
-                <button class="font-btn" onclick="resetFontSize()">기본</button>
-                <button class="font-btn" onclick="changeFontSize(1)">가+ (확대)</button>
+        
+        <div class="control-bar-group">
+            <div class="font-control-bar">
+                <span class="font-control-title">🔤 글자</span>
+                <div class="font-btn-group">
+                    <button class="font-btn" onclick="changeFontSize(-1)">가-</button>
+                    <button class="font-btn" onclick="resetFontSize()">기본</button>
+                    <button class="font-btn" onclick="changeFontSize(1)">가+</button>
+                </div>
+                <button class="font-btn" id="memorize-toggle-btn" onclick="toggleMemorizeMode()">🙈 암기모드 OFF</button>
+                <button class="font-btn" id="darkmode-toggle-btn" onclick="toggleDarkMode()">🌙 야간</button>
+            </div>
+
+            <div class="search-box-container">
+                <input type="text" id="search-input" class="search-input" placeholder="🔍 궁금한 단어 검색 (예: 무창층, 선임, 겸직)" oninput="handleSearch()">
+                <div id="search-results" class="search-results-list"></div>
             </div>
         </div>
 
@@ -303,34 +435,43 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>수정일: 2026.09.04</p>
-                    <p>버전: V1.1.9416</p>
+                    <p>버전: V1.2.0 (스마트 기능 탑재)</p>
                 </div>
             </div>
         </div>
 
         <div id="tab-ch1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>Chapter 01. 소방관계법령</h1>
-            <div style="text-align: right; font-size: 0.8em; color: #64748b; margin-top: 4px; margin-bottom: 12px;">
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
                 <span>만든이: 꾸누</span> | <span>수정일: 2026.09.04</span>
             </div>
 
             <div id="sub-page-menu">
-                <div style="font-size: 0.9em; font-weight: bold; color: #64748b; margin-bottom: 8px;">📑 항목 선택 (소페이지 열기)</div>
-                <div class="sub-nav-grid">
-                    <div class="sub-nav-card" onclick="showSubPage(1)">1. 주요 소방관계법령 제정 목적</div>
-                    <div class="sub-nav-card" onclick="showSubPage(2)">2. 기본 소방 용어 정리</div>
-                    <div class="sub-nav-card" onclick="showSubPage(3)">3. 무창층 요건 (암기 필수)</div>
-                    <div class="sub-nav-card" onclick="showSubPage(4)">4. 한국소방안전원</div>
-                    <div class="sub-nav-card" onclick="showSubPage(5)">5. 소방안전관리대상물 구분</div>
-                    <div class="sub-nav-card" onclick="showSubPage(6)">6. 소방안전관리자 업무 및 대행</div>
-                    <div class="sub-nav-card" onclick="showSubPage(7)">7. 선임자격 기준 [특/1/2/3급]</div>
-                    <div class="sub-nav-card" onclick="showSubPage(8)">8. 선임 기한 및 신고 절차</div>
-                    <div class="sub-nav-card" onclick="showSubPage(9)">9. 소방안전관리자 현황표</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-size: 0.9em; font-weight: bold; color: var(--text-sub);">📑 항목 선택 (소페이지 열기)</span>
+                    <button class="font-btn" onclick="filterBookmarks()" style="font-size: 0.8em;">⭐ 북마크 모아보기</button>
+                </div>
+                <div class="sub-nav-grid" id="main-menu-grid">
+                    <div class="sub-nav-card" onclick="showSubPage(1)"><span>1. 주요 소방관계법령 제정 목적</span><span id="card-star-1"></span></div>
+                    <div class="sub-nav-card" onclick="showSubPage(2)"><span>2. 기본 소방 용어 정리</span><span id="card-star-2"></span></div>
+                    <div class="sub-nav-card" onclick="showSubPage(3)"><span>3. 무창층 요건 (암기 필수)</span><span id="card-star-3"></span></div>
+                    <div class="sub-nav-card" onclick="showSubPage(4)"><span>4. 한국소방안전원</span><span id="card-star-4"></span></div>
+                    <div class="sub-nav-card" onclick="showSubPage(5)"><span>5. 소방안전관리대상물 구분</span><span id="card-star-5"></span></div>
+                    <div class="sub-nav-card" onclick="showSubPage(6)"><span>6. 소방안전관리자 업무 및 대행</span><span id="card-star-6"></span></div>
+                    <div class="sub-nav-card" onclick="showSubPage(7)"><span>7. 선임자격 기준 [특/1/2/3급]</span><span id="card-star-7"></span></div>
+                    <div class="sub-nav-card" onclick="showSubPage(8)"><span>8. 선임 기한 및 신고 절차</span><span id="card-star-8"></span></div>
+                    <div class="sub-nav-card" onclick="showSubPage(9)"><span>9. 소방안전관리자 현황표</span><span id="card-star-9"></span></div>
                 </div>
             </div>
 
             <div id="sub-page-1" class="sub-page">
-                <div class="page-indicator">1 / 9 PAGE</div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">1 / 9 PAGE</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="complete-check-label"><input type="checkbox" id="check-page-1" onchange="toggleComplete(1)"> 학습 완료</label>
+                        <button class="bookmark-btn" id="star-btn-1" onclick="toggleBookmark(1)">☆</button>
+                    </div>
+                </div>
                 <h2>1. 주요 소방관계법령의 제정 목적</h2>
                 <ul>
                     <li><b>소방<span class="blue">기본법</span></b>: <span class="mint_nb">공공의 안녕 및 질서 유지와 복리증진</span> (<span class="red">예</span>방·<span class="red">경</span>계·<span class="red">진</span>압·<span class="red">구</span>조·구<span class="red">급</span>)</li>
@@ -340,7 +481,13 @@
             </div>
 
             <div id="sub-page-2" class="sub-page">
-                <div class="page-indicator">2 / 9 PAGE</div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">2 / 9 PAGE</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="complete-check-label"><input type="checkbox" id="check-page-2" onchange="toggleComplete(2)"> 학습 완료</label>
+                        <button class="bookmark-btn" id="star-btn-2" onclick="toggleBookmark(2)">☆</button>
+                    </div>
+                </div>
                 <h2>2. 기본 소방 용어 정리</h2>
                 <ul>
                     <li><b>소방대상물</b>: 건축물, (운행 중인) 차량, 산림, 물건, 항구에 매어둔 선박, 구조물 <span class="red">(단, 항해 중인 선박 제외)</span></li>
@@ -354,7 +501,13 @@
             </div>
 
             <div id="sub-page-3" class="sub-page">
-                <div class="page-indicator">3 / 9 PAGE</div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">3 / 9 PAGE</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="complete-check-label"><input type="checkbox" id="check-page-3" onchange="toggleComplete(3)"> 학습 완료</label>
+                        <button class="bookmark-btn" id="star-btn-3" onclick="toggleBookmark(3)">☆</button>
+                    </div>
+                </div>
                 <h2>3. 무창층 요건 (암기 필수)</h2>
                 <div class="box">
                     <p style="margin-top:0;"><b>개념</b>: 지상층 개구부 면적의 총합이 해당 층 <span class="blue">바닥면적의 1/30 이하</span>인 층 (예: 백화점)</p>
@@ -368,7 +521,13 @@
             </div>
 
             <div id="sub-page-4" class="sub-page">
-                <div class="page-indicator">4 / 9 PAGE</div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">4 / 9 PAGE</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="complete-check-label"><input type="checkbox" id="check-page-4" onchange="toggleComplete(4)"> 학습 완료</label>
+                        <button class="bookmark-btn" id="star-btn-4" onclick="toggleBookmark(4)">☆</button>
+                    </div>
+                </div>
                 <h2>4. 한국소방안전원</h2>
                 <ul>
                     <li><b>설립목적</b>: 소방 및 안전관리 기술의 향상 및 홍보, 소방 종사자 기술 향상, 행정기관 위탁업무 수행</li>
@@ -383,7 +542,13 @@
             </div>
 
             <div id="sub-page-5" class="sub-page">
-                <div class="page-indicator">5 / 9 PAGE</div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">5 / 9 PAGE</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="complete-check-label"><input type="checkbox" id="check-page-5" onchange="toggleComplete(5)"> 학습 완료</label>
+                        <button class="bookmark-btn" id="star-btn-5" onclick="toggleBookmark(5)">☆</button>
+                    </div>
+                </div>
                 <h2>5. 소방안전관리대상물 구분 (특/1/2/3급) &lt;1층=약4m&gt;</h2>
                 <div class="table-wrapper">
                     <table class="table">
@@ -426,11 +591,17 @@
             </div>
 
             <div id="sub-page-6" class="sub-page">
-                <div class="page-indicator">6 / 9 PAGE</div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">6 / 9 PAGE</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="complete-check-label"><input type="checkbox" id="check-page-6" onchange="toggleComplete(6)"> 학습 완료</label>
+                        <button class="bookmark-btn" id="star-btn-6" onclick="toggleBookmark(6)">☆</button>
+                    </div>
+                </div>
                 <h2>6. 소방안전관리자 업무 및 대행</h2>
                 
-                <div style="font-weight: bold; margin-top: 15px; margin-bottom: 8px; color: #1e293b;">📋 주요 업무 9가지</div>
-                <div class="box" style="padding: 10px; background-color: #f8fafc;">
+                <div style="font-weight: bold; margin-top: 15px; margin-bottom: 8px; color: var(--text-color);">📋 주요 업무 9가지</div>
+                <div class="box" style="padding: 10px;">
                     <ul style="list-style: none; padding-left: 0; margin-bottom: 0;">
                         <li style="margin-bottom: 8px;"><span class="badge blue">1</span> 소방계획서 작성 및 시행</li>
                         <li style="margin-bottom: 8px;"><span class="badge blue">2</span> 자위소방대 및 초기대응체계의 구성·운영·교육</li>
@@ -453,7 +624,13 @@
             </div>
 
             <div id="sub-page-7" class="sub-page">
-                <div class="page-indicator">7 / 9 PAGE</div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">7 / 9 PAGE</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="complete-check-label"><input type="checkbox" id="check-page-7" onchange="toggleComplete(7)"> 학습 완료</label>
+                        <button class="bookmark-btn" id="star-btn-7" onclick="toggleBookmark(7)">☆</button>
+                    </div>
+                </div>
                 <h2>7. 선임자격 기준 [특/1/2/3급]</h2>
                 <div class="box">
                     <ul style="margin-bottom:0;">
@@ -474,7 +651,13 @@
             </div>
 
             <div id="sub-page-8" class="sub-page">
-                <div class="page-indicator">8 / 9 PAGE</div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">8 / 9 PAGE</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label class="complete-check-label"><input type="checkbox" id="check-page-8" onchange="toggleComplete(8)"> 학습 완료</label>
+                        <button class="bookmark-btn" id="star-btn-8" onclick="toggleBookmark(8)">☆</button>
+                    </div>
+                </div>
                 <h2>8. 선임 기한 및 신고 절차</h2>
                 <div class="box">
                     <ul style="margin-bottom:0;">
@@ -507,7 +690,7 @@
                 <button id="btn-next" class="page-nav-btn" onclick="nextSubPage()">다음 ▶</button>
             </div>
 
-            <div style="text-align: right; font-size: 0.8em; color: #64748b; margin-top: 20px; margin-bottom: 10px;">
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
                 위 해당 저작권은 꾸누에 있으며 무단 복제를 금합니다.
             </div>
         </div>
@@ -537,10 +720,13 @@
                     }
                 });
             }
+            loadSavedStates();
         });
 
         var currentSubPage = 0;
         var totalSubPages = 9;
+        var bookmarks = JSON.parse(localStorage.getItem('user_bookmarks') || '[]');
+        var completes = JSON.parse(localStorage.getItem('user_completes') || '[]');
 
         var currentFontSize = parseInt(localStorage.getItem('user_font_size') || '15', 10);
 
@@ -559,6 +745,127 @@
         function resetFontSize() {
             currentFontSize = 15;
             applyFontSize();
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            var isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('user_dark_mode', isDark);
+            document.getElementById('darkmode-toggle-btn').innerText = isDark ? "☀️ 주간" : "🌙 야간";
+        }
+
+        function toggleMemorizeMode() {
+            document.body.classList.toggle('memorize-mode');
+            var isMemo = document.body.classList.contains('memorize-mode');
+            var btn = document.getElementById('memorize-toggle-btn');
+            btn.innerText = isMemo ? "👁️ 암기모드 ON" : "🙈 암기모드 OFF";
+            btn.classList.toggle('active', isMemo);
+        }
+
+        function toggleBookmark(pageNum) {
+            var index = bookmarks.indexOf(pageNum);
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+            } else {
+                bookmarks.push(pageNum);
+            }
+            localStorage.setItem('user_bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkUI();
+        }
+
+        function updateBookmarkUI() {
+            for (var i = 1; i <= totalSubPages; i++) {
+                var btn = document.getElementById("star-btn-" + i);
+                var cardStar = document.getElementById("card-star-" + i);
+                var isBookmarked = bookmarks.includes(i);
+                if (btn) {
+                    btn.innerText = isBookmarked ? "★" : "☆";
+                    btn.classList.toggle('active', isBookmarked);
+                }
+                if (cardStar) {
+                    cardStar.innerText = isBookmarked ? " ★" : "";
+                    cardStar.style.color = "#f59e0b";
+                }
+            }
+        }
+
+        function filterBookmarks() {
+            if (bookmarks.length === 0) {
+                alert("등록된 북마크가 없습니다. 소페이지 상단의 별표(☆)를 눌러 추가해보세요!");
+                return;
+            }
+            var cards = document.querySelectorAll(".sub-nav-card");
+            cards.forEach(function(card, idx) {
+                var pageNum = idx + 1;
+                card.style.display = bookmarks.includes(pageNum) ? "flex" : "none";
+            });
+            alert("★ 북마크한 " + bookmarks.length + "개 항목만 표시합니다. (전체보려면 다시 목차 클릭)");
+        }
+
+        function toggleComplete(pageNum) {
+            var chk = document.getElementById("check-page-" + pageNum);
+            if (chk.checked) {
+                if (!completes.includes(pageNum)) completes.push(pageNum);
+            } else {
+                var idx = completes.indexOf(pageNum);
+                if (idx > -1) completes.splice(idx, 1);
+            }
+            localStorage.setItem('user_completes', JSON.stringify(completes));
+        }
+
+        function loadSavedStates() {
+            if (localStorage.getItem('user_dark_mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkmode-toggle-btn').innerText = "☀️ 주간";
+            }
+            completes.forEach(function(pageNum) {
+                var chk = document.getElementById("check-page-" + pageNum);
+                if (chk) chk.checked = true;
+            });
+            updateBookmarkUI();
+        }
+
+        function handleSearch() {
+            var query = document.getElementById("search-input").value.trim().toLowerCase();
+            var resultsContainer = document.getElementById("search-results");
+            resultsContainer.innerHTML = "";
+
+            if (query.length < 1) {
+                resultsContainer.style.display = "none";
+                return;
+            }
+
+            var matches = [];
+            for (var i = 1; i <= totalSubPages; i++) {
+                var pageEl = document.getElementById("sub-page-" + i);
+                if (pageEl && pageEl.innerText.toLowerCase().includes(query)) {
+                    var title = pageEl.querySelector("h2").innerText;
+                    matches.push({ pageNum: i, title: title });
+                }
+            }
+
+            if (matches.length > 0) {
+                matches.forEach(function(m) {
+                    var div = document.createElement("div");
+                    div.className = "search-result-item";
+                    div.innerHTML = "<b>[" + m.pageNum + "페이지]</b> " + m.title;
+                    div.onclick = function() {
+                        showSubPage(m.pageNum);
+                        resultsContainer.style.display = "none";
+                        document.getElementById("search-input").value = "";
+                        
+                        var targetPage = document.getElementById("sub-page-" + m.pageNum);
+                        targetPage.classList.add("search-match-flash");
+                        setTimeout(function() {
+                            targetPage.classList.remove("search-match-flash");
+                        }, 1500);
+                    };
+                    resultsContainer.appendChild(div);
+                });
+                resultsContainer.style.display = "block";
+            } else {
+                resultsContainer.style.display = "none";
+            }
         }
 
         function openTab(evt, tabName) {
@@ -600,6 +907,9 @@
                 var page = document.getElementById("sub-page-" + i);
                 if (page) page.style.display = "none";
             }
+            var cards = document.querySelectorAll(".sub-nav-card");
+            cards.forEach(function(card) { card.style.display = "flex"; });
+
             document.getElementById("sub-page-menu").style.display = "block";
             document.getElementById("page-nav-bar").style.display = "none";
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -634,10 +944,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        var touchstartX = 0;
-        var touchendX = 0;
-        var touchstartY = 0;
-        var touchendY = 0;
+        var touchstartX = 0, touchendX = 0, touchstartY = 0, touchendY = 0;
 
         document.addEventListener('touchstart', function(event) {
             touchstartX = event.changedTouches[0].screenX;
@@ -645,7 +952,7 @@
         }, false);
 
         document.addEventListener('touchend', function(event) {
-            if (event.target.closest('.table-wrapper') || event.target.closest('.table')) {
+            if (event.target.closest('.table-wrapper') || event.target.closest('.table') || event.target.closest('.search-box-container')) {
                 return;
             }
             touchendX = event.changedTouches[0].screenX;
@@ -659,11 +966,8 @@
 
             if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
                 if (currentSubPage > 0) {
-                    if (xDiff < 0) {
-                        nextSubPage();
-                    } else {
-                        prevSubPage();
-                    }
+                    if (xDiff < 0) nextSubPage();
+                    else prevSubPage();
                 }
             }
         }
