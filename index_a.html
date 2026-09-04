@@ -361,18 +361,24 @@
             transition: color 0.15s, background-color 0.15s;
         }
 
-        body.memorize-mode .red:active,
-        body.memorize-mode .blue:active,
-        body.memorize-mode .yellow:active,
-        body.memorize-mode .mint:active,
-        body.memorize-mode .orange:active,
-        body.memorize-mode .highlight:active,
-        body.dark-mode.memorize-mode .red:active,
-        body.dark-mode.memorize-mode .blue:active,
-        body.dark-mode.memorize-mode .yellow:active,
-        body.dark-mode.memorize-mode .mint:active,
-        body.dark-mode.memorize-mode .orange:active,
-        body.dark-mode.memorize-mode .highlight:active {
+        body.memorize-mode .revealed,
+        body.dark-mode.memorize-mode .revealed {
+            background-color: #fef08a !important;
+            color: #dc2626 !important;
+        }
+
+        body.memorize-mode.press-mode .red:active,
+        body.memorize-mode.press-mode .blue:active,
+        body.memorize-mode.press-mode .yellow:active,
+        body.memorize-mode.press-mode .mint:active,
+        body.memorize-mode.press-mode .orange:active,
+        body.memorize-mode.press-mode .highlight:active,
+        body.dark-mode.memorize-mode.press-mode .red:active,
+        body.dark-mode.memorize-mode.press-mode .blue:active,
+        body.dark-mode.memorize-mode.press-mode .yellow:active,
+        body.dark-mode.memorize-mode.press-mode .mint:active,
+        body.dark-mode.memorize-mode.press-mode .orange:active,
+        body.dark-mode.memorize-mode.press-mode .highlight:active {
             background-color: #fef08a !important;
             color: #dc2626 !important;
         }
@@ -429,6 +435,15 @@
                 <button class="font-btn" id="darkmode-toggle-btn" onclick="toggleDarkMode()">🌙 야간</button>
             </div>
 
+            <div class="font-control-bar" id="timer-control-bar" style="display: none; background-color: var(--card-bg);">
+                <span class="font-control-title">⏱️ 표시시간</span>
+                <div class="font-btn-group">
+                    <button class="font-btn active" id="timer-btn-3" onclick="setTimerSec(3)">3초</button>
+                    <button class="font-btn" id="timer-btn-5" onclick="setTimerSec(5)">5초</button>
+                    <button class="font-btn" id="timer-btn-0" onclick="setTimerSec(0)">누를때만</button>
+                </div>
+            </div>
+
             <div class="search-box-container">
                 <input type="text" id="search-input" class="search-input" placeholder="🔍 궁금한 단어 검색 (예: 무창층, 선임, 겸직)" oninput="handleSearch()">
                 <div id="search-results" class="search-results-list"></div>
@@ -448,7 +463,7 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>수정일: 2026.09.04</p>
-                    <p>버전: V1.2.2 (야간 암기모드 버그 완벽 수정)</p>
+                    <p>버전: V1.3.0 (표시시간 타이머 옵션 추가)</p>
                 </div>
             </div>
         </div>
@@ -734,6 +749,7 @@
                 });
             }
             loadSavedStates();
+            setupMemorizeClickEvents();
         });
 
         var currentSubPage = 0;
@@ -742,6 +758,7 @@
         var completes = JSON.parse(localStorage.getItem('user_completes') || '[]');
 
         var currentFontSize = parseInt(localStorage.getItem('user_font_size') || '15', 10);
+        var memorizeTimerSec = parseInt(localStorage.getItem('user_timer_sec') || '3', 10);
 
         function applyFontSize() {
             document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
@@ -773,6 +790,50 @@
             var btn = document.getElementById('memorize-toggle-btn');
             btn.innerText = isMemo ? "👁️ 암기모드 ON" : "🙈 암기모드 OFF";
             btn.classList.toggle('active', isMemo);
+
+            document.getElementById('timer-control-bar').style.display = isMemo ? "flex" : "none";
+            updateTimerUI();
+        }
+
+        function setTimerSec(sec) {
+            memorizeTimerSec = sec;
+            localStorage.setItem('user_timer_sec', sec);
+            updateTimerUI();
+        }
+
+        function updateTimerUI() {
+            document.getElementById('timer-btn-3').classList.toggle('active', memorizeTimerSec === 3);
+            document.getElementById('timer-btn-5').classList.toggle('active', memorizeTimerSec === 5);
+            document.getElementById('timer-btn-0').classList.toggle('active', memorizeTimerSec === 0);
+
+            if (memorizeTimerSec === 0) {
+                document.body.classList.add('press-mode');
+            } else {
+                document.body.classList.remove('press-mode');
+            }
+        }
+
+        function setupMemorizeClickEvents() {
+            var targets = document.querySelectorAll('.red, .blue, .yellow, .mint, .orange, .highlight');
+            targets.forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                    if (!document.body.classList.contains('memorize-mode')) return;
+                    if (memorizeTimerSec === 0) return;
+
+                    if (el.dataset.timerId) {
+                        clearTimeout(parseInt(el.dataset.timerId, 10));
+                    }
+
+                    el.classList.add('revealed');
+
+                    var timerId = setTimeout(function() {
+                        el.classList.remove('revealed');
+                        delete el.dataset.timerId;
+                    }, memorizeTimerSec * 1000);
+
+                    el.dataset.timerId = timerId;
+                });
+            });
         }
 
         function toggleBookmark(pageNum) {
@@ -836,6 +897,7 @@
                 if (chk) chk.checked = true;
             });
             updateBookmarkUI();
+            updateTimerUI();
         }
 
         function handleSearch() {
