@@ -516,27 +516,10 @@
     <button id="top-btn" class="top-btn" onclick="scrollToTop()">▲</button>
 
     <script>
-        function _sys_encode(s) {
-            var salt = "_kkunu_secret";
-            var str = s + salt;
-            var h1 = 0xdeadbeef ^ 0, h2 = 0x41c6ce57 ^ 0;
-            for (var i = 0, ch; i < str.length; i++) {
-                ch = str.charCodeAt(i);
-                h1 = Math.imul(h1 ^ ch, 2654435761);
-                h2 = Math.imul(h2 ^ ch, 1597334677);
-            }
-            h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-            h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-            return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
-        }
-
-        var _cfg_sys_target = "1f2b6833c8ad81";
-
         function sys_verify_token() {
             var inputVal = String(document.getElementById('sys-key-input').value).trim();
-            var calcResult = _sys_encode(inputVal);
 
-            if (calcResult === _cfg_sys_target) {
+            if (inputVal === "243617") {
                 document.getElementById('sys-auth-layer').style.display = 'none';
                 document.getElementById('app-viewport').style.display = 'flex';
             } else {
