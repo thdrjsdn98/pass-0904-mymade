@@ -318,30 +318,6 @@
         .orange { color: #ea580c; font-weight: 700; }
         .orange_nb { color: #ea580c; font-weight: 400; }
 
-        body.memorize-mode .red,
-        body.memorize-mode .blue,
-        body.memorize-mode .yellow,
-        body.memorize-mode .mint,
-        body.memorize-mode .orange,
-        body.memorize-mode .highlight {
-            background-color: #000000 !important;
-            color: #000000 !important;
-            border-radius: 3px;
-            padding: 0 4px;
-            user-select: none;
-            cursor: pointer;
-            transition: color 0.15s, background-color 0.15s;
-        }
-        body.memorize-mode .red:active,
-        body.memorize-mode .blue:active,
-        body.memorize-mode .yellow:active,
-        body.memorize-mode .mint:active,
-        body.memorize-mode .orange:active,
-        body.memorize-mode .highlight:active {
-            background-color: #fef08a !important;
-            color: #dc2626 !important;
-        }
-
         .badge {
             display: inline-block;
             min-width: 22px;
@@ -362,6 +338,43 @@
             border-radius: 4px;
             font-weight: 700;
             color: #0f172a;
+        }
+
+        body.memorize-mode .red,
+        body.memorize-mode .blue,
+        body.memorize-mode .yellow,
+        body.memorize-mode .mint,
+        body.memorize-mode .orange,
+        body.memorize-mode .highlight,
+        body.dark-mode.memorize-mode .red,
+        body.dark-mode.memorize-mode .blue,
+        body.dark-mode.memorize-mode .yellow,
+        body.dark-mode.memorize-mode .mint,
+        body.dark-mode.memorize-mode .orange,
+        body.dark-mode.memorize-mode .highlight {
+            background-color: #000000 !important;
+            color: #000000 !important;
+            border-radius: 3px;
+            padding: 0 4px;
+            user-select: none;
+            cursor: pointer;
+            transition: color 0.15s, background-color 0.15s;
+        }
+
+        body.memorize-mode .red:active,
+        body.memorize-mode .blue:active,
+        body.memorize-mode .yellow:active,
+        body.memorize-mode .mint:active,
+        body.memorize-mode .orange:active,
+        body.memorize-mode .highlight:active,
+        body.dark-mode.memorize-mode .red:active,
+        body.dark-mode.memorize-mode .blue:active,
+        body.dark-mode.memorize-mode .yellow:active,
+        body.dark-mode.memorize-mode .mint:active,
+        body.dark-mode.memorize-mode .orange:active,
+        body.dark-mode.memorize-mode .highlight:active {
+            background-color: #fef08a !important;
+            color: #dc2626 !important;
         }
 
         .box { background-color: var(--box-bg); border: 1px solid var(--border-color); padding: 14px; border-radius: 10px; margin: 14px 0; font-size: 0.95em; }
@@ -435,7 +448,7 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>수정일: 2026.09.04</p>
-                    <p>버전: V1.2.1 (암기모드 완벽 수정)</p>
+                    <p>버전: V1.2.2 (야간 암기모드 버그 완벽 수정)</p>
                 </div>
             </div>
         </div>
