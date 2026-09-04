@@ -148,12 +148,19 @@
             background-color: var(--card-bg);
             z-index: 100;
             display: flex;
+            justify-content: space-between;
+            align-items: center;
             gap: 8px;
             margin-bottom: 16px;
             border-bottom: 2px solid var(--border-color);
             padding: 8px 0 12px 0;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+        }
+        .tab-menu-left {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
         }
         .tab-menu::-webkit-scrollbar { display: none; }
         .tab-btn {
@@ -173,6 +180,20 @@
             color: #ffffff;
             border-color: #2563eb;
             box-shadow: 0 3px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        /* 📋 업데이트 내역 선택창(드롭다운) 스타일 */
+        .changelog-select {
+            background-color: var(--box-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85em;
+            cursor: pointer;
+            outline: none;
+            min-height: 44px;
         }
 
         .tab-content { display: none; }
@@ -472,9 +493,20 @@
             </div>
         </div>
 
+        <!-- 📑 상단 탭 메뉴 및 업데이트 내역 선택창 -->
         <div class="tab-menu">
-            <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">Chapter 01. 소방관계법령</button>
+            <div class="tab-menu-left">
+                <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">Chapter 01. 소방관계법령</button>
+            </div>
+            <select class="changelog-select" onchange="handleChangelogSelect(this)">
+                <option value="" disabled selected>📌 V1.4.0 업데이트 내역</option>
+                <option value="v14">✨ V1.4.0: 페이지별 각주 메모 탑재</option>
+                <option value="v13">⏱️ V1.3.0: 암기모드 표시시간 타이머 (3초/5초)</option>
+                <option value="v12">🌙 V1.2.x: 다크모드 및 야간 암기모드 버그 수정</option>
+                <option value="v11">⭐ V1.1.x: 북마크 모아보기 & 학습완료 체크</option>
+                <option value="v10">🔍 V1.0.x: 실시간 검색 및 암기모드 블라인드 도입</option>
+            </select>
         </div>
 
         <div id="tab-cover" class="tab-content active">
@@ -485,7 +517,7 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>수정일: 2026.09.04</p>
-                    <p>버전: V1.4.0 (페이지별 각주 메모 탑재)</p>
+                    <p>버전: V1.4.0 (업데이트 내역 선택창 추가)</p>
                 </div>
             </div>
         </div>
@@ -915,6 +947,20 @@
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
         }
 
+        // 📋 업데이트 내역 선택창 핸들러
+        function handleChangelogSelect(selectEl) {
+            var val = selectEl.value;
+            var msg = "";
+            if (val === "v14") msg = "✨ [V1.4.0 업데이트 내역]\n- 각 소페이지 하단에 나만의 각주(메모) 작성 및 자동 저장 기능 탑재!";
+            else if (val === "v13") msg = "⏱️ [V1.3.0 업데이트 내역]\n- 암기 모드 터치 시 답이 보이는 시간 설정 (3초 / 5초 / 누를때만) 기능 추가!";
+            else if (val === "v12") msg = "🌙 [V1.2.x 업데이트 내역]\n- 다크모드(야간모드)와 암기모드 중첩 시 글자가 비치던 스타일 우선순위 버그 완벽 해결!";
+            else if (val === "v11") msg = "⭐ [V1.1.x 업데이트 내역]\n- 중요 페이지 북마크(즐겨찾기) 모아보기 및 회독 체크박스(학습 완료) 추가!";
+            else if (val === "v10") msg = "🔍 [V1.0.x 업데이트 내역]\n- 핵심 키워드 실시간 검색 기능, 암기 모드(블라인드) 및 보안 인증 시스템 구축!";
+            
+            if (msg) alert(msg);
+            selectEl.selectedIndex = 0; // 선택 후 기본 안내 문구로 복원
+        }
+
         function toggleBookmark(pageNum) {
             var index = bookmarks.indexOf(pageNum);
             if (index > -1) {
@@ -1114,7 +1160,7 @@
         }, false);
 
         document.addEventListener('touchend', function(event) {
-            if (event.target.closest('.table-wrapper') || event.target.closest('.table') || event.target.closest('.search-box-container') || event.target.closest('.page-memo-textarea')) {
+            if (event.target.closest('.table-wrapper') || event.target.closest('.table') || event.target.closest('.search-box-container') || event.target.closest('.page-memo-textarea') || event.target.closest('.changelog-select')) {
                 return;
             }
             touchendX = event.changedTouches[0].screenX;
