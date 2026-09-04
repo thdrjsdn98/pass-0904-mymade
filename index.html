@@ -5,24 +5,46 @@
     <!-- 검색 엔진 노출 차단 (구글, 네이버 수집 방지) -->
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- 비밀번호 보안 스크립트 -->
+	
 	<!-- 🔐 비밀번호 보안 스크립트 (화면 강제 차단 방식) -->
 	<script>
 		(function() {
-			var myPassword = "243617"; // <-- 사용할 비밀번호로 변경하세요
-			var input = prompt("비밀번호를 입력하세요:");
+			var myPassword = "243617"; // 사용할 비밀번호
+			var input = "";
 			
-			if (input !== myPassword) {
-				alert("비밀번호가 올바르지 않습니다.");
-				// 스타일을 주입해서 본문(body)을 아예 안 보이게 숨기고 안내 문구만 출력
-				document.write("<style>body { display: none !important; }</style>");
-				document.write("<div style='text-align:center; padding-top:100px; font-size:20px; font-weight:bold;'>접근 권한이 없습니다.</div>");
+			// 올바른 비밀번호를 입력할 때까지 반복
+			while (input !== myPassword) {
+				input = prompt("비밀번호를 입력하세요:");
+				
+				// 취소 버튼을 눌렀거나 빈 값인 경우
+				if (input === null) {
+					document.write("<style>body { display: none !important; }</style>");
+					document.write("<div style='text-align:center; padding-top:100px; font-size:20px; font-weight:bold;'>접근 권한이 없습니다.</div>");
+					return; // 실행 종료
+				}
+				
+				// 틀린 비밀번호를 입력한 경우
+				if (input !== myPassword) {
+					alert("비밀번호가 올바르지 않습니다. 다시 입력해주세요.");
+				}
 			}
 		})();
 	</script>
 		
     <title>소방안전관리자 2급 - 핵심 요약집</title>
     <style>
+		/* 브라우저 기본 여백 완전 제거 및 너비 100% 설정 */
+		html, body {
+			margin: 0 !important;
+			padding: 0 !important;
+			width: 100%;
+			box-sizing: border-box;
+			overflow-x: hidden;
+		}
+		/* 화면 내부 상하좌우 여백 조정 */
+		body {
+			padding: 10px !important;
+		}
         @page {
             size: A4;
             margin: 15mm;
@@ -41,7 +63,6 @@
             margin: 0 auto;
             padding: 20px;
             background-color: #f8fafc;
-			
 			word-break: keep-all;
         }
         .container {
