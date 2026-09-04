@@ -141,7 +141,7 @@
         .search-result-item:last-child { border-bottom: none; }
         .search-result-item:active { background-color: #eff6ff; }
 
-        /* 📌 상단 탭 메뉴 고정 */
+        /* 📌 상단 탭 메뉴 고정 (버그 수정: 버튼들이 화면에 꽉 차게 조절) */
         .tab-menu {
             position: sticky;
             top: 0;
@@ -150,30 +150,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             margin-bottom: 16px;
             border-bottom: 2px solid var(--border-color);
             padding: 8px 0 12px 0;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
         .tab-menu-left {
             display: flex;
-            gap: 8px;
-            overflow-x: auto;
+            gap: 4px;
         }
-        .tab-menu::-webkit-scrollbar { display: none; }
         .tab-btn {
             background-color: var(--box-bg);
             color: var(--text-sub);
             border: 1px solid var(--border-color);
-            padding: 10px 16px;
+            padding: 8px 10px;
             border-radius: 10px;
             font-weight: 700;
-            font-size: 0.93em;
+            font-size: 0.85em;
             cursor: pointer;
             white-space: nowrap;
-            min-height: 44px;
+            min-height: 40px;
         }
         .tab-btn.active {
             background-color: #2563eb;
@@ -187,13 +183,14 @@
             background-color: var(--box-bg);
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            padding: 8px 12px;
+            padding: 6px 8px;
             border-radius: 10px;
             font-weight: 700;
-            font-size: 0.85em;
+            font-size: 0.78em;
             cursor: pointer;
             outline: none;
-            min-height: 44px;
+            min-height: 40px;
+            max-width: 145px;
         }
 
         .tab-content { display: none; }
@@ -396,7 +393,7 @@
             color: #0f172a;
         }
 
-        /* 🙈 암기 모드 */
+        /* 🙈 암기 모드 기본 블라인드 */
         body.memorize-mode .red,
         body.memorize-mode .blue,
         body.memorize-mode .yellow,
@@ -418,8 +415,26 @@
             transition: color 0.15s, background-color 0.15s;
         }
 
+        /* 타이머로 열린 상태 */
         body.memorize-mode .revealed,
         body.dark-mode.memorize-mode .revealed {
+            background-color: #fef08a !important;
+            color: #dc2626 !important;
+        }
+
+        /* [누를때만 모드] 버그 수정: 누르고(:active) 있을 때 확실하게 노출되도록 강제 설정 */
+        body.memorize-mode.press-mode .red:active,
+        body.memorize-mode.press-mode .blue:active,
+        body.memorize-mode.press-mode .yellow:active,
+        body.memorize-mode.press-mode .mint:active,
+        body.memorize-mode.press-mode .orange:active,
+        body.memorize-mode.press-mode .highlight:active,
+        body.dark-mode.memorize-mode.press-mode .red:active,
+        body.dark-mode.memorize-mode.press-mode .blue:active,
+        body.dark-mode.memorize-mode.press-mode .yellow:active,
+        body.dark-mode.memorize-mode.press-mode .mint:active,
+        body.dark-mode.memorize-mode.press-mode .orange:active,
+        body.dark-mode.memorize-mode.press-mode .highlight:active {
             background-color: #fef08a !important;
             color: #dc2626 !important;
         }
@@ -493,19 +508,19 @@
             </div>
         </div>
 
-        <!-- 📑 상단 탭 메뉴 및 업데이트 내역 선택창 -->
+        <!-- 📑 상단 탭 메뉴 및 업데이트 내역 선택창 (버그 수정: 너비 최적화) -->
         <div class="tab-menu">
             <div class="tab-menu-left">
                 <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">Chapter 01. 소방관계법령</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">Ch.01</button>
             </div>
             <select class="changelog-select" onchange="handleChangelogSelect(this)">
-                <option value="" disabled selected>📌 V1.4.0 업데이트 내역</option>
-                <option value="v14">✨ V1.4.0: 페이지별 각주 메모 탑재</option>
-                <option value="v13">⏱️ V1.3.0: 암기모드 표시시간 타이머 (3초/5초)</option>
-                <option value="v12">🌙 V1.2.x: 다크모드 및 야간 암기모드 버그 수정</option>
-                <option value="v11">⭐ V1.1.x: 북마크 모아보기 & 학습완료 체크</option>
-                <option value="v10">🔍 V1.0.x: 실시간 검색 및 암기모드 블라인드 도입</option>
+                <option value="" disabled selected>📌 V1.4.1 내역보기</option>
+                <option value="v14">✨ V1.4.x: 페이지별 각주 메모 탑재</option>
+                <option value="v13">⏱️ V1.3.x: 암기모드 표시시간 타이머 설정</option>
+                <option value="v12">🌙 V1.2.x: 다크모드 암기모드 버그 수정</option>
+                <option value="v11">⭐ V1.1.x: 북마크 & 학습완료 체크</option>
+                <option value="v10">🔍 V1.0.x: 실시간 검색 및 블라인드 도입</option>
             </select>
         </div>
 
@@ -517,7 +532,7 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>수정일: 2026.09.04</p>
-                    <p>버전: V1.4.0 (업데이트 내역 선택창 추가)</p>
+                    <p>버전: V1.4.1 (상단 메뉴 버그 수정)</p>
                 </div>
             </div>
         </div>
@@ -923,6 +938,7 @@
             targets.forEach(function(el) {
                 el.addEventListener('click', function(e) {
                     if (!document.body.classList.contains('memorize-mode')) return;
+                    // '누를때만' 모드(0초)일 때는 클릭 타이머 작동 안 함 (:active 사용)
                     if (memorizeTimerSec === 0) return;
 
                     if (el.dataset.timerId) {
@@ -941,24 +957,22 @@
             });
         }
 
-        // 📝 페이지별 메모 저장 함수
         function savePageMemo(pageNum) {
             var memoText = document.getElementById("memo-input-" + pageNum).value;
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
         }
 
-        // 📋 업데이트 내역 선택창 핸들러
         function handleChangelogSelect(selectEl) {
             var val = selectEl.value;
             var msg = "";
-            if (val === "v14") msg = "✨ [V1.4.0 업데이트 내역]\n- 각 소페이지 하단에 나만의 각주(메모) 작성 및 자동 저장 기능 탑재!";
-            else if (val === "v13") msg = "⏱️ [V1.3.0 업데이트 내역]\n- 암기 모드 터치 시 답이 보이는 시간 설정 (3초 / 5초 / 누를때만) 기능 추가!";
-            else if (val === "v12") msg = "🌙 [V1.2.x 업데이트 내역]\n- 다크모드(야간모드)와 암기모드 중첩 시 글자가 비치던 스타일 우선순위 버그 완벽 해결!";
-            else if (val === "v11") msg = "⭐ [V1.1.x 업데이트 내역]\n- 중요 페이지 북마크(즐겨찾기) 모아보기 및 회독 체크박스(학습 완료) 추가!";
-            else if (val === "v10") msg = "🔍 [V1.0.x 업데이트 내역]\n- 핵심 키워드 실시간 검색 기능, 암기 모드(블라인드) 및 보안 인증 시스템 구축!";
+            if (val === "v14") msg = "✨ [V1.4.1 업데이트 내역]\n- 상단 메뉴 레이아웃 최적화 및 페이지별 각주 메모 탑재!";
+            else if (val === "v13") msg = "⏱️ [V1.3.0 업데이트 내역]\n- 암기 모드 표시시간 설정 (3초/5초/누를때만) 기능 추가!";
+            else if (val === "v12") msg = "🌙 [V1.2.x 업데이트 내역]\n- 다크모드 암기모드 글자 가독성 버그 완벽 해결!";
+            else if (val === "v11") msg = "⭐ [V1.1.x 업데이트 내역]\n- 북마크 모아보기 및 학습완료 체크 추가!";
+            else if (val === "v10") msg = "🔍 [V1.0.x 업데이트 내역]\n- 실시간 검색 및 암기모드 블라인드 도입!";
             
             if (msg) alert(msg);
-            selectEl.selectedIndex = 0; // 선택 후 기본 안내 문구로 복원
+            selectEl.selectedIndex = 0;
         }
 
         function toggleBookmark(pageNum) {
@@ -1021,7 +1035,6 @@
                 var chk = document.getElementById("check-page-" + pageNum);
                 if (chk) chk.checked = true;
             });
-            // 저장된 메모 로드
             for (var i = 1; i <= totalSubPages; i++) {
                 var savedMemo = localStorage.getItem("user_memo_page_" + i);
                 if (savedMemo) {
