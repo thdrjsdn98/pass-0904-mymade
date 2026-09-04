@@ -51,15 +51,49 @@
             min-height: 90vh;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
-        /* 탭 메뉴 */
+        /* ⏱️ 공부 시간 타이머 바 */
+        .timer-bar {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+        .timer-clock {
+            font-size: 15px;
+            font-weight: bold;
+            color: #38bdf8;
+            font-family: monospace;
+        }
+        .timer-btn {
+            background-color: #334155;
+            color: #ffffff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* 📌 상단 탭 메뉴 고정 (sticky) */
         .tab-menu {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            z-index: 100;
             display: flex;
             gap: 8px;
             margin-bottom: 16px;
             border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 12px;
+            padding: 8px 0 12px 0;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
         }
@@ -68,13 +102,13 @@
             background-color: #f8fafc;
             color: #475569;
             border: 1px solid #cbd5e1;
-            padding: 12px 18px;
+            padding: 10px 16px;
             border-radius: 10px;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
             white-space: nowrap;
-            min-height: 46px;
+            min-height: 44px;
         }
         .tab-btn.active {
             background-color: #2563eb;
@@ -120,9 +154,24 @@
             color: #94a3b8;
         }
 
-        /* 소페이지 제어 영역 */
-        .sub-page { display: none; }
+        /* 소페이지 제어 영역 및 터치 영역 */
+        .sub-page { 
+            display: none; 
+            touch-action: pan-y;
+        }
         .sub-page.active { display: block; }
+
+        /* 상단 현재 위치 표시 바 */
+        .page-indicator {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2563eb;
+            background-color: #eff6ff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
 
         /* 하단 네비게이션 바 */
         .page-nav-bar {
@@ -159,9 +208,30 @@
             cursor: not-allowed;
         }
 
+        /* 우측 하단 Top 플로팅 버튼 */
+        .top-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background-color: #1e293b;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
         /* 서식 및 가독성 최적화 */
-        h1 { font-size: 21px; color: #0f172a; border-bottom: 3px solid #3b82f6; padding-bottom: 8px; margin-top: 5px; }
-        h2 { font-size: 18px; color: #1d4ed8; background: #eff6ff; padding: 10px 12px; border-left: 5px solid #3b82f6; border-radius: 6px; margin-top: 10px; }
+        h1 { font-size: 20px; color: #0f172a; border-bottom: 3px solid #3b82f6; padding-bottom: 8px; margin-top: 5px; }
+        h2 { font-size: 17px; color: #1d4ed8; background: #eff6ff; padding: 10px 12px; border-left: 5px solid #3b82f6; border-radius: 6px; margin-top: 10px; }
         ul { padding-left: 18px; margin-bottom: 15px; }
         li { margin-bottom: 10px; font-size: 15px; }
         
@@ -175,6 +245,29 @@
         .mint_nb { color: #0d9488; font-weight: 400; }
         .orange { color: #ea580c; font-weight: 700; }
         .orange_nb { color: #ea580c; font-weight: 400; }
+
+        /* 주요 업무 번호 강조 배지 */
+        .badge {
+            display: inline-block;
+            min-width: 22px;
+            height: 22px;
+            line-height: 22px;
+            text-align: center;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-right: 6px;
+        }
+        .badge.blue { background-color: #2563eb; }
+
+        /* 암기용 형광펜 하이라이트 효과 */
+        .highlight {
+            background-color: #fef08a;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
 
         .box { background-color: #f8fafc; border: 1px solid #cbd5e1; padding: 14px; border-radius: 10px; margin: 14px 0; font-size: 14.5px; }
         .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; border-radius: 8px; border: 1px solid #cbd5e1; }
@@ -192,7 +285,13 @@
 </head>
 <body>
     <div class="container">
-        <!-- 네비게이션 탭 메뉴 -->
+        <!-- ⏱️ 공부 시간 측정 타이머 바 -->
+        <div class="timer-bar">
+            <div>⏱️ 오늘 공부: <span id="timer-display" class="timer-clock">00:00:00</span></div>
+            <button class="timer-btn" onclick="toggleLogModal()">📊 7일 기록</button>
+        </div>
+
+        <!-- 네비게이션 탭 메뉴 (Sticky 고정) -->
         <div class="tab-menu">
             <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
             <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">Chapter 01. 소방관계법령</button>
@@ -237,6 +336,7 @@
 
             <!-- [소페이지 1] -->
             <div id="sub-page-1" class="sub-page">
+                <div class="page-indicator">1 / 9 PAGE</div>
                 <h2>1. 주요 소방관계법령의 제정 목적</h2>
                 <ul>
                     <li><b>소방<span class="blue">기본법</span></b>: <span class="mint_nb">공공의 안녕 및 질서 유지와 복리증진</span> (<span class="red">예</span>방·<span class="red">경</span>계·<span class="red">진</span>압·<span class="red">구</span>조·구<span class="red">급</span>)</li>
@@ -247,6 +347,7 @@
 
             <!-- [소페이지 2] -->
             <div id="sub-page-2" class="sub-page">
+                <div class="page-indicator">2 / 9 PAGE</div>
                 <h2>2. 기본 소방 용어 정리</h2>
                 <ul>
                     <li><b>소방대상물</b>: 건축물, (운행 중인) 차량, 산림, 물건, 항구에 매어둔 선박, 구조물 <span class="red">(단, 항해 중인 선박 제외)</span></li>
@@ -254,19 +355,20 @@
                     <li><b>소방시설</b>: 소화설비, 소화용수설비, 소화활동설비, 경보설비, 피난구조설비</li>
                     <li><b>관계인</b>: <span class="mint">소유자, 관리자, 점유자</span> <span class="red">(소방안전관리자는 원칙상 포함 X)</span></li>
                     <li><b>소방대</b>: <span class="mint">소방공무원, 의무소방원, 의용소방대원</span> <span class="red">(자위소방대원, 경찰공무원 X)</span></li>
-                    <li><b>소방대장</b>: 본부장 또는 서장 (<span class="red">본또서장</span>)</li>
+                    <li><b>소방대장</b>: 본부장 또는 서장 (<span class="highlight">본또서장</span>)</li>
                     <li><b>피난층</b>: 곧바로 지상으로 나가는 출입구가 있는 층</li>
                 </ul>
             </div>
 
             <!-- [소페이지 3] -->
             <div id="sub-page-3" class="sub-page">
+                <div class="page-indicator">3 / 9 PAGE</div>
                 <h2>3. 무창층 요건 (암기 필수)</h2>
                 <div class="box">
                     <p style="margin-top:0;"><b>개념</b>: 지상층 개구부 면적의 총합이 해당 층 <span class="blue">바닥면적의 1/30 이하</span>인 층 (예: 백화점)</p>
                     <ul style="margin-bottom:0;">
-                        <li>개구부 크기: 지름 <span class="blue">50cm 이상</span>의 원이 내접할 수 있을 것</li>
-                        <li>개구부 위치: 하단이 바닥으로부터 <span class="blue">1.2m 이내의 높이</span>에 위치</li>
+                        <li>개구부 크기: 지름 <span class="highlight">50cm 이상</span>의 원이 내접할 수 있을 것</li>
+                        <li>개구부 위치: 하단이 바닥으로부터 <span class="highlight">1.2m 이내의 높이</span>에 위치</li>
                         <li>도로 또는 차량 진입 가능한 빈터를 향할 것</li>
                         <li>창살 및 장애물이 없고 쉽게 부술 수 있을 것</li>
                     </ul>
@@ -275,6 +377,7 @@
 
             <!-- [소페이지 4] -->
             <div id="sub-page-4" class="sub-page">
+                <div class="page-indicator">4 / 9 PAGE</div>
                 <h2>4. 한국소방안전원</h2>
                 <ul>
                     <li><b>설립목적</b>: 소방 및 안전관리 기술의 향상 및 홍보, 소방 종사자 기술 향상, 행정기관 위탁업무 수행</li>
@@ -290,6 +393,7 @@
 
             <!-- [소페이지 5] -->
             <div id="sub-page-5" class="sub-page">
+                <div class="page-indicator">5 / 9 PAGE</div>
                 <h2>5. 소방안전관리대상물 구분 (특/1/2/3급) &lt;1층=약4m&gt;</h2>
                 <div class="table-wrapper">
                     <table class="table">
@@ -333,18 +437,35 @@
 
             <!-- [소페이지 6] -->
             <div id="sub-page-6" class="sub-page">
+                <div class="page-indicator">6 / 9 PAGE</div>
                 <h2>6. 소방안전관리자 업무 및 대행</h2>
-                <ul>
-                    <li><b>주요 업무 9가지</b>: 1)소방계획서 작성·시행, 2)자위소방대 구성·운영, 3)피난·방화시설 관리, 4)소방시설 관리, 5)소방훈련·교육, 6)화기취급 감독, 7)초기대응체계 구축, 8) (3),(4),(6)호 업무수행에 관한 기록·유지<span class="orange">&lt;월 1회 이상 작성, 2년간 보관&gt;</span>, 9)그 밖의 소방안전관리에 필요한 업무</li>
+                
+                <div style="font-weight: bold; margin-top: 15px; margin-bottom: 8px; color: #1e293b;">📋 주요 업무 9가지</div>
+                <div class="box" style="padding: 10px; background-color: #f8fafc;">
+                    <ul style="list-style: none; padding-left: 0; margin-bottom: 0;">
+                        <li style="margin-bottom: 8px;"><span class="badge blue">1</span> 소방계획서 작성 및 시행</li>
+                        <li style="margin-bottom: 8px;"><span class="badge blue">2</span> 자위소방대 및 초기대응체계의 구성·운영·교육</li>
+                        <li style="margin-bottom: 8px;"><span class="badge blue">3</span> 피난시설, 방화구획 및 방화시설의 관리</li>
+                        <li style="margin-bottom: 8px;"><span class="badge blue">4</span> 소방시설이나 그 밖의 소방 관련 시설의 관리</li>
+                        <li style="margin-bottom: 8px;"><span class="badge blue">5</span> 소방훈련 및 교육</li>
+                        <li style="margin-bottom: 8px;"><span class="badge blue">6</span> 화기취급의 감독</li>
+                        <li style="margin-bottom: 8px;"><span class="badge blue">7</span> 초기대응체계 구축</li>
+                        <li style="margin-bottom: 8px;"><span class="badge blue">8</span> (3),(4),(6)호 업무수행에 관한 기록·유지 <span class="highlight" style="font-size: 13px;">월 1회 이상 작성, 2년간 보관</span></li>
+                        <li style="margin-bottom: 0;"><span class="badge blue">9</span> 그 밖의 소방안전관리에 필요한 업무</li>
+                    </ul>
+                </div>
+
+                <ul style="margin-top: 15px;">
                     <li><b>업무 대행 가능 항목</b>: 피난·방화시설의 유지·관리, 소방시설 및 관련 시설의 관리 <span class="blue">(3번, 4번 항목만 가능)</span></li>
                     <li><b>소방안전관리대상물</b>: (아파트 제외) 11층 이상 연면적 1.5만m² 미만인 1급, 2·3급 대상물</li>
                     <li><b>대통령령으로 정하는 일부 업무 (3),(4)를 대행</b>
-                        <br>이 경우, 선임 된 소방안전관리자는 관리업자의 대행업무 수행을 감독, 대행업무 외의 소방안전관리업무는 직접 수행해야한다. 이 때 선임된 날 부터 <span class="red">3개월 내에 강습교육</span> 받아야함!</li>
+                        <br>이 경우, 선임 된 소방안전관리자는 관리업자의 대행업무 수행을 감독, 대행업무 외의 소방안전관리업무는 직접 수행해야한다. 이 때 선임된 날 부터 <span class="highlight">3개월 내에 강습교육</span> 받아야함!</li>
                 </ul>
             </div>
 
             <!-- [소페이지 7] -->
             <div id="sub-page-7" class="sub-page">
+                <div class="page-indicator">7 / 9 PAGE</div>
                 <h2>7. 선임자격 기준 [특/1/2/3급]</h2>
                 <div class="box">
                     <ul style="margin-bottom:0;">
@@ -366,11 +487,12 @@
 
             <!-- [소페이지 8] -->
             <div id="sub-page-8" class="sub-page">
+                <div class="page-indicator">8 / 9 PAGE</div>
                 <h2>8. 선임 기한 및 신고 절차</h2>
                 <div class="box">
                     <ul style="margin-bottom:0;">
-                        <li><b>선임 기한</b>: 사유 발생일로부터 <span class="red">30일 이내</span></li>
-                        <li><b>선임 신고</b>: 선임한 날부터 <span class="red">14일 이내</span> 소방본부장 또는 소방서장에 신고</li>
+                        <li><b>선임 기한</b>: 사유 발생일로부터 <span class="highlight">30일 이내</span></li>
+                        <li><b>선임 신고</b>: 선임한 날부터 <span class="highlight">14일 이내</span> 소방본부장 또는 소방서장에 신고</li>
                         <li><b>선임연기 신청</b>: <span class="red">2/3급 대상물만 가능</span> (특/1급 연기 불가)</li>
                         <li><b>연기 기간 중 안전관리</b>: <span class="red">관계인</span>이 담당</li>
                         <li><b>실무교육</b>: 선임된 날부터 <span class="orange">6개월 이내</span> 최초 이수, 이후 <span class="orange">2년 주기</span> 필수 이수</li>
@@ -384,6 +506,7 @@
 
             <!-- [소페이지 9] -->
             <div id="sub-page-9" class="sub-page">
+                <div class="page-indicator">9 / 9 PAGE</div>
                 <h2>9. 소방안전관리자 현황표</h2>
                 <ul>
                     <li><b>신고 기한</b>: 선임일로부터 14일 이내 (본부장/서장)</li>
@@ -392,7 +515,7 @@
                 </ul>
             </div>
 
-            <!-- 하단 이동 네비게이션 바 (소페이지 내부에서만 표시됨) -->
+            <!-- 하단 이동 네비게이션 바 -->
             <div id="page-nav-bar" class="page-nav-bar" style="display: none;">
                 <button id="btn-prev" class="page-nav-btn" onclick="prevSubPage()">◀ 이전</button>
                 <button class="page-nav-btn main-btn" onclick="showSubMenu()">📋 목차</button>
@@ -405,10 +528,75 @@
         </div>
     </div>
 
+    <!-- 맨 위로 이동 플로팅 버튼 -->
+    <button id="top-btn" class="top-btn" onclick="scrollToTop()">▲</button>
+
     <!-- 스크립트 -->
     <script>
         var currentSubPage = 0;
         var totalSubPages = 9;
+
+        // ⏱️ 공부 시간 측정 및 7일 기록 로직
+        var studySeconds = 0;
+        var todayStr = new Date().toISOString().slice(0, 10);
+
+        function initTimer() {
+            var savedDate = localStorage.getItem('last_study_date');
+            var savedLogs = JSON.parse(localStorage.getItem('study_logs') || '{}');
+
+            if (savedDate !== todayStr) {
+                localStorage.setItem('last_study_date', todayStr);
+                studySeconds = 0;
+            } else {
+                studySeconds = parseInt(localStorage.getItem('today_study_seconds') || '0', 10);
+            }
+
+            updateTimerDisplay();
+
+            setInterval(function() {
+                studySeconds++;
+                localStorage.setItem('today_study_seconds', studySeconds);
+                
+                savedLogs[todayStr] = studySeconds;
+                cleanOldLogs(savedLogs);
+                localStorage.setItem('study_logs', JSON.stringify(savedLogs));
+
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function cleanOldLogs(logs) {
+            var keys = Object.keys(logs).sort();
+            while (keys.length > 7) {
+                var oldKey = keys.shift();
+                delete logs[oldKey];
+            }
+        }
+
+        function updateTimerDisplay() {
+            var h = String(Math.floor(studySeconds / 3600)).padStart(2, '0');
+            var m = String(Math.floor((studySeconds % 3600) / 60)).padStart(2, '0');
+            var s = String(studySeconds % 60).padStart(2, '0');
+            document.getElementById('timer-display').innerText = h + ":" + m + ":" + s;
+        }
+
+        function toggleLogModal() {
+            var logs = JSON.parse(localStorage.getItem('study_logs') || '{}');
+            var msg = "📊 최근 7일 공부 시간 기록:\n\n";
+            var keys = Object.keys(logs).sort().reverse();
+
+            if (keys.length === 0) {
+                msg += "기록된 데이터가 없습니다.";
+            } else {
+                keys.forEach(function(date) {
+                    var sec = logs[date];
+                    var h = Math.floor(sec / 3600);
+                    var m = Math.floor((sec % 3600) / 60);
+                    msg += "• " + date + ": " + h + "시간 " + m + "분\n";
+                });
+            }
+            alert(msg);
+        }
 
         // 메인 탭 전환
         function openTab(evt, tabName) {
@@ -457,17 +645,14 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 이전 소페이지
         function prevSubPage() {
             if (currentSubPage > 1) showSubPage(currentSubPage - 1);
         }
 
-        // 다음 소페이지
         function nextSubPage() {
             if (currentSubPage < totalSubPages) showSubPage(currentSubPage + 1);
         }
 
-        // 하단 이전/다음 버튼 활성화 제어
         function updateNavButtons() {
             var btnPrev = document.getElementById("btn-prev");
             var btnNext = document.getElementById("btn-next");
@@ -475,6 +660,55 @@
             btnPrev.disabled = (currentSubPage <= 1);
             btnNext.disabled = (currentSubPage >= totalSubPages);
         }
+
+        // 스크롤 시 Top 버튼 노출 제어
+        window.onscroll = function() {
+            var topBtn = document.getElementById("top-btn");
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                topBtn.style.display = "flex";
+            } else {
+                topBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 모바일 좌/우 스와이프(Swipe) 제어 로직
+        var touchstartX = 0;
+        var touchendX = 0;
+        var touchstartY = 0;
+        var touchendY = 0;
+
+        document.addEventListener('touchstart', function(event) {
+            touchstartX = event.changedTouches[0].screenX;
+            touchstartY = event.changedTouches[0].screenY;
+        }, false);
+
+        document.addEventListener('touchend', function(event) {
+            touchendX = event.changedTouches[0].screenX;
+            touchendY = event.changedTouches[0].screenY;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            var xDiff = touchendX - touchstartX;
+            var yDiff = touchendY - touchstartY;
+
+            if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
+                if (currentSubPage > 0) {
+                    if (xDiff < 0) {
+                        nextSubPage();
+                    } else {
+                        prevSubPage();
+                    }
+                }
+            }
+        }
+
+        // 페이지 로드 시 타이머 초기화
+        window.addEventListener('load', initTimer);
     </script>
 </body>
 </html>
