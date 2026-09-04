@@ -5,25 +5,6 @@
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	
-	<!-- 🔐 비밀번호 보안 스크립트 -->
-	<script>
-		(function() {
-			var myPassword = "243617";
-			var input = "";
-			while (input !== myPassword) {
-				input = prompt("비밀번호를 입력하세요:");
-				if (input === null) {
-					document.write("<style>body { display: none !important; }</style>");
-					document.write("<div style='text-align:center; padding-top:100px; font-size:20px; font-weight:bold;'>접근 권한이 없습니다.</div>");
-					return;
-				}
-				if (input !== myPassword) {
-					alert("비밀번호가 올바르지 않습니다. 다시 입력해주세요.");
-				}
-			}
-		})();
-	</script>
-		
     <title>소방안전관리자 2급 - 핵심 요약집</title>
     <style>
 		:root {
@@ -47,18 +28,18 @@
 			word-break: keep-all;
 			font-size: var(--base-font-size);
         }
+
         .container {
             background: #ffffff;
             padding: 16px;
             border-radius: 16px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             min-height: 90vh;
-            display: flex;
+            display: none;
             flex-direction: column;
             position: relative;
         }
 
-        /* 🔤 글자 크기 조절 컨트롤 바 */
         .font-control-bar {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -95,7 +76,6 @@
             color: #2563eb;
         }
 
-        /* 📌 상단 탭 메뉴 고정 (sticky) */
         .tab-menu {
             position: sticky;
             top: 0;
@@ -132,7 +112,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* 소페이지(카드형) 그리드 목차 메뉴 */
         .sub-nav-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -166,14 +145,12 @@
             color: #94a3b8;
         }
 
-        /* 소페이지 제어 영역 및 터치 영역 */
         .sub-page { 
             display: none; 
             touch-action: pan-y;
         }
         .sub-page.active { display: block; }
 
-        /* 상단 현재 위치 표시 바 */
         .page-indicator {
             font-size: 0.85em;
             font-weight: 700;
@@ -185,7 +162,6 @@
             margin-bottom: 8px;
         }
 
-        /* 하단 네비게이션 바 */
         .page-nav-bar {
             display: flex;
             justify-content: space-between;
@@ -220,7 +196,6 @@
             cursor: not-allowed;
         }
 
-        /* 우측 하단 Top 플로팅 버튼 */
         .top-btn {
             position: fixed;
             bottom: 20px;
@@ -241,7 +216,6 @@
             z-index: 999;
         }
 
-        /* 서식 및 가독성 최적화 */
         h1 { font-size: 1.35em; color: #0f172a; border-bottom: 3px solid #3b82f6; padding-bottom: 8px; margin-top: 5px; }
         h2 { font-size: 1.15em; color: #1d4ed8; background: #eff6ff; padding: 10px 12px; border-left: 5px solid #3b82f6; border-radius: 6px; margin-top: 10px; }
         ul { padding-left: 18px; margin-bottom: 15px; }
@@ -258,7 +232,6 @@
         .orange { color: #ea580c; font-weight: 700; }
         .orange_nb { color: #ea580c; font-weight: 400; }
 
-        /* 주요 업무 번호 강조 배지 */
         .badge {
             display: inline-block;
             min-width: 22px;
@@ -273,7 +246,6 @@
         }
         .badge.blue { background-color: #2563eb; }
 
-        /* 암기용 형광펜 하이라이트 효과 */
         .highlight {
             background-color: #fef08a;
             padding: 2px 4px;
@@ -296,8 +268,19 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 🔤 글자 크기 조절 컨트롤 바 -->
+
+    <div id="sys-auth-layer" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; z-index:99999; display:flex; justify-content:center; align-items:center; padding:20px;">
+        <div style="background:#ffffff; padding:28px 24px; border-radius:18px; width:100%; max-width:320px; text-align:center; box-shadow:0 12px 30px rgba(0,0,0,0.25);">
+            <div style="font-size:32px; margin-bottom:8px;">📌</div>
+            <h3 style="margin:0 0 6px 0; color:#0f172a; font-size:18px; font-weight:800;">시스템 사용자 인증</h3>
+            <p style="color:#64748b; font-size:13px; margin:0 0 18px 0;">식별 코드를 입력해 주세요.</p>
+            
+            <input type="password" id="sys-key-input" placeholder="ACCESS CODE" style="width:100%; padding:13px; border:1px solid #cbd5e1; border-radius:10px; font-size:16px; text-align:center; outline:none; margin-bottom:12px; background-color:#f8fafc; letter-spacing: 2px;">
+            <button onclick="sys_verify_token()" style="width:100%; background:#2563eb; color:#ffffff; border:none; padding:13px; border-radius:10px; font-size:15px; font-weight:bold; cursor:pointer;">확인</button>
+        </div>
+    </div>
+
+    <div class="container" id="app-viewport">
         <div class="font-control-bar">
             <span class="font-control-title">🔤 글자 크기</span>
             <div class="font-btn-group">
@@ -307,13 +290,11 @@
             </div>
         </div>
 
-        <!-- 네비게이션 탭 메뉴 (Sticky 고정) -->
         <div class="tab-menu">
             <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
             <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">Chapter 01. 소방관계법령</button>
         </div>
 
-        <!-- [탭 1] 표지 -->
         <div id="tab-cover" class="tab-content active">
             <div class="cover-page">
                 <div class="cover-title">소방안전관리자 2급</div>
@@ -327,14 +308,12 @@
             </div>
         </div>
 
-        <!-- [탭 2] Chapter 01. 소방관계법령 -->
         <div id="tab-ch1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>Chapter 01. 소방관계법령</h1>
             <div style="text-align: right; font-size: 0.8em; color: #64748b; margin-top: 4px; margin-bottom: 12px;">
                 <span>만든이: 꾸누</span> | <span>수정일: 2026.09.04</span>
             </div>
 
-            <!-- 메인 목차 리스트 (소페이지 선택 전) -->
             <div id="sub-page-menu">
                 <div style="font-size: 0.9em; font-weight: bold; color: #64748b; margin-bottom: 8px;">📑 항목 선택 (소페이지 열기)</div>
                 <div class="sub-nav-grid">
@@ -350,7 +329,6 @@
                 </div>
             </div>
 
-            <!-- [소페이지 1] -->
             <div id="sub-page-1" class="sub-page">
                 <div class="page-indicator">1 / 9 PAGE</div>
                 <h2>1. 주요 소방관계법령의 제정 목적</h2>
@@ -361,7 +339,6 @@
                 </ul>
             </div>
 
-            <!-- [소페이지 2] -->
             <div id="sub-page-2" class="sub-page">
                 <div class="page-indicator">2 / 9 PAGE</div>
                 <h2>2. 기본 소방 용어 정리</h2>
@@ -376,7 +353,6 @@
                 </ul>
             </div>
 
-            <!-- [소페이지 3] -->
             <div id="sub-page-3" class="sub-page">
                 <div class="page-indicator">3 / 9 PAGE</div>
                 <h2>3. 무창층 요건 (암기 필수)</h2>
@@ -391,7 +367,6 @@
                 </div>
             </div>
 
-            <!-- [소페이지 4] -->
             <div id="sub-page-4" class="sub-page">
                 <div class="page-indicator">4 / 9 PAGE</div>
                 <h2>4. 한국소방안전원</h2>
@@ -407,7 +382,6 @@
                 </div>
             </div>
 
-            <!-- [소페이지 5] -->
             <div id="sub-page-5" class="sub-page">
                 <div class="page-indicator">5 / 9 PAGE</div>
                 <h2>5. 소방안전관리대상물 구분 (특/1/2/3급) &lt;1층=약4m&gt;</h2>
@@ -451,7 +425,6 @@
                 </div>
             </div>
 
-            <!-- [소페이지 6] -->
             <div id="sub-page-6" class="sub-page">
                 <div class="page-indicator">6 / 9 PAGE</div>
                 <h2>6. 소방안전관리자 업무 및 대행</h2>
@@ -479,7 +452,6 @@
                 </ul>
             </div>
 
-            <!-- [소페이지 7] -->
             <div id="sub-page-7" class="sub-page">
                 <div class="page-indicator">7 / 9 PAGE</div>
                 <h2>7. 선임자격 기준 [특/1/2/3급]</h2>
@@ -501,7 +473,6 @@
                 </ul>
             </div>
 
-            <!-- [소페이지 8] -->
             <div id="sub-page-8" class="sub-page">
                 <div class="page-indicator">8 / 9 PAGE</div>
                 <h2>8. 선임 기한 및 신고 절차</h2>
@@ -520,7 +491,6 @@
                 </ul>
             </div>
 
-            <!-- [소페이지 9] -->
             <div id="sub-page-9" class="sub-page">
                 <div class="page-indicator">9 / 9 PAGE</div>
                 <h2>9. 소방안전관리자 현황표</h2>
@@ -531,7 +501,6 @@
                 </ul>
             </div>
 
-            <!-- 하단 이동 네비게이션 바 -->
             <div id="page-nav-bar" class="page-nav-bar" style="display: none;">
                 <button id="btn-prev" class="page-nav-btn" onclick="prevSubPage()">◀ 이전</button>
                 <button class="page-nav-btn main-btn" onclick="showSubMenu()">📋 목차</button>
@@ -544,15 +513,44 @@
         </div>
     </div>
 
-    <!-- 맨 위로 이동 플로팅 버튼 -->
     <button id="top-btn" class="top-btn" onclick="scrollToTop()">▲</button>
 
-    <!-- 스크립트 -->
     <script>
+        var _cfg_sys_hash = "2d3df24388e3678ca0eb770ca9860b73c473ae838b0870954930be62e1e35f79";
+        var _cfg_sys_salt = "_kkunu_secret";
+
+        async function _sys_calc_digest(val) {
+            var b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(val));
+            return Array.prototype.map.call(new Uint8Array(b), x => (('0' + x.toString(16)).slice(-2))).join('');
+        }
+
+        async function sys_verify_token() {
+            var inputVal = document.getElementById('sys-key-input').value;
+            var hashedResult = await _sys_calc_digest(inputVal + _cfg_sys_salt);
+
+            if (hashedResult === _cfg_sys_hash) {
+                document.getElementById('sys-auth-layer').style.display = 'none';
+                document.getElementById('app-viewport').style.display = 'flex';
+            } else {
+                alert("인증 코드가 정확하지 않습니다.");
+                document.getElementById('sys-key-input').value = "";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var input = document.getElementById("sys-key-input");
+            if(input) {
+                input.addEventListener("keyup", function(event) {
+                    if (event.key === "Enter") {
+                        sys_verify_token();
+                    }
+                });
+            }
+        });
+
         var currentSubPage = 0;
         var totalSubPages = 9;
 
-        // 🔤 글자 크기 조절 기능
         var currentFontSize = parseInt(localStorage.getItem('user_font_size') || '15', 10);
 
         function applyFontSize() {
@@ -562,8 +560,8 @@
 
         function changeFontSize(delta) {
             currentFontSize += delta;
-            if (currentFontSize < 12) currentFontSize = 12; // 최소 크기 제한
-            if (currentFontSize > 22) currentFontSize = 22; // 최대 크기 제한
+            if (currentFontSize < 12) currentFontSize = 12;
+            if (currentFontSize > 22) currentFontSize = 22;
             applyFontSize();
         }
 
@@ -572,7 +570,6 @@
             applyFontSize();
         }
 
-        // 메인 탭 전환
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -589,7 +586,6 @@
             evt.currentTarget.classList.add("active");
         }
 
-        // 소페이지 열기
         function showSubPage(pageNum) {
             currentSubPage = pageNum;
             document.getElementById("sub-page-menu").style.display = "none";
@@ -607,7 +603,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 목차로 돌아가기
         function showSubMenu() {
             currentSubPage = 0;
             for (var i = 1; i <= totalSubPages; i++) {
@@ -635,7 +630,6 @@
             btnNext.disabled = (currentSubPage >= totalSubPages);
         }
 
-        // 스크롤 시 Top 버튼 노출 제어
         window.onscroll = function() {
             var topBtn = document.getElementById("top-btn");
             if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
@@ -649,7 +643,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 📌 모바일 좌/우 스와이프(Swipe) 제어 및 표 스크롤 예외 처리 로직
         var touchstartX = 0;
         var touchendX = 0;
         var touchstartY = 0;
@@ -661,7 +654,6 @@
         }, false);
 
         document.addEventListener('touchend', function(event) {
-            // 📌 표(table) 영역 안에서 터치 동작이 발생한 경우 페이지 스와이프 방지
             if (event.target.closest('.table-wrapper') || event.target.closest('.table')) {
                 return;
             }
@@ -685,7 +677,6 @@
             }
         }
 
-        // 초기화
         window.addEventListener('load', function() {
             applyFontSize();
         });
