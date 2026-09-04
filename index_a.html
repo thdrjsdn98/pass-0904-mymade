@@ -516,71 +516,27 @@
     <button id="top-btn" class="top-btn" onclick="scrollToTop()">▲</button>
 
     <script>
-        function _sys_simple_sha256(ascii) {
-            function mathPow(n) { return Math.pow(n, 1/2); }
-            function mathPow3(n) { return Math.pow(n, 1/3); }
-            var K = [], H = [];
-            var isPrime = function(n) {
-                for (var factor = 2; factor <= Math.sqrt(n); factor++) {
-                    if (n % factor === 0) return false;
-                }
-                return true;
-            };
-            var p = 2;
-            while (H.length < 8) {
-                if (isPrime(p)) {
-                    H.push((mathPow(p) * 0x100000000) | 0);
-                    K.push((mathPow3(p) * 0x100000000) | 0);
-                }
-                p++;
+        function _sys_encode(s) {
+            var salt = "_kkunu_secret";
+            var str = s + salt;
+            var h1 = 0xdeadbeef ^ 0, h2 = 0x41c6ce57 ^ 0;
+            for (var i = 0, ch; i < str.length; i++) {
+                ch = str.charCodeAt(i);
+                h1 = Math.imul(h1 ^ ch, 2654435761);
+                h2 = Math.imul(h2 ^ ch, 1597334677);
             }
-            var bytes = [];
-            for (var i = 0; i < ascii.length; i++) bytes.push(ascii.charCodeAt(i));
-            var bitLen = bytes.length * 8;
-            bytes.push(0x80);
-            while ((bytes.length % 64) !== 56) bytes.push(0);
-            for (var j = 7; j >= 0; j--) bytes.push((bitLen >>> (j * 8)) & 0xff);
-            
-            for (var i = 0; i < bytes.length; i += 64) {
-                var w = new Array(64);
-                for (var t = 0; t < 16; t++) {
-                    w[t] = (bytes[i + t * 4] << 24) | (bytes[i + t * 4 + 1] << 16) | (bytes[i + t * 4 + 2] << 8) | (bytes[i + t * 4 + 3]);
-                }
-                for (var t = 16; t < 64; t++) {
-                    var s0 = ((w[t-15] >>> 7) | (w[t-15] << 25)) ^ ((w[t-15] >>> 18) | (w[t-15] << 14)) ^ (w[t-15] >>> 3);
-                    var s1 = ((w[t-2] >>> 17) | (w[t-2] << 15)) ^ ((w[t-2] >>> 19) | (w[t-2] << 13)) ^ (w[t-2] >>> 10);
-                    w[t] = (w[t-16] + s0 + w[t-7] + s1) | 0;
-                }
-                var a = H[0], b = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
-                for (var t = 0; t < 64; t++) {
-                    var S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
-                    var ch = (e & f) ^ ((~e) & g);
-                    var temp1 = (h + S1 + ch + K[t] + w[t]) | 0;
-                    var S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
-                    var maj = (a & b) ^ (a & c) ^ (b & c);
-                    var temp2 = (S0 + maj) | 0;
-                    h = g; g = f; f = e; e = (d + temp1) | 0; d = c; c = b; b = a; a = (temp1 + temp2) | 0;
-                }
-                H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
-                H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
-            }
-            var res = "";
-            for (var i = 0; i < 8; i++) {
-                var hex = (H[i] >>> 0).toString(16);
-                while (hex.length < 8) hex = "0" + hex;
-                res += hex;
-            }
-            return res;
+            h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+            h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+            return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16);
         }
 
-        var _cfg_sys_hash = "2d3df24388e3678ca0eb770ca9860b73c473ae838b0870954930be62e1e35f79";
-        var _cfg_sys_salt = "_kkunu_secret";
+        var _cfg_sys_target = "1f2b6833c8ad81";
 
         function sys_verify_token() {
             var inputVal = String(document.getElementById('sys-key-input').value).trim();
-            var hashedResult = _sys_simple_sha256(inputVal + _cfg_sys_salt);
+            var calcResult = _sys_encode(inputVal);
 
-            if (hashedResult === _cfg_sys_hash) {
+            if (calcResult === _cfg_sys_target) {
                 document.getElementById('sys-auth-layer').style.display = 'none';
                 document.getElementById('app-viewport').style.display = 'flex';
             } else {
