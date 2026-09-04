@@ -525,7 +525,7 @@
         }
 
         async function sys_verify_token() {
-            var inputVal = document.getElementById('sys-key-input').value;
+            var inputVal = String(document.getElementById('sys-key-input').value).trim();
             var hashedResult = await _sys_calc_digest(inputVal + _cfg_sys_salt);
 
             if (hashedResult === _cfg_sys_hash) {
