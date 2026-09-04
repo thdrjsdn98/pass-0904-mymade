@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
+	<meta charset="UTF-8">
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	
     <title>소방안전관리자 2급 - 핵심 요약집</title>
     <style>
-        /* 기본 테마 색상 및 폰트 변수 */
-        :root {
-            --base-font-size: 15px;
+		:root {
+			--base-font-size: 15px;
             --bg-color: #f1f5f9;
             --card-bg: #ffffff;
             --text-color: #1e293b;
             --text-sub: #475569;
             --border-color: #cbd5e1;
             --box-bg: #f8fafc;
-        }
+		}
 
-        /* 야간 모드 색상 재정의 */
+        /* 🌙 다크 모드 테마 변수 */
         body.dark-mode {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
@@ -27,27 +27,26 @@
             --box-bg: #334155;
         }
 
-        html, body {
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100%;
-            box-sizing: border-box;
-            overflow-x: hidden;
+		html, body {
+			margin: 0 !important;
+			padding: 0 !important;
+			width: 100%;
+			box-sizing: border-box;
+			overflow-x: hidden;
             background-color: var(--bg-color);
             -webkit-text-size-adjust: 100%;
             transition: background-color 0.3s;
-        }
+		}
         * { box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
             line-height: 1.65;
             color: var(--text-color);
             padding: 8px !important;
-            word-break: keep-all;
-            font-size: var(--base-font-size);
+			word-break: keep-all;
+			font-size: var(--base-font-size);
         }
 
-        /* 메인 컨테이너: 비밀번호 없이 바로 flex 렌더링 */
         .container {
             background: var(--card-bg);
             padding: 16px;
@@ -59,7 +58,7 @@
             position: relative;
         }
 
-        /* 컨트롤 영역 */
+        /* 🔤 글자 크기 & 다크모드 & 암기모드 컨트롤 바 */
         .control-bar-group {
             display: flex;
             flex-direction: column;
@@ -172,7 +171,7 @@
         .search-result-item:last-child { border-bottom: none; }
         .search-result-item:active { background-color: #eff6ff; }
 
-        /* 상단 탭 내비게이션 */
+        /* 📌 상단 탭 메뉴 고정 */
         .tab-menu {
             position: sticky;
             top: 0;
@@ -213,7 +212,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* 카드 그리드 */
         .sub-nav-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -287,7 +285,7 @@
             color: #93c5fd;
         }
 
-        /* 각주(페이지 메모) */
+        /* 📝 각주 메모 영역 */
         .page-memo-section {
             margin-top: 25px;
             padding: 12px;
@@ -315,7 +313,6 @@
             font-family: inherit;
         }
 
-        /* 하단 내비게이션 바 */
         .page-nav-bar {
             display: flex;
             justify-content: space-between;
@@ -409,7 +406,7 @@
             color: #0f172a;
         }
 
-        /* 암기 모드 블라인드 */
+        /* 🙈 암기 모드 */
         body.memorize-mode .red,
         body.memorize-mode .blue,
         body.memorize-mode .yellow,
@@ -462,7 +459,6 @@
         .note { background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; color: #991b1b; margin: 14px 0; border-radius: 6px; font-size: 0.9em; }
         body.dark-mode .note { background-color: #7f1d1d !important; color: #fee2e2 !important; border-left-color: #f87171; }
 
-        /* 스코어보드 스타일 */
         .score-board {
             background-color: var(--box-bg);
             border: 2px solid #2563eb;
@@ -497,7 +493,6 @@
     <!-- 메인 앱 뷰포트 -->
     <div class="container" id="app-viewport">
         
-        <!-- 상단 컨트롤러 및 진도율 바 -->
         <div class="control-bar-group">
             <div class="font-control-bar">
                 <span class="font-control-title">🔤 글자</span>
@@ -510,7 +505,7 @@
                 <button class="font-btn" id="darkmode-toggle-btn" onclick="toggleDarkMode()">🌙 야간</button>
             </div>
 
-            <!-- 학습 진도율 프로그레스 바 -->
+            <!-- 학습 진도율 바 -->
             <div class="progress-box">
                 <div class="progress-header">
                     <span>📊 회독 학습 진도율</span>
@@ -521,7 +516,6 @@
                 </div>
             </div>
 
-            <!-- 암기 유지시간 옵션 바 -->
             <div class="font-control-bar" id="timer-control-bar" style="display: none; background-color: var(--card-bg);">
                 <span class="font-control-title">⏱️ 표시시간</span>
                 <div class="font-btn-group">
@@ -537,12 +531,12 @@
             </div>
         </div>
 
-        <!-- 탭 메뉴 -->
+        <!-- 📑 상단 탭 메뉴 -->
         <div class="tab-menu">
             <div class="tab-menu-left">
                 <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
                 <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">복습예제</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">I. 복습예제</button>
                 <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!');">II. 설비 및 구조</button>
                 <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!');">III. 복합개념</button>
                 <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
@@ -558,19 +552,19 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>수정일: 2026.09.04</p>
-                    <p>버전: V2.3.0 (인증 제거 및 수험 특화 기능 풀버전)</p>
+                    <p>버전: V2.4.0 (I. 복습예제 파트형 개편)</p>
                 </div>
             </div>
         </div>
 
-        <!-- Chapter 01 (I. 이론과 개념) -->
+        <!-- Chapter 01 (I. 이론과 개념) 탭 -->
         <div id="tab-ch1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 이론과 개념</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
                 <span>만든이: 꾸누</span> | <span>수정일: 2026.09.04</span>
             </div>
 
-            <!-- 대단원 메인 파트 선택 -->
+            <!-- Ch.1 메인 파트 목록 -->
             <div id="ch1-main-menu">
                 <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 학습 파트 선택</div>
                 <div class="sub-nav-grid">
@@ -585,7 +579,7 @@
                 </div>
             </div>
 
-            <!-- Part 1-1 단원 목록 및 소페이지 영역 -->
+            <!-- Part1-1 내부 1~9단원 소페이지 컨테이너 -->
             <div id="ch1-part1-1-container" style="display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                     <button class="font-btn" onclick="showCh1MainMenu()" style="font-size: 0.8em;">◀ 파트 목록으로</button>
@@ -606,7 +600,7 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 1 -->
+                <!-- 소페이지 1 ~ 9 -->
                 <div id="sub-page-1" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">1 / 9 PAGE</div>
@@ -627,7 +621,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 2 -->
                 <div id="sub-page-2" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">2 / 9 PAGE</div>
@@ -652,7 +645,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 3 -->
                 <div id="sub-page-3" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">3 / 9 PAGE</div>
@@ -677,7 +669,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 4 -->
                 <div id="sub-page-4" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">4 / 9 PAGE</div>
@@ -703,7 +694,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 5 -->
                 <div id="sub-page-5" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">5 / 9 PAGE</div>
@@ -757,7 +747,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 6 -->
                 <div id="sub-page-6" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">6 / 9 PAGE</div>
@@ -790,7 +779,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 7 -->
                 <div id="sub-page-7" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">7 / 9 PAGE</div>
@@ -815,7 +803,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 8 -->
                 <div id="sub-page-8" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">8 / 9 PAGE</div>
@@ -840,7 +827,6 @@
                     </div>
                 </div>
 
-                <!-- 소페이지 9 -->
                 <div id="sub-page-9" class="sub-page">
                     <div class="sub-page-header">
                         <div class="page-indicator">9 / 9 PAGE</div>
@@ -874,46 +860,66 @@
             </div>
         </div>
 
-        <!-- 복습 예제 탭 -->
+        <!-- Chapter 01-1 (I. 복습예제) 탭 -->
         <div id="tab-ch1-1" class="tab-content">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #3b82f6; padding-bottom: 8px; margin-top: 5px;">
-                <h1 style="margin: 0; border: none; padding: 0;">복습 예제</h1>
-                <button class="font-btn" onclick="resetAllQuestions('ch11-', 2)" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff; border-color: #dc2626;">🔄 전체 초기화</button>
-            </div>
+            <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V2.3.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V2.4.0</span>
             </div>
 
-            <!-- Q1 -->
-            <div class="box" style="margin-top: 15px; position: relative;">
-                <button class="font-btn" onclick="resetAnswer('ch11-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                <p style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 화재를 진압하고 화재, 재난·재해 그 밖의 위급한 상황에서 구조·구급활동 등을 하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 뜻하는 용어를 고르시오.</p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                    <button class="font-btn" id="ch11-1-opt-1" onclick="checkAnswer('ch11-1', 1, 2)" style="text-align: left; padding: 10px;">1) 자위소방대</button>
-                    <button class="font-btn" id="ch11-1-opt-2" onclick="checkAnswer('ch11-1', 2, 2)" style="text-align: left; padding: 10px;">2) 소방대</button>
-                    <button class="font-btn" id="ch11-1-opt-3" onclick="checkAnswer('ch11-1', 3, 2)" style="text-align: left; padding: 10px;">3) 초기대응체계</button>
-                    <button class="font-btn" id="ch11-1-opt-4" onclick="checkAnswer('ch11-1', 4, 2)" style="text-align: left; padding: 10px;">4) 공동소방안전관리협의회</button>
-                </div>
-                <div id="q-result-ch11-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                <div id="q-expl-ch11-1" class="note" style="margin-top: 10px; display: none;">
-                    <b>💡 해설:</b> 화재 진압 및 위급상황 시 구조·구급활동을 행하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 '소방대'라고 한다.<br><br>
-                    <b>Tip.</b> 소방대를 구성하는 사람들에게 소방공무원, 의무소방원, 의용소방대원이 포함될 수 있다는 것도 기억하는 것이 유리해요~!
+            <!-- 복습예제 메인 파트 선택 -->
+            <div id="ch1-1-main-menu">
+                <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 복습예제 파트 선택</div>
+                <div class="sub-nav-grid">
+                    <div class="sub-nav-card" onclick="showCh11Part('part1-1')"><span>Part1-1. 소방관계법령</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part1-2. 건축관계법령 복습예제는 준비 중입니다!');"><span>Part1-2. 건축관계법령</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-1. 소방안전교육 및 훈련/소방계획의 수립 복습예제는 준비 중입니다!');"><span>Part2-1. 소방안전교육 및 훈련/소방계획의 수립</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-2. 화재대응 및 피난 복습예제는 준비 중입니다!');"><span>Part2-2. 화재대응 및 피난</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part3. 응급처치 개요 복습예제는 준비 중입니다!');"><span>Part3. 응급처치 개요</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part4. 소방학개론 복습예제는 준비 중입니다!');"><span>Part4. 소방학개론</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part5. 위험물·전기·가스 안전관리 복습예제는 준비 중입니다!');"><span>Part5. 위험물·전기·가스 안전관리</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part6. 화기취급 감독 및 화재위험작업의 허가·관리 복습예제는 준비 중입니다!');"><span>Part6. 화기취급 감독 및 화재위험작업의 허가·관리</span><span>➔</span></div>
                 </div>
             </div>
 
-            <!-- Q2 -->
-            <div class="box" style="margin-top: 15px; position: relative;">
-                <button class="font-btn" onclick="resetAnswer('ch11-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                <p style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 아파트를 제외하고 연면적이 35,000m²인 특정소방대상물의 소방안전관리보조자 최소 선임 인원수를 구하시오.</p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                    <button class="font-btn" id="ch11-2-opt-1" onclick="checkAnswer('ch11-2', 1, 2)" style="text-align: left; padding: 10px;">1) 1명</button>
-                    <button class="font-btn" id="ch11-2-opt-2" onclick="checkAnswer('ch11-2', 2, 2)" style="text-align: left; padding: 10px;">2) 2명</button>
-                    <button class="font-btn" id="ch11-2-opt-3" onclick="checkAnswer('ch11-2', 3, 2)" style="text-align: left; padding: 10px;">3) 3명</button>
-                    <button class="font-btn" id="ch11-2-opt-4" onclick="checkAnswer('ch11-2', 4, 2)" style="text-align: left; padding: 10px;">4) 4명</button>
+            <!-- Part1-1 복습예제 문제 컨테이너 -->
+            <div id="ch1-1-part1-1-container" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <button class="font-btn" onclick="showCh11MainMenu()" style="font-size: 0.8em;">◀ 파트 목록으로</button>
+                    <button class="font-btn" onclick="resetAllQuestions('ch11-', 2)" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff; border-color: #dc2626;">🔄 전체 초기화</button>
                 </div>
-                <div id="q-result-ch11-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                <div id="q-expl-ch11-2" class="note" style="margin-top: 10px; display: none;">
-                    <b>💡 해설:</b> 35,000 / 15,000 = 2.33. 소수점 이하를 버린 정수로 계산하므로 최소 선임 인원수는 2명입니다.
+
+                <!-- Q1 -->
+                <div class="box" style="margin-top: 15px; position: relative;">
+                    <button class="font-btn" onclick="resetAnswer('ch11-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                    <p style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 화재를 진압하고 화재, 재난·재해 그 밖의 위급한 상황에서 구조·구급활동 등을 하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 뜻하는 용어를 고르시오.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                        <button class="font-btn" id="ch11-1-opt-1" onclick="checkAnswer('ch11-1', 1, 2)" style="text-align: left; padding: 10px;">1) 자위소방대</button>
+                        <button class="font-btn" id="ch11-1-opt-2" onclick="checkAnswer('ch11-1', 2, 2)" style="text-align: left; padding: 10px;">2) 소방대</button>
+                        <button class="font-btn" id="ch11-1-opt-3" onclick="checkAnswer('ch11-1', 3, 2)" style="text-align: left; padding: 10px;">3) 초기대응체계</button>
+                        <button class="font-btn" id="ch11-1-opt-4" onclick="checkAnswer('ch11-1', 4, 2)" style="text-align: left; padding: 10px;">4) 공동소방안전관리협의회</button>
+                    </div>
+                    <div id="q-result-ch11-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                    <div id="q-expl-ch11-1" class="note" style="margin-top: 10px; display: none;">
+                        <b>💡 해설:</b> 화재 진압 및 위급상황 시 구조·구급활동을 행하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 '소방대'라고 한다.<br><br>
+                        <b>Tip.</b> 소방대를 구성하는 사람들에게 소방공무원, 의무소방원, 의용소방대원이 포함될 수 있다는 것도 기억하는 것이 유리해요~! 참고로 자위소방대는 소방안전관리대상물에서 피해를 최소화를 위해 편성하는 자율 안전관리조직을 말하므로 문제에서 묻고 있는 소방대와는 구분해 주시는 것이 좋습니다.
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="box" style="margin-top: 15px; position: relative;">
+                    <button class="font-btn" onclick="resetAnswer('ch11-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                    <p style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 아파트를 제외하고 연면적이 35,000m²인 특정소방대상물의 소방안전관리보조자 최소 선임 인원수를 구하시오.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                        <button class="font-btn" id="ch11-2-opt-1" onclick="checkAnswer('ch11-2', 1, 2)" style="text-align: left; padding: 10px;">1) 1명</button>
+                        <button class="font-btn" id="ch11-2-opt-2" onclick="checkAnswer('ch11-2', 2, 2)" style="text-align: left; padding: 10px;">2) 2명</button>
+                        <button class="font-btn" id="ch11-2-opt-3" onclick="checkAnswer('ch11-2', 3, 2)" style="text-align: left; padding: 10px;">3) 3명</button>
+                        <button class="font-btn" id="ch11-2-opt-4" onclick="checkAnswer('ch11-2', 4, 2)" style="text-align: left; padding: 10px;">4) 4명</button>
+                    </div>
+                    <div id="q-result-ch11-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                    <div id="q-expl-ch11-2" class="note" style="margin-top: 10px; display: none;">
+                        <b>💡 해설:</b> (아파트 제외) 연면적 15,000m² 이상의 특정소방대상물은 소방안전관리보조자 선임 대상물이며 다만, 초과되는 연면적 1만 5천 제곱미터마다 1명 이상을 추가로 선임해야 하므로, 35,000 / 15,000 = 2.33. 이때 소수점 이하를 버린 정수로 계산하므로 소방안전관리보조자 최소 선임 인원수는 2명.
+                    </div>
                 </div>
             </div>
 
@@ -926,7 +932,7 @@
         <div id="tab-ch3" class="tab-content">
             <h1>소방안전관리자 2급 - <br>모의고사</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V2.3.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V2.4.0</span>
             </div>
 
             <div id="ch3-page-menu">
@@ -947,7 +953,6 @@
                     </div>
                 </div>
 
-                <!-- 실시간 성적 및 합격 판정 스코어보드 -->
                 <div class="score-board">
                     <span id="quiz-score-text">점수: 0 / 100점 (정답: 0개)</span>
                     <span id="quiz-pass-text" style="color: #64748b;">응시 중</span>
@@ -1127,7 +1132,6 @@
     <button id="top-btn" class="top-btn" onclick="scrollToTop()">▲</button>
 
     <script>
-        // 전역 상태 변수
         var currentSubPage = 0;
         var totalSubPages = 9;
         var bookmarks = JSON.parse(localStorage.getItem('user_bookmarks') || '[]');
@@ -1135,7 +1139,6 @@
         var currentFontSize = parseInt(localStorage.getItem('user_font_size') || '15', 10);
         var memorizeTimerSec = parseInt(localStorage.getItem('user_timer_sec') || '3', 10);
         
-        // 모의고사 채점 상태 및 오답 추적 맵
         var quizAnswerState = {}; 
         var isFilterWrongMode = false;
 
@@ -1145,7 +1148,6 @@
             updateProgress();
         });
 
-        // 폰트 크기 조정
         function applyFontSize() {
             document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
             localStorage.setItem('user_font_size', currentFontSize);
@@ -1161,7 +1163,6 @@
             applyFontSize();
         }
 
-        // 야간 모드 토글
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             var isDark = document.body.classList.contains('dark-mode');
@@ -1169,7 +1170,6 @@
             document.getElementById('darkmode-toggle-btn').innerText = isDark ? "☀️ 주간" : "🌙 야간";
         }
 
-        // 암기 모드 토글
         function toggleMemorizeMode() {
             document.body.classList.toggle('memorize-mode');
             var isMemo = document.body.classList.contains('memorize-mode');
@@ -1199,7 +1199,6 @@
             }
         }
 
-        // 암기 모드 단어 터치 인터랙션
         function setupMemorizeClickEvents() {
             var targets = document.querySelectorAll('.red, .blue, .yellow, .mint, .orange, .highlight');
             targets.forEach(function(el) {
@@ -1223,13 +1222,11 @@
             });
         }
 
-        // 각주 메모 저장
         function savePageMemo(pageNum) {
             var memoText = document.getElementById("memo-input-" + pageNum).value;
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
         }
 
-        // 학습 진도율 갱신
         function updateProgress() {
             var doneCount = completes.length;
             var percent = Math.round((doneCount / totalSubPages) * 100);
@@ -1237,7 +1234,6 @@
             document.getElementById('progress-fill').style.width = percent + "%";
         }
 
-        // 회독 완료 체크박스
         function toggleComplete(pageNum) {
             var chk = document.getElementById("check-page-" + pageNum);
             if (chk.checked) {
@@ -1250,7 +1246,6 @@
             updateProgress();
         }
 
-        // 북마크 토글 및 필터링
         function toggleBookmark(pageNum) {
             var index = bookmarks.indexOf(pageNum);
             if (index > -1) {
@@ -1291,7 +1286,7 @@
             alert("★ 북마크한 " + bookmarks.length + "개 항목만 표시합니다. (전체보려면 다시 단원 목록 클릭)");
         }
 
-        // Ch.01 파트 전환
+        /* Ch.01 파트 및 화면 전환 */
         function showCh1Part(partName) {
             if (partName === 'part1-1') {
                 document.getElementById("ch1-main-menu").style.display = "none";
@@ -1316,7 +1311,22 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 모의고사 뷰 전환
+        /* Ch.01-1 (I. 복습예제) 파트 및 화면 전환 */
+        function showCh11Part(partName) {
+            if (partName === 'part1-1') {
+                document.getElementById("ch1-1-main-menu").style.display = "none";
+                document.getElementById("ch1-1-part1-1-container").style.display = "block";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showCh11MainMenu() {
+            document.getElementById("ch1-1-part1-1-container").style.display = "none";
+            document.getElementById("ch1-1-main-menu").style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* Ch.03 (모의고사) 화면 전환 */
         function showCh3Page(pageNum) {
             document.getElementById("ch3-page-menu").style.display = "none";
             var testPage = document.getElementById("ch3-sub-page-" + pageNum);
@@ -1330,7 +1340,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 퀴즈 정답 검증 및 스코어보드 업데이트
+        /* 퀴즈 정답 검증 로직 */
         function checkAnswer(qId, selectedOpt, correctOpt) {
             var resultEl = document.getElementById("q-result-" + qId);
             var explEl = document.getElementById("q-expl-" + qId);
@@ -1371,7 +1381,6 @@
             }
         }
 
-        // 점수 집계 및 합격 판정 (기준 70점)
         function updateQuizScore() {
             var totalQ = 10;
             var correctCount = 0;
@@ -1391,7 +1400,7 @@
             }
         }
 
-        // 개별 문제 초기화
+        /* 퀴즈 초기화 */
         function resetAnswer(qId) {
             var resultEl = document.getElementById("q-result-" + qId);
             var explEl = document.getElementById("q-expl-" + qId);
@@ -1417,7 +1426,6 @@
             if (qId.startsWith('ch3-')) updateQuizScore();
         }
 
-        // 전체 초기화
         function resetAllQuestions(prefix, totalQ) {
             for (var i = 1; i <= totalQ; i++) {
                 resetAnswer(prefix + i);
@@ -1425,7 +1433,7 @@
             if (isFilterWrongMode) toggleWrongOnly();
         }
 
-        // 오답노트 필터링 (틀린 문제만 표시)
+        /* 오답노트 필터링 */
         function toggleWrongOnly() {
             var btn = document.getElementById('btn-filter-wrong');
             isFilterWrongMode = !isFilterWrongMode;
@@ -1435,7 +1443,6 @@
                 if (!box) continue;
 
                 if (isFilterWrongMode) {
-                    // 답을 풀지 않았거나 정답인 경우 숨김
                     if (quizAnswerState['ch3-' + i] === false) {
                         box.style.display = 'block';
                     } else {
@@ -1450,7 +1457,6 @@
             btn.innerText = isFilterWrongMode ? "📑 전체 문제 보기" : "❌ 오답만 보기";
         }
 
-        // 저장 상태 복원
         function loadSavedStates() {
             if (localStorage.getItem('user_dark_mode') === 'true') {
                 document.body.classList.add('dark-mode');
@@ -1471,7 +1477,6 @@
             updateTimerUI();
         }
 
-        // 통합 검색
         function handleSearch() {
             var query = document.getElementById("search-input").value.trim().toLowerCase();
             var resultsContainer = document.getElementById("search-results");
@@ -1516,7 +1521,6 @@
             }
         }
 
-        // 상단 탭 전환
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -1530,14 +1534,19 @@
             }
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
+            
             if (tabName === 'tab-ch1') {
                 document.getElementById("ch1-main-menu").style.display = "block";
                 document.getElementById("ch1-part1-1-container").style.display = "none";
             }
+            if (tabName === 'tab-ch1-1') {
+                document.getElementById("ch1-1-main-menu").style.display = "block";
+                document.getElementById("ch1-1-part1-1-container").style.display = "none";
+            }
+            
             if (evt && evt.currentTarget) evt.currentTarget.classList.add("active");
         }
 
-        // 소페이지 전환
         function showSubPage(pageNum) {
             currentSubPage = pageNum;
             document.getElementById("sub-page-menu").style.display = "none";
@@ -1580,11 +1589,11 @@
         function updateNavButtons() {
             var btnPrev = document.getElementById("btn-prev");
             var btnNext = document.getElementById("btn-next");
+            
             btnPrev.disabled = (currentSubPage <= 1);
             btnNext.disabled = (currentSubPage >= totalSubPages);
         }
 
-        // 상단 이동 버튼
         window.onscroll = function() {
             var topBtn = document.getElementById("top-btn");
             if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
@@ -1598,7 +1607,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 모바일 좌우 스와이프 제스처 내비게이션
         var touchstartX = 0, touchendX = 0, touchstartY = 0, touchendY = 0;
 
         document.addEventListener('touchstart', function(event) {
