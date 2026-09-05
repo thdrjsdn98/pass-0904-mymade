@@ -23,6 +23,7 @@
             --radius-lg: 16px;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         body.dark-mode {
@@ -37,6 +38,7 @@
             --primary-light: #172554;
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
         }
 
         html, body {
@@ -54,7 +56,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI', Roboto, sans-serif;
             line-height: 1.68;
             color: var(--text-color);
-            padding: 12px !important;
+            padding: 12px 12px 85px 12px !important;
             word-break: keep-all;
             font-size: var(--base-font-size);
         }
@@ -66,14 +68,13 @@
             padding: 16px 14px;
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
-            min-height: 92vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             position: relative;
             border: 1px solid var(--border-color);
         }
 
-        /* 🎛️ 상단 제어 바 스타일 */
         .control-bar-group {
             display: flex;
             flex-direction: column;
@@ -81,7 +82,6 @@
             margin-bottom: 12px;
         }
 
-        /* 🌟 접기/펼치기 토글 전용 헤더 바 */
         .panel-toggle-bar {
             display: flex;
             justify-content: space-between;
@@ -94,9 +94,7 @@
             user-select: none;
             transition: background-color 0.2s;
         }
-        .panel-toggle-bar:active {
-            background-color: var(--primary-light);
-        }
+        .panel-toggle-bar:active { background-color: var(--primary-light); }
         .panel-toggle-title {
             font-size: 0.82em;
             font-weight: 800;
@@ -115,16 +113,13 @@
             border-radius: var(--radius-sm);
         }
 
-        /* 축소/확대 대상 내용 감싸개 */
         #collapsible-control-content {
             display: flex;
             flex-direction: column;
             gap: 8px;
             transition: all 0.25s ease-in-out;
         }
-        #collapsible-control-content.collapsed {
-            display: none !important;
-        }
+        #collapsible-control-content.collapsed { display: none !important; }
 
         .font-control-bar {
             background-color: var(--box-bg);
@@ -160,16 +155,13 @@
             box-shadow: var(--shadow-sm);
             transition: all 0.15s ease;
         }
-        .font-btn:active {
-            transform: translateY(1px);
-        }
+        .font-btn:active { transform: translateY(1px); }
         .font-btn.active {
             background-color: var(--primary);
             color: #ffffff;
             border-color: var(--primary);
         }
 
-        /* 🌟 D-Day & 매시간 바뀌는 말씀 위젯 */
         .dday-quote-bar {
             background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(239, 68, 68, 0.06));
             border: 1px solid var(--border-color);
@@ -250,10 +242,12 @@
 
         .search-box-container {
             position: relative;
+            display: flex;
+            align-items: center;
         }
         .search-input {
             width: 100%;
-            padding: 10px 14px;
+            padding: 10px 38px 10px 14px;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
             background-color: var(--box-bg);
@@ -265,6 +259,17 @@
         .search-input:focus {
             border-color: var(--primary);
             background-color: var(--card-bg);
+        }
+        .search-clear-btn {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 1.1em;
+            cursor: pointer;
+            display: none;
+            padding: 4px;
         }
         .search-results-list {
             position: absolute;
@@ -289,22 +294,25 @@
         .search-result-item:last-child { border-bottom: none; }
         .search-result-item:hover, .search-result-item:active { background-color: var(--primary-light); }
 
-        /* 📑 상단 고정 탭 메뉴 */
-        .tab-menu {
+        .tab-menu-wrapper {
             position: sticky;
             top: 0;
             background-color: var(--card-bg);
             z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+        }
+        .tab-menu {
             display: flex;
-            justify-content: flex-start;
             align-items: center;
             gap: 6px;
-            margin-bottom: 16px;
-            border-bottom: 1px solid var(--border-color);
             padding: 6px 0 10px 0;
             overflow-x: auto;
+            scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
+        .tab-menu::-webkit-scrollbar { display: none; }
         .tab-btn {
             background-color: transparent;
             color: var(--text-sub);
@@ -327,7 +335,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* 🗂️ 카드 그리드 레이아웃 */
         .sub-nav-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -335,14 +342,12 @@
             margin: 14px 0;
         }
         @media (min-width: 600px) {
-            .sub-nav-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+            .sub-nav-grid { grid-template-columns: 1fr 1fr; }
         }
         .sub-nav-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 14px 16px;
+            padding: 13px 15px;
             border-radius: var(--radius-md);
             font-size: 0.95em;
             font-weight: 700;
@@ -361,6 +366,28 @@
             background-color: var(--primary-light);
             color: var(--primary);
             transform: translateY(-1px);
+        }
+        .card-status-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+        .card-done-badge {
+            background-color: #dcfce7;
+            color: #166534;
+            font-size: 0.72em;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid #bbf7d0;
+            display: none;
+        }
+        body.dark-mode .card-done-badge {
+            background-color: #064e3b;
+            color: #86efac;
+            border-color: #047857;
         }
 
         .sub-page { 
@@ -413,6 +440,58 @@
             display: inline-block;
         }
 
+        /* 📝 단원별 쪽지시험 영역 */
+        .quiz-section {
+            margin-top: 20px;
+            padding: 14px;
+            background-color: var(--box-bg);
+            border: 1.5px solid #3b82f6;
+            border-radius: var(--radius-md);
+        }
+        .quiz-sec-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+        .quiz-sec-title {
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        body.dark-mode .quiz-sec-title { color: #60a5fa; }
+        .mini-q-item {
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+        .mini-q-item:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+        .mini-q-title {
+            font-size: 0.9em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-color);
+        }
+        .mini-opt-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin: 6px 0;
+        }
+        .mini-text-input {
+            width: 100%;
+            max-width: 220px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 0.88em;
+            outline: none;
+        }
+
         .page-memo-section {
             margin-top: 24px;
             padding: 14px;
@@ -442,25 +521,40 @@
         .page-memo-textarea:focus { border-color: var(--primary); }
 
         .page-nav-bar {
-            display: flex;
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 24px);
+            max-width: 780px;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            display: none;
             justify-content: space-between;
             gap: 8px;
-            margin-top: 32px;
-            padding-top: 16px;
-            border-top: 1px solid var(--border-color);
+            z-index: 900;
+        }
+        body.dark-mode .page-nav-bar {
+            background: rgba(19, 27, 46, 0.92);
+            border-color: #334155;
         }
         .page-nav-btn {
             flex: 1;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 11px 8px;
+            padding: 10px 6px;
             border-radius: var(--radius-md);
-            font-size: 0.88em;
+            font-size: 0.85em;
             font-weight: 700;
             color: var(--text-color);
             text-align: center;
             cursor: pointer;
-            min-height: 46px;
+            min-height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -473,21 +567,21 @@
             border-color: var(--primary);
         }
         .page-nav-btn:disabled {
-            opacity: 0.4;
+            opacity: 0.35;
             cursor: not-allowed;
         }
 
         .top-btn {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 44px;
-            height: 44px;
+            bottom: 74px;
+            right: 20px;
+            width: 42px;
+            height: 42px;
             background-color: var(--primary);
             color: #ffffff;
             border: none;
             border-radius: 50%;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             box-shadow: 0 4px 12px rgba(0,0,0,0.25);
             cursor: pointer;
@@ -537,7 +631,7 @@
             margin: 12px 0;
         }
 
-        /* 🙈 암기모드 스타일 (삼성 인터넷 브라우저 텍스트 반전 무력화) */
+        /* 🙈 암기모드 스타일 */
         body.memorize-mode .red,
         body.memorize-mode .blue,
         body.memorize-mode .yellow,
@@ -591,12 +685,38 @@
             -webkit-text-fill-color: #dc2626 !important;
         }
 
+        /* 🌟 [신규 1] 초성 모드 스타일 */
+        body.chosung-mode .red,
+        body.chosung-mode .blue,
+        body.chosung-mode .yellow,
+        body.chosung-mode .mint,
+        body.chosung-mode .orange,
+        body.chosung-mode .highlight {
+            background-color: #fef3c7 !important;
+            color: #b45309 !important;
+            -webkit-text-fill-color: #b45309 !important;
+            border-bottom: 2px dashed #f59e0b;
+            cursor: pointer;
+        }
+        body.dark-mode.chosung-mode .red,
+        body.dark-mode.chosung-mode .blue,
+        body.dark-mode.chosung-mode .yellow,
+        body.dark-mode.chosung-mode .mint,
+        body.dark-mode.chosung-mode .orange,
+        body.dark-mode.chosung-mode .highlight {
+            background-color: #78350f !important;
+            color: #fde68a !important;
+            -webkit-text-fill-color: #fde68a !important;
+        }
+
         .box { background-color: var(--box-bg); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); margin: 16px 0; font-size: 0.96em; }
         .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
         .table { width: 100%; min-width: 480px; border-collapse: collapse; background: var(--card-bg); }
         .table th, .table td { border: 1px solid var(--border-color); padding: 11px; text-align: left; font-size: 0.9em; }
         .table th { background-color: var(--box-bg); color: var(--text-color); font-weight: 700; }
-        
+        .note { background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; color: #991b1b; margin: 14px 0; border-radius: 6px; font-size: 0.9em; }
+        body.dark-mode .note { background-color: #7f1d1d !important; color: #fee2e2 !important; border-left-color: #f87171; }
+
         .score-board {
             background-color: var(--box-bg);
             border: 1px solid var(--border-color);
@@ -616,9 +736,7 @@
         .cover-divider { width: 50px; height: 3px; background-color: var(--primary); margin-bottom: 25px; border-radius: 2px; }
         .cover-info { font-size: 0.9em; color: var(--text-sub); line-height: 1.8; }
 
-        .search-match-flash {
-            animation: flash-animation 1.5s ease-in-out;
-        }
+        .search-match-flash { animation: flash-animation 1.5s ease-in-out; }
         @keyframes flash-animation {
             0% { background-color: #fef08a; }
             50% { background-color: #fde047; }
@@ -630,10 +748,8 @@
 
     <div class="container" id="app-viewport">
         
-        <!-- [1] 상단 컨트롤 바 (접기/펼치기 스위치 탑재) -->
+        <!-- [1] 상단 컨트롤 바 -->
         <div class="control-bar-group">
-            
-            <!-- 🌟 상단 축소/확대 토글 바 -->
             <div class="panel-toggle-bar" onclick="toggleTopPanel()">
                 <span class="panel-toggle-title">
                     <span>⚙️ 학습 도구 상자</span>
@@ -642,7 +758,6 @@
                 <span class="panel-toggle-btn" id="panel-toggle-btn-text">▲ 메뉴 접기</span>
             </div>
 
-            <!-- 🌟 접히고 펼쳐지는 본체 영역 -->
             <div id="collapsible-control-content">
                 <div class="font-control-bar">
                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -654,18 +769,27 @@
                         </div>
                     </div>
                     <div class="font-btn-group">
-                        <button class="font-btn" id="memorize-toggle-btn" onclick="toggleMemorizeMode()">🙈 암기모드 OFF</button>
+                        <button class="font-btn" id="memorize-toggle-btn" onclick="toggleMemorizeMode()">🙈 암기 OFF</button>
+                        <button class="font-btn" id="chosung-toggle-btn" onclick="toggleChosungMode()">💡 초성 퀴즈</button>
                         <button class="font-btn" id="darkmode-toggle-btn" onclick="toggleDarkMode()">🌙 야간</button>
                     </div>
                 </div>
 
-                <!-- D-Day & 매시간 갱신되는 성경 말씀 위젯 -->
+                <!-- 🌟 [신규 4] 데이터 백업 & 복원 도구 바 -->
+                <div class="font-control-bar" style="background-color: var(--card-bg);">
+                    <span class="font-control-title">💾 내 학습 데이터 보호</span>
+                    <div class="font-btn-group">
+                        <button class="font-btn" onclick="exportUserData()">📥 메모·진도 백업</button>
+                        <button class="font-btn" onclick="document.getElementById('import-file-input').click()">📤 백업 복원</button>
+                        <input type="file" id="import-file-input" style="display:none;" accept=".json" onchange="importUserData(event)">
+                    </div>
+                </div>
+
                 <div class="dday-quote-bar">
                     <div class="dday-capsule" id="exam-dday-badge">D-Day 계산중</div>
                     <div class="daily-quote-text" id="daily-quote-box">말씀 묵상 로딩 중...</div>
                 </div>
 
-                <!-- 학습 진도율 바 -->
                 <div class="progress-box">
                     <div class="progress-header">
                         <span>📊 회독 학습 진도율</span>
@@ -676,7 +800,6 @@
                     </div>
                 </div>
 
-                <!-- 암기모드 타이머 -->
                 <div class="font-control-bar" id="timer-control-bar" style="display: none; background-color: var(--card-bg);">
                     <span class="font-control-title">⏱️ 표시시간</span>
                     <div class="font-btn-group">
@@ -686,22 +809,26 @@
                     </div>
                 </div>
 
-                <!-- 검색창 -->
                 <div class="search-box-container">
                     <input type="text" id="search-input" class="search-input" placeholder="🔍 궁금한 단어 검색 (예: 무창층, 선임, 자체점검, 화재안전조사)" oninput="handleSearch()">
+                    <button class="search-clear-btn" id="search-clear-btn" onclick="clearSearch()">✕</button>
                     <div id="search-results" class="search-results-list"></div>
                 </div>
             </div>
         </div>
 
         <!-- [2] 상단 대단원 탭 -->
-        <div class="tab-menu">
-            <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">I. 복습예제</button>
-            <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!');">II. 설비 및 구조</button>
-            <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!');">III. 복합개념</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
+        <div class="tab-menu-wrapper">
+            <div class="tab-menu" id="main-tab-menu">
+                <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
+                <!-- 🌟 [신규 2] 핵심 숫자 치트시트 탭 신설 -->
+                <button class="tab-btn" onclick="openTab(event, 'tab-numbers')">📐 숫자·기한 총정리</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">I. 복습예제</button>
+                <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!');">II. 설비 및 구조</button>
+                <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!');">III. 복합개념</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
+            </div>
         </div>
 
         <!-- [3] 표지 탭 -->
@@ -713,7 +840,41 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>목표 시험일: 2026.10.02</p>
-                    <p>버전: V3.1.0 (상단 메뉴 축소/확대 &amp; 암기모드 최적화)</p>
+                    <p>버전: V3.3.0 (초성퀴즈·숫자정리·백업 완비 베이스본)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 🌟 [신규 2] 숫자·기한 총정리 치트시트 탭 -->
+        <div id="tab-numbers" class="tab-content">
+            <h1>소방관계법령 - <br>📐 핵심 숫자 &amp; 기한 치트시트</h1>
+            <div class="box">
+                <b>🚨 시험에 가장 많이 출제되는 기간(일수)</b>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <tr><th>기간 / 일수</th><th>관련 법정 업무</th><th>소관 기관 / 비고</th></tr>
+                        <tr><td><b class="red">30일 이내</b></td><td>소방안전관리자 <b>선임</b> 기한</td><td>사유 발생일 기준</td></tr>
+                        <tr><td><b class="red">30일 이내</b></td><td>특·1급 소방훈련·교육 결과 제출</td><td>본부장 또는 서장</td></tr>
+                        <tr><td><b class="blue">14일 이내</b></td><td>소방안전관리자 선임 <b>신고</b></td><td>본부장 또는 서장</td></tr>
+                        <tr><td><b class="blue">14일 이내</b></td><td>건설현장 소방안전관리자 선임 신고</td><td>시공자가 서류 4종 제출</td></tr>
+                        <tr><td><b class="yellow">10일 이내</b></td><td>자체점검 결과보고서 <b>관리업자 ➔ 관계인</b> 제출</td><td>점검표 첨부</td></tr>
+                        <tr><td><b class="yellow">15일 이내</b></td><td>자체점검 결과·이행계획서 <b>관계인 ➔ 소방서</b> 보고</td><td>완료일로부터 15일</td></tr>
+                        <tr><td><b class="mint">60일 이내</b></td><td>신설 건축물(최초점검) 종합점검 실시</td><td>사용승인일로부터 60일</td></tr>
+                        <tr><td><b class="orange">2년 보관</b></td><td>소방훈련기록부, 점검결과보고서, 업무일지</td><td>자체 보관 의무</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="box">
+                <b>📐 무창층 &amp; 면적 기준 공식</b>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <tr><th>항목</th><th>법정 기준 수치</th><th>암기 포인트</th></tr>
+                        <tr><td><b>무창층 개구부</b></td><td>바닥면적의 <span class="highlight">1/30 이하</span></td><td>지름 <span class="red">50cm 이상</span> 내접원, 바닥에서 <span class="red">1.2m 이내</span></td></tr>
+                        <tr><td><b>특급 대상물</b></td><td>아파트 50층/200m, 일반 30층/<span class="highlight">10만m²</span></td><td>겸직 절대 불가</td></tr>
+                        <tr><td><b>1급 대상물</b></td><td>아파트 30층/120m, 일반 11층/<span class="highlight">1.5만m²</span></td><td>겸직 절대 불가</td></tr>
+                        <tr><td><b>종합점검 면적</b></td><td>물분무 5천, 다중이 2천, 공공 1천</td><td><span class="red">물·분무 5천 / 다중이 2천 / 공공 천</span></td></tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -725,7 +886,6 @@
                 <span>만든이: 꾸누</span> | <span>수정일: 2026.09.06</span>
             </div>
 
-            <!-- 파트 선택 메뉴 -->
             <div id="ch1-main-menu">
                 <div style="font-size: 0.9em; font-weight: 700; color: var(--text-sub); margin-bottom: 8px;">📑 학습 파트 선택</div>
                 <div class="sub-nav-grid">
@@ -740,42 +900,40 @@
                 </div>
             </div>
 
-            <!-- Part1-1 내부 단원 목록 및 본문 컨테이너 -->
             <div id="ch1-part1-1-container" style="display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                     <button class="font-btn" onclick="showCh1MainMenu()" style="font-size: 0.82em;">◀ 파트 목록으로</button>
                     <button class="font-btn" onclick="filterBookmarks()" style="font-size: 0.82em;">⭐ 북마크 모아보기</button>
                 </div>
 
-                <!-- 단원 카드 그리드 (1~22) -->
                 <div id="sub-page-menu">
                     <div class="sub-nav-grid" id="main-menu-grid">
-                        <div class="sub-nav-card" onclick="showSubPage(1)"><span>1. 주요 소방관계법령 제정 목적</span><span id="card-star-1"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(2)"><span>2. 기본 소방 용어 정리</span><span id="card-star-2"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(3)"><span>3. 무창층 요건 (암기 필수)</span><span id="card-star-3"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(4)"><span>4. 한국소방안전원</span><span id="card-star-4"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(5)"><span>5. 소방안전관리대상물 구분</span><span id="card-star-5"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(6)"><span>6. 소방안전관리자 업무 및 대행</span><span id="card-star-6"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(7)"><span>7. 선임자격 기준 [특/1/2/3급]</span><span id="card-star-7"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(8)"><span>8. 선임 기한 및 신고 절차</span><span id="card-star-8"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(9)"><span>9. 소방안전관리자 현황표</span><span id="card-star-9"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(10)"><span>10. 건설현장 소방안전관리자 신고 첨부서류</span><span id="card-star-10"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(11)"><span>11. 근무자 및 거주자 등에 대한 소방훈련 등</span><span id="card-star-11"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(12)"><span>12. 소방시설등의 자체점검</span><span id="card-star-12"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(13)"><span>13. 화재안전조사</span><span id="card-star-13"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(14)"><span>14. 단독주택&amp;공공주택</span><span id="card-star-14"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(15)"><span>15. 특별피난계단</span><span id="card-star-15"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(16)"><span>16. 피난.방화시설의 유지.관리 및 금지행위</span><span id="card-star-16"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(17)"><span>17. 옥상광장 출입문 개방 안전관리</span><span id="card-star-17"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(18)"><span>18. 소방안전관리자의 실무교육</span><span id="card-star-18"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(19)"><span>19. 벌칙(벌금 및 과태료)(필수암기)</span><span id="card-star-19"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(20)"><span>20. 화재 예방조치</span><span id="card-star-20"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(21)"><span>21. 방염</span><span id="card-star-21"></span></div>
-                        <div class="sub-nav-card" onclick="showSubPage(22)"><span>22. 합격표시 및 표지</span><span id="card-star-22"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(1)"><span>1. 주요 소방관계법령 제정 목적</span><div class="card-status-box"><span class="card-done-badge" id="card-done-1">✅ 완료</span><span id="card-star-1"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(2)"><span>2. 기본 소방 용어 정리</span><div class="card-status-box"><span class="card-done-badge" id="card-done-2">✅ 완료</span><span id="card-star-2"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(3)"><span>3. 무창층 요건 (암기 필수)</span><div class="card-status-box"><span class="card-done-badge" id="card-done-3">✅ 완료</span><span id="card-star-3"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(4)"><span>4. 한국소방안전원</span><div class="card-status-box"><span class="card-done-badge" id="card-done-4">✅ 완료</span><span id="card-star-4"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(5)"><span>5. 소방안전관리대상물 구분</span><div class="card-status-box"><span class="card-done-badge" id="card-done-5">✅ 완료</span><span id="card-star-5"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(6)"><span>6. 소방안전관리자 업무 및 대행</span><div class="card-status-box"><span class="card-done-badge" id="card-done-6">✅ 완료</span><span id="card-star-6"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(7)"><span>7. 선임자격 기준 [특/1/2/3급]</span><div class="card-status-box"><span class="card-done-badge" id="card-done-7">✅ 완료</span><span id="card-star-7"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(8)"><span>8. 선임 기한 및 신고 절차</span><div class="card-status-box"><span class="card-done-badge" id="card-done-8">✅ 완료</span><span id="card-star-8"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(9)"><span>9. 소방안전관리자 현황표</span><div class="card-status-box"><span class="card-done-badge" id="card-done-9">✅ 완료</span><span id="card-star-9"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(10)"><span>10. 건설현장 소방안전관리자 신고 첨부서류</span><div class="card-status-box"><span class="card-done-badge" id="card-done-10">✅ 완료</span><span id="card-star-10"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(11)"><span>11. 근무자 및 거주자 등에 대한 소방훈련 등</span><div class="card-status-box"><span class="card-done-badge" id="card-done-11">✅ 완료</span><span id="card-star-11"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(12)"><span>12. 소방시설등의 자체점검</span><div class="card-status-box"><span class="card-done-badge" id="card-done-12">✅ 완료</span><span id="card-star-12"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(13)"><span>13. 화재안전조사</span><div class="card-status-box"><span class="card-done-badge" id="card-done-13">✅ 완료</span><span id="card-star-13"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(14)"><span>14. 단독주택&amp;공공주택</span><div class="card-status-box"><span class="card-done-badge" id="card-done-14">✅ 완료</span><span id="card-star-14"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(15)"><span>15. 특별피난계단</span><div class="card-status-box"><span class="card-done-badge" id="card-done-15">✅ 완료</span><span id="card-star-15"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(16)"><span>16. 피난.방화시설의 유지.관리 및 금지행위</span><div class="card-status-box"><span class="card-done-badge" id="card-done-16">✅ 완료</span><span id="card-star-16"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(17)"><span>17. 옥상광장 출입문 개방 안전관리</span><div class="card-status-box"><span class="card-done-badge" id="card-done-17">✅ 완료</span><span id="card-star-17"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(18)"><span>18. 소방안전관리자의 실무교육</span><div class="card-status-box"><span class="card-done-badge" id="card-done-18">✅ 완료</span><span id="card-star-18"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(19)"><span>19. 벌칙(벌금 및 과태료)(필수암기)</span><div class="card-status-box"><span class="card-done-badge" id="card-done-19">✅ 완료</span><span id="card-star-19"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(20)"><span>20. 화재 예방조치</span><div class="card-status-box"><span class="card-done-badge" id="card-done-20">✅ 완료</span><span id="card-star-20"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(21)"><span>21. 방염</span><div class="card-status-box"><span class="card-done-badge" id="card-done-21">✅ 완료</span><span id="card-star-21"></span></div></div>
+                        <div class="sub-nav-card" onclick="showSubPage(22)"><span>22. 합격표시 및 표지</span><div class="card-status-box"><span class="card-done-badge" id="card-done-22">✅ 완료</span><span id="card-star-22"></span></div></div>
                     </div>
                 </div>
 
-                <!-- 1 ~ 11단원 유지 -->
+                <!-- 1 ~ 11단원 -->
                 <div id="sub-page-1" class="sub-page">
                     <div class="sub-page-header">
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -1068,6 +1226,25 @@
                             &lt;<span class="mint"><b>의료시설, 노유자시설, 교육연구시설</b></span>&gt;
                         </div>
                     </div>
+
+                    <!-- 🌟 [신규 3] 11단원 학습 후 즉시 복습 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 11단원 즉시 점검 쪽지시험</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec11')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec11">
+                            <div class="mini-q-title">Q. 특급 및 1급 대상물의 관계인이 소방훈련 및 교육 결과를 본부장 또는 서장에게 제출해야 하는 기한은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec11-1', this, '30일 이내')">14일 이내</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec11-1', this, '30일 이내')">30일 이내</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec11-1', this, '30일 이내')">10일 이내</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec11-1', this, '30일 이내')">20일 이내</button>
+                            </div>
+                            <div id="res-sec11-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
                     <div class="page-memo-section">
                         <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
                         <textarea id="memo-input-11" class="page-memo-textarea" placeholder="11단원에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(11)"></textarea>
@@ -1252,209 +1429,44 @@
                         </div>
                     </div>
 
+                    <!-- 🌟 [신규 3] 12단원 즉시 점검 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 12단원 즉시 점검 쪽지시험</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec12')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec12">
+                            <div class="mini-q-title">Q. 자체점검을 마친 관계인이 결과보고서와 이행계획서를 본부장 또는 서장에게 보고해야 하는 기한은 점검이 끝난 날부터 며칠 이내인가?</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec12-1" class="mini-text-input" placeholder="일수 입력 (숫자만)">
+                                <button class="font-btn" onclick="checkMiniText('sec12-1', ['15', '15일'])">확인</button>
+                            </div>
+                            <div id="res-sec12-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
                     <div class="page-memo-section">
                         <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
                         <textarea id="memo-input-12" class="page-memo-textarea" placeholder="12단원에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(12)"></textarea>
                     </div>
                 </div>
 
-                <!-- 13 ~ 22단원 틀 -->
+                <!-- 13 ~ 22단원 빈 틀 -->
                 <div id="sub-page-13" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">13 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-13" onchange="toggleComplete(13)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-13" onclick="toggleBookmark(13)">☆</button>
-                        </div>
-                    </div>
+                    <div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">13 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-13" onchange="toggleComplete(13)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-13" onclick="toggleBookmark(13)">☆</button></div></div>
                     <h2>13. 화재안전조사</h2>
                     <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-13" class="page-memo-textarea" placeholder="13단원 메모를 입력하세요..." oninput="savePageMemo(13)"></textarea>
-                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-13" class="page-memo-textarea" placeholder="13단원 메모를 입력하세요..." oninput="savePageMemo(13)"></textarea></div>
                 </div>
-
-                <div id="sub-page-14" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">14 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-14" onchange="toggleComplete(14)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-14" onclick="toggleBookmark(14)">☆</button>
-                        </div>
-                    </div>
-                    <h2>14. 단독주택&amp;공공주택</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-14" class="page-memo-textarea" placeholder="14단원 메모를 입력하세요..." oninput="savePageMemo(14)"></textarea>
-                    </div>
-                </div>
-
-                <div id="sub-page-15" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">15 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-15" onchange="toggleComplete(15)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-15" onclick="toggleBookmark(15)">☆</button>
-                        </div>
-                    </div>
-                    <h2>15. 특별피난계단</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-15" class="page-memo-textarea" placeholder="15단원 메모를 입력하세요..." oninput="savePageMemo(15)"></textarea>
-                    </div>
-                </div>
-
-                <div id="sub-page-16" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">16 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-16" onchange="toggleComplete(16)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-16" onclick="toggleBookmark(16)">☆</button>
-                        </div>
-                    </div>
-                    <h2>16. 피난.방화시설의 유지.관리 및 금지행위</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-16" class="page-memo-textarea" placeholder="16단원 메모를 입력하세요..." oninput="savePageMemo(16)"></textarea>
-                    </div>
-                </div>
-
-                <div id="sub-page-17" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">17 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-17" onchange="toggleComplete(17)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-17" onclick="toggleBookmark(17)">☆</button>
-                        </div>
-                    </div>
-                    <h2>17. 옥상광장 출입문 개방 안전관리</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-17" class="page-memo-textarea" placeholder="17단원 메모를 입력하세요..." oninput="savePageMemo(17)"></textarea>
-                    </div>
-                </div>
-
-                <div id="sub-page-18" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">18 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-18" onchange="toggleComplete(18)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-18" onclick="toggleBookmark(18)">☆</button>
-                        </div>
-                    </div>
-                    <h2>18. 소방안전관리자의 실무교육</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-18" class="page-memo-textarea" placeholder="18단원 메모를 입력하세요..." oninput="savePageMemo(18)"></textarea>
-                    </div>
-                </div>
-
-                <div id="sub-page-19" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">19 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-19" onchange="toggleComplete(19)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-19" onclick="toggleBookmark(19)">☆</button>
-                        </div>
-                    </div>
-                    <h2>19. 벌칙(벌금 및 과태료)(필수암기)</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-19" class="page-memo-textarea" placeholder="19단원 메모를 입력하세요..." oninput="savePageMemo(19)"></textarea>
-                    </div>
-                </div>
-
-                <div id="sub-page-20" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">20 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-20" onchange="toggleComplete(20)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-20" onclick="toggleBookmark(20)">☆</button>
-                        </div>
-                    </div>
-                    <h2>20. 화재 예방조치</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-20" class="page-memo-textarea" placeholder="20단원 메모를 입력하세요..." oninput="savePageMemo(20)"></textarea>
-                    </div>
-                </div>
-
-                <div id="sub-page-21" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">21 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-21" onchange="toggleComplete(21)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-21" onclick="toggleBookmark(21)">☆</button>
-                        </div>
-                    </div>
-                    <h2>21. 방염</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-21" class="page-memo-textarea" placeholder="21단원 메모를 입력하세요..." oninput="savePageMemo(21)"></textarea>
-                    </div>
-                </div>
-
-                <div id="sub-page-22" class="sub-page">
-                    <div class="sub-page-header">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <div class="page-indicator">22 / 22 PAGE</div>
-                            <button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <label class="complete-check-label"><input type="checkbox" id="check-page-22" onchange="toggleComplete(22)"> 학습 완료</label>
-                            <button class="bookmark-btn" id="star-btn-22" onclick="toggleBookmark(22)">☆</button>
-                        </div>
-                    </div>
-                    <h2>22. 합격표시 및 표지</h2>
-                    <div class="box"><p>내용을 입력해주세요.</p></div>
-                    <div class="page-memo-section">
-                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
-                        <textarea id="memo-input-22" class="page-memo-textarea" placeholder="22단원 메모를 입력하세요..." oninput="savePageMemo(22)"></textarea>
-                    </div>
-                </div>
-
-                <!-- 하단 내비게이션 바 -->
-                <div id="page-nav-bar" class="page-nav-bar" style="display: none;">
-                    <button id="btn-prev" class="page-nav-btn" onclick="prevSubPage()">◀ 이전</button>
-                    <button class="page-nav-btn main-btn" onclick="showSubMenu()">📋 단원 목록으로</button>
-                    <button id="btn-next" class="page-nav-btn" onclick="nextSubPage()">다음 ▶</button>
-                </div>
+                <div id="sub-page-14" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">14 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-14" onchange="toggleComplete(14)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-14" onclick="toggleBookmark(14)">☆</button></div></div><h2>14. 단독주택&amp;공공주택</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-14" class="page-memo-textarea" placeholder="14단원 메모를 입력하세요..." oninput="savePageMemo(14)"></textarea></div></div>
+                <div id="sub-page-15" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">15 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-15" onchange="toggleComplete(15)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-15" onclick="toggleBookmark(15)">☆</button></div></div><h2>15. 특별피난계단</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-15" class="page-memo-textarea" placeholder="15단원 메모를 입력하세요..." oninput="savePageMemo(15)"></textarea></div></div>
+                <div id="sub-page-16" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">16 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-16" onchange="toggleComplete(16)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-16" onclick="toggleBookmark(16)">☆</button></div></div><h2>16. 피난.방화시설의 유지.관리 및 금지행위</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-16" class="page-memo-textarea" placeholder="16단원 메모를 입력하세요..." oninput="savePageMemo(16)"></textarea></div></div>
+                <div id="sub-page-17" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">17 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-17" onchange="toggleComplete(17)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-17" onclick="toggleBookmark(17)">☆</button></div></div><h2>17. 옥상광장 출입문 개방 안전관리</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-17" class="page-memo-textarea" placeholder="17단원 메모를 입력하세요..." oninput="savePageMemo(17)"></textarea></div></div>
+                <div id="sub-page-18" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">18 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-18" onchange="toggleComplete(18)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-18" onclick="toggleBookmark(18)">☆</button></div></div><h2>18. 소방안전관리자의 실무교육</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-18" class="page-memo-textarea" placeholder="18단원 메모를 입력하세요..." oninput="savePageMemo(18)"></textarea></div></div>
+                <div id="sub-page-19" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">19 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-19" onchange="toggleComplete(19)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-19" onclick="toggleBookmark(19)">☆</button></div></div><h2>19. 벌칙(벌금 및 과태료)(필수암기)</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-19" class="page-memo-textarea" placeholder="19단원 메모를 입력하세요..." oninput="savePageMemo(19)"></textarea></div></div>
+                <div id="sub-page-20" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">20 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-20" onchange="toggleComplete(20)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-20" onclick="toggleBookmark(20)">☆</button></div></div><h2>20. 화재 예방조치</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-20" class="page-memo-textarea" placeholder="20단원 메모를 입력하세요..." oninput="savePageMemo(20)"></textarea></div></div>
+                <div id="sub-page-21" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">21 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-21" onchange="toggleComplete(21)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-21" onclick="toggleBookmark(21)">☆</button></div></div><h2>21. 방염</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-21" class="page-memo-textarea" placeholder="21단원 메모를 입력하세요..." oninput="savePageMemo(21)"></textarea></div></div>
+                <div id="sub-page-22" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">22 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-22" onchange="toggleComplete(22)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-22" onclick="toggleBookmark(22)">☆</button></div></div><h2>22. 합격표시 및 표지</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-22" class="page-memo-textarea" placeholder="22단원 메모를 입력하세요..." oninput="savePageMemo(22)"></textarea></div></div>
             </div>
 
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
@@ -1462,24 +1474,13 @@
             </div>
         </div>
 
-        <!-- [5] I. 복습예제 탭 유지 -->
+        <!-- [5] I. 복습예제 탭 -->
         <div id="tab-ch1-1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
-            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V3.1.0</span>
-            </div>
-
             <div id="ch1-1-main-menu">
                 <div style="font-size: 0.9em; font-weight: 700; color: var(--text-sub); margin-bottom: 8px;">📑 복습예제 파트 선택</div>
                 <div class="sub-nav-grid">
                     <div class="sub-nav-card" onclick="showCh11Part('part1-1')"><span>Part1-1. 소방관계법령 (4문항)</span><span>➔</span></div>
-                    <div class="sub-nav-card" onclick="alert('Part1-2. 건축관계법령 복습예제는 준비 중입니다!');"><span>Part1-2. 건축관계법령</span><span>➔</span></div>
-                    <div class="sub-nav-card" onclick="alert('Part2-1. 복습예제는 준비 중입니다!');"><span>Part2-1. 소방안전교육 및 훈련/소방계획의 수립</span><span>➔</span></div>
-                    <div class="sub-nav-card" onclick="alert('Part2-2. 복습예제는 준비 중입니다!');"><span>Part2-2. 화재대응 및 피난</span><span>➔</span></div>
-                    <div class="sub-nav-card" onclick="alert('Part3. 복습예제는 준비 중입니다!');"><span>Part3. 응급처치 개요</span><span>➔</span></div>
-                    <div class="sub-nav-card" onclick="alert('Part4. 복습예제는 준비 중입니다!');"><span>Part4. 소방학개론</span><span>➔</span></div>
-                    <div class="sub-nav-card" onclick="alert('Part5. 복습예제는 준비 중입니다!');"><span>Part5. 위험물·전기·가스 안전관리</span><span>➔</span></div>
-                    <div class="sub-nav-card" onclick="alert('Part6. 복습예제는 준비 중입니다!');"><span>Part6. 화기취급 감독 및 허가·관리</span><span>➔</span></div>
                 </div>
             </div>
 
@@ -1493,263 +1494,48 @@
                 </div>
 
                 <div id="ch1-1-questions-wrap">
-                    <div class="box quiz-box" id="box-ch11-1" style="position: relative;" data-qid="ch11-1" data-correct-text="소방대">
-                        <button class="font-btn" onclick="resetAnswer('ch11-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 화재를 진압하고 화재, 재난·재해 그 밖의 위급한 상황에서 구조·구급활동 등을 하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 뜻하는 용어를 고르시오.</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch11-1-opt-1" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">자위소방대</button>
-                            <button class="font-btn opt-btn" id="ch11-1-opt-2" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">소방대</button>
-                            <button class="font-btn opt-btn" id="ch11-1-opt-3" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">초기대응체계</button>
-                            <button class="font-btn opt-btn" id="ch11-1-opt-4" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">공동소방안전관리협의회</button>
+                    <div class="box quiz-box" id="box-ch11-1" data-qid="ch11-1" data-correct-text="소방대">
+                        <p class="quiz-q-title">Q1. 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체의 용어는?</p>
+                        <div class="quiz-opt-grid">
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch11-1', this, '소방대')">자위소방대</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch11-1', this, '소방대')">소방대</button>
                         </div>
-                        <div id="q-result-ch11-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch11-1" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 소방기본법상 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체는 '소방대'입니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch11-2" style="position: relative;" data-qid="ch11-2" data-correct-text="2명">
-                        <button class="font-btn" onclick="resetAnswer('ch11-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 아파트를 제외하고 연면적이 35,000m²인 특정소방대상물의 소방안전관리보조자 최소 선임 인원수를 구하시오.</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch11-2-opt-1" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">1명</button>
-                            <button class="font-btn opt-btn" id="ch11-2-opt-2" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">2명</button>
-                            <button class="font-btn opt-btn" id="ch11-2-opt-3" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">3명</button>
-                            <button class="font-btn opt-btn" id="ch11-2-opt-4" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">4명</button>
-                        </div>
-                        <div id="q-result-ch11-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch11-2" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 35,000 / 15,000 = 2.33 -> 최소 2명 선임합니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch11-3" style="position: relative;" data-qid="ch11-3" data-correct-text="피난층">
-                        <button class="font-btn" onclick="resetAnswer('ch11-3')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q3. 곧바로 지상으로 갈 수 있는 출입구가 있는 층을 뜻하는 용어를 고르시오.</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch11-3-opt-1" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">피난층</button>
-                            <button class="font-btn opt-btn" id="ch11-3-opt-2" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">무창층</button>
-                            <button class="font-btn opt-btn" id="ch11-3-opt-3" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">지하층</button>
-                            <button class="font-btn opt-btn" id="ch11-3-opt-4" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">지상층</button>
-                        </div>
-                        <div id="q-result-ch11-3" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch11-3" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 곧바로 지상 출입구가 연결된 층은 '피난층'입니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch11-4" style="position: relative;" data-qid="ch11-4" data-correct-text="해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.">
-                        <button class="font-btn" onclick="resetAnswer('ch11-4')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q4. 다음 중 무창층에서의 개구부의 요건에 대한 설명으로 옳은 것을 고르시오.</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch11-4-opt-1" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">내·외부에서 쉽게 부술 수 없도록 일정 강도 이상을 유지해야 한다.</button>
-                            <button class="font-btn opt-btn" id="ch11-4-opt-2" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">피난상 안전을 위해 창살이 설치되어 있어야 한다.</button>
-                            <button class="font-btn opt-btn" id="ch11-4-opt-3" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.</button>
-                            <button class="font-btn opt-btn" id="ch11-4-opt-4" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">크기는 지름 40cm 이상의 원이 통과할 수 있는 크기로 한다.</button>
-                        </div>
-                        <div id="q-result-ch11-4" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch11-4" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 개구부 하단 높이는 1.2m 이내여야 합니다.
-                        </div>
+                        <div id="q-result-ch11-1" style="display:none; font-weight:bold; margin-top:10px;"></div>
+                        <div id="q-expl-ch11-1" class="note" style="display:none;">💡 해설: 소방기본법상 조직체는 '소방대'입니다.</div>
                     </div>
                 </div>
             </div>
-
-            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
-                위 해당 저작권은 꾸누에 있으며 무단 복제를 금합니다.
-            </div>
         </div>
 
-        <!-- [6] 모의고사 탭 유지 -->
+        <!-- [6] 모의고사 탭 -->
         <div id="tab-ch3" class="tab-content">
             <h1>소방안전관리자 2급 - <br>모의고사</h1>
-            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V3.1.0</span>
-            </div>
-
             <div id="ch3-page-menu">
-                <div style="font-size: 0.9em; font-weight: 700; color: var(--text-sub); margin-bottom: 8px;">📑 모의고사 회차 선택</div>
                 <div class="sub-nav-grid">
                     <div class="sub-nav-card" onclick="showCh3Page(1)"><span>01. Test (실전 모의고사 10선)</span><span>➔</span></div>
                 </div>
             </div>
-
             <div id="ch3-sub-page-1" class="sub-page">
-                <div class="sub-page-header">
-                    <div class="page-indicator">01. Test 회차</div>
-                    <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-                        <button class="font-btn" onclick="shuffleSection('ch3-questions-wrap')" style="font-size: 0.8em; background-color: #8b5cf6; color: #fff;">🔀 순서 섞기</button>
-                        <button class="font-btn" id="btn-filter-wrong" onclick="toggleWrongOnly()" style="font-size: 0.8em;">❌ 오답만</button>
-                        <button class="font-btn" onclick="resetAllQuestions('ch3-', 10)" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff;">🔄 전체 리셋</button>
-                        <button class="font-btn" onclick="showCh3Menu()" style="font-size: 0.8em;">📋 목록</button>
-                    </div>
-                </div>
-
-                <div class="score-board">
-                    <span id="quiz-score-text">점수: 0 / 100점 (정답: 0개)</span>
-                    <span id="quiz-pass-text" style="color: #64748b;">응시 중</span>
-                </div>
-
+                <div class="score-board"><span id="quiz-score-text">점수: 0 / 100점</span><span id="quiz-pass-text">응시 중</span></div>
                 <div id="ch3-questions-wrap">
-                    <div class="box quiz-box" id="box-ch3-1" style="position: relative;" data-qid="ch3-1" data-correct-text="공공의 안녕 및 질서 유지와 복리증진">
-                        <button class="font-btn" onclick="resetAnswer('ch3-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 소방기본법의 제정 목적으로 가장 적절한 것은?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-1-opt-1" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">공공의 안녕 및 질서 유지와 복리증진</button>
-                            <button class="font-btn opt-btn" id="ch3-1-opt-2" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">화재의 예방 및 진압 우선</button>
-                            <button class="font-btn opt-btn" id="ch3-1-opt-3" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">건축물 안전기준 확립</button>
-                            <button class="font-btn opt-btn" id="ch3-1-opt-4" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">위험물 허가 업무 수행</button>
+                    <div class="box quiz-box" id="box-ch3-1" data-qid="ch3-1" data-correct-text="공공의 안녕 및 질서 유지와 복리증진">
+                        <p class="quiz-q-title">Q1. 소방기본법 제정 목적은?</p>
+                        <div class="quiz-opt-grid">
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')">공공의 안녕 및 질서 유지와 복리증진</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')">화재 예방 우선</button>
                         </div>
-                        <div id="q-result-ch3-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-1" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 소방기본법 목적: 공공의 안녕 및 질서 유지와 복리증진입니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-2" style="position: relative;" data-qid="ch3-2" data-correct-text="소방안전관리자">
-                        <button class="font-btn" onclick="resetAnswer('ch3-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 다음 중 소방관계법령상 '관계인'의 범위에 원칙적으로 포함되지 않는 사람은?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-2-opt-1" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">소유자</button>
-                            <button class="font-btn opt-btn" id="ch3-2-opt-2" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">관리자</button>
-                            <button class="font-btn opt-btn" id="ch3-2-opt-3" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">소방안전관리자</button>
-                            <button class="font-btn opt-btn" id="ch3-2-opt-4" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">점유자</button>
-                        </div>
-                        <div id="q-result-ch3-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-2" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 관계인은 소유자, 관리자, 점유자입니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-3" style="position: relative;" data-qid="ch3-3" data-correct-text="지름 50cm 이상, 1.2m 이내">
-                        <button class="font-btn" onclick="resetAnswer('ch3-3')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q3. 무창층 요건 중 개구부의 크기 및 위치 기준이 옳은 것은?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-3-opt-1" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 40cm 이상, 1.5m 이내</button>
-                            <button class="font-btn opt-btn" id="ch3-3-opt-2" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 50cm 이상, 1.2m 이내</button>
-                            <button class="font-btn opt-btn" id="ch3-3-opt-3" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 60cm 이상, 1.0m 이내</button>
-                            <button class="font-btn opt-btn" id="ch3-3-opt-4" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 50cm 이상, 1.5m 이내</button>
-                        </div>
-                        <div id="q-result-ch3-3" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-3" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 무창층 개구부는 지름 50cm 이상, 바닥으로부터 1.2m 이내입니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-4" style="position: relative;" data-qid="ch3-4" data-correct-text="위험물 시설의 허가 및 승인">
-                        <button class="font-btn" onclick="resetAnswer('ch3-4')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q4. 다음 중 한국소방안전원의 업무가 아닌 것은?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-4-opt-1" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">종사자 기술 교육</button>
-                            <button class="font-btn opt-btn" id="ch3-4-opt-2" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">대국민 홍보</button>
-                            <button class="font-btn opt-btn" id="ch3-4-opt-3" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">행정 위탁업무 수행</button>
-                            <button class="font-btn opt-btn" id="ch3-4-opt-4" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">위험물 시설의 허가 및 승인</button>
-                        </div>
-                        <div id="q-result-ch3-4" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-4" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 위험물 시설 허가/승인은 행정청의 권한입니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-5" style="position: relative;" data-qid="ch3-5" data-correct-text="특급">
-                        <button class="font-btn" onclick="resetAnswer('ch3-5')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q5. 아파트로서 50층 이상 또는 지상높이 200m 이상인 건축물의 소방안전관리대상물 등급은?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-5-opt-1" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">특급</button>
-                            <button class="font-btn opt-btn" id="ch3-5-opt-2" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">1급</button>
-                            <button class="font-btn opt-btn" id="ch3-5-opt-3" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">2급</button>
-                            <button class="font-btn opt-btn" id="ch3-5-opt-4" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">3급</button>
-                        </div>
-                        <div id="q-result-ch3-5" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-5" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 아파트 50층 이상 또는 200m 이상은 특급입니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-6" style="position: relative;" data-qid="ch3-6" data-correct-text="피난·방화시설 및 소방시설 관리">
-                        <button class="font-btn" onclick="resetAnswer('ch3-6')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q6. 관리업자에게 대행시킬 수 있는 업무 범위는?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-6-opt-1" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">소방계획서 작성</button>
-                            <button class="font-btn opt-btn" id="ch3-6-opt-2" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">피난·방화시설 및 소방시설 관리</button>
-                            <button class="font-btn opt-btn" id="ch3-6-opt-3" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">화기취급 감독</button>
-                            <button class="font-btn opt-btn" id="ch3-6-opt-4" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">자위소방대 편성</button>
-                        </div>
-                        <div id="q-result-ch3-6" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-6" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 피난·방화시설 관리 및 소방시설 관리만 대행 가능합니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-7" style="position: relative;" data-qid="ch3-7" data-correct-text="특급 및 1급">
-                        <button class="font-btn" onclick="resetAnswer('ch3-7')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q7. 다른 안전관리자와 겸직이 불가능한 등급은?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-7-opt-1" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">특급 및 1급</button>
-                            <button class="font-btn opt-btn" id="ch3-7-opt-2" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">1급 및 2급</button>
-                            <button class="font-btn opt-btn" id="ch3-7-opt-3" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">2급 및 3급</button>
-                            <button class="font-btn opt-btn" id="ch3-7-opt-4" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">모든 등급 겸직 가능</button>
-                        </div>
-                        <div id="q-result-ch3-7" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-7" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 특급 및 1급은 겸직이 불가능합니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-8" style="position: relative;" data-qid="ch3-8" data-correct-text="30일 이내">
-                        <button class="font-btn" onclick="resetAnswer('ch3-8')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q8. 소방안전관리자 선임 기한은 사유 발생일로부터 며칠 이내인가?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-8-opt-1" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">14일 이내</button>
-                            <button class="font-btn opt-btn" id="ch3-8-opt-2" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">20일 이내</button>
-                            <button class="font-btn opt-btn" id="ch3-8-opt-3" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">30일 이내</button>
-                            <button class="font-btn opt-btn" id="ch3-8-opt-4" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">60일 이내</button>
-                        </div>
-                        <div id="q-result-ch3-8" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-8" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 선임 기한은 30일 이내입니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-9" style="position: relative;" data-qid="ch3-9" data-correct-text="2급 및 3급">
-                        <button class="font-btn" onclick="resetAnswer('ch3-9')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q9. 소방안전관리자 선임 연기 신청이 가능한 대상물은?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-9-opt-1" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">2급 및 3급</button>
-                            <button class="font-btn opt-btn" id="ch3-9-opt-2" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">특급</button>
-                            <button class="font-btn opt-btn" id="ch3-9-opt-3" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">1급</button>
-                            <button class="font-btn opt-btn" id="ch3-9-opt-4" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">전 등급</button>
-                        </div>
-                        <div id="q-result-ch3-9" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-9" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 선임 연기는 2급 및 3급 대상물만 가능합니다.
-                        </div>
-                    </div>
-
-                    <div class="box quiz-box" id="box-ch3-10" style="position: relative;" data-qid="ch3-10" data-correct-text="관리자의 자격증 종류">
-                        <button class="font-btn" onclick="resetAnswer('ch3-10')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
-                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q10. 현황표에 반드시 표기해야 하는 항목이 아닌 것은?</p>
-                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
-                            <button class="font-btn opt-btn" id="ch3-10-opt-1" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">관리자 성명/연락처</button>
-                            <button class="font-btn opt-btn" id="ch3-10-opt-2" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">근무 위치 (수신기 위치)</button>
-                            <button class="font-btn opt-btn" id="ch3-10-opt-3" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">대상물 등급 및 명칭</button>
-                            <button class="font-btn opt-btn" id="ch3-10-opt-4" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">관리자의 자격증 종류</button>
-                        </div>
-                        <div id="q-result-ch3-10" style="margin-top: 10px; font-weight: bold; display: none;"></div>
-                        <div id="q-expl-ch3-10" class="note" style="margin-top: 10px; display: none;">
-                            <b>💡 해설:</b> 자격증 종류(자격 등급)는 표기 대상이 아닙니다.
-                        </div>
+                        <div id="q-result-ch3-1" style="display:none; font-weight:bold; margin-top:10px;"></div>
                     </div>
                 </div>
-
-                <div style="margin-top: 25px; text-align: center;">
-                    <button class="page-nav-btn main-btn" onclick="showCh3Menu()" style="display: inline-block; width: auto; padding: 10px 24px;">📋 회차 목록으로</button>
-                </div>
+                <div style="text-align:center; margin-top:20px;"><button class="page-nav-btn main-btn" onclick="showCh3Menu()">📋 회차 목록으로</button></div>
             </div>
+        </div>
 
-            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
-                위 해당 저작권은 꾸누에 있으며 무단 복제를 금합니다.
-            </div>
+        <!-- 하단 플로팅 독 네비게이션 -->
+        <div id="page-nav-bar" class="page-nav-bar">
+            <button id="btn-prev" class="page-nav-btn" onclick="prevSubPage()">◀ 이전</button>
+            <button class="page-nav-btn main-btn" onclick="showSubMenu()">📋 단원 목록</button>
+            <button id="btn-next" class="page-nav-btn" onclick="nextSubPage()">다음 ▶</button>
         </div>
     </div>
 
@@ -1765,9 +1551,10 @@
         
         var quizAnswerState = {}; 
         var isFilterWrongMode = false;
-        var wasDarkModeBeforeMemo = false; // 🌟 암기모드 자동 주간 전환 복원 변수
+        var wasDarkModeBeforeMemo = false;
+        var isChosungMode = false;
+        var originalElementsData = []; // 초성 모드 복원을 위한 원본 저장소
 
-        /* 🌟 [100개 엄선] 수험생을 위한 지혜, 격려, 끈기의 성경 구절 풀 */
         var bibleQuotes100 = [
             { text: "시작은 미약하였으나 네 나중은 심히 창대하리라.", ref: "욥기 8:7" },
             { text: "두려워하지 말라 내가 너와 함께 함이라 놀라지 말라 나는 네 하나님이 됨이라.", ref: "이사야 41:10" },
@@ -1876,11 +1663,10 @@
             setupMemorizeClickEvents();
             updateProgress();
             calculateDDay();
-            renderHourlyBibleQuote(); // 🌟 매시간 중복방지 말씀 렌더러
+            renderHourlyBibleQuote();
             setupMiniEnterKeys();
         });
 
-        /* 🌟 [상단 패널 접기/펼치기 제어 함수] */
         function toggleTopPanel() {
             var content = document.getElementById("collapsible-control-content");
             var btnText = document.getElementById("panel-toggle-btn-text");
@@ -1895,7 +1681,6 @@
             }
         }
 
-        /* 🎯 D-Day 자동 계산 */
         function calculateDDay() {
             var targetDate = new Date("2026-10-02T00:00:00+09:00");
             var now = new Date();
@@ -1913,7 +1698,6 @@
             if (miniBadgeEl) miniBadgeEl.innerText = "(" + text + ")";
         }
 
-        /* 🌟 [매 시간 변경 & 24시간 중복 방지 성경 구절 엔진] */
         function renderHourlyBibleQuote() {
             var now = new Date();
             var currentHourKey = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + "-" + now.getHours();
@@ -1922,7 +1706,6 @@
             var savedQuoteIndex = localStorage.getItem("current_quote_index");
             var recentHistory = JSON.parse(localStorage.getItem("quote_recent_24h_history") || "[]");
 
-            // 24시간 초과 기록 정리
             var twentyFourHoursAgo = now.getTime() - (24 * 60 * 60 * 1000);
             recentHistory = recentHistory.filter(function(item) {
                 return item.time > twentyFourHoursAgo;
@@ -1930,11 +1713,9 @@
 
             var chosenIndex = -1;
 
-            // 동일한 시간대면 저장된 인덱스 그대로 유지
             if (savedHourKey === currentHourKey && savedQuoteIndex !== null) {
                 chosenIndex = parseInt(savedQuoteIndex, 10);
             } else {
-                // 새로운 1시간: 24시간 내 노출된 인덱스 제외 후 랜덤 추첨
                 var usedIndices = recentHistory.map(function(item) { return item.index; });
                 var availableIndices = [];
                 for (var i = 0; i < bibleQuotes100.length; i++) {
@@ -1986,15 +1767,15 @@
             document.getElementById('darkmode-toggle-btn').innerText = isDark ? "☀️ 주간" : "🌙 야간";
         }
 
-        /* 🌟 [암기모드 토글 및 자동 밝게보기 연동] */
         function toggleMemorizeMode() {
+            if (isChosungMode) toggleChosungMode(); // 초성모드가 켜져있으면 해제
+
             document.body.classList.toggle('memorize-mode');
             var isMemo = document.body.classList.contains('memorize-mode');
             var btn = document.getElementById('memorize-toggle-btn');
-            btn.innerText = isMemo ? "👁️ 암기모드 ON" : "🙈 암기모드 OFF";
+            btn.innerText = isMemo ? "👁️ 암기 ON" : "🙈 암기 OFF";
             btn.classList.toggle('active', isMemo);
 
-            // 💡 암기모드 켤 때 자동으로 주간(밝은 모드)으로 임시 전환
             if (isMemo) {
                 if (document.body.classList.contains('dark-mode')) {
                     wasDarkModeBeforeMemo = true;
@@ -2011,6 +1792,46 @@
 
             document.getElementById('timer-control-bar').style.display = isMemo ? "flex" : "none";
             updateTimerUI();
+        }
+
+        /* 🌟 [신규 1] 한글 초성 추출 및 초성 모드 엔진 */
+        function getChosung(str) {
+            var cho = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+            var result = "";
+            for (var i = 0; i < str.length; i++) {
+                var code = str.charCodeAt(i) - 44032;
+                if (code >= 0 && code <= 11171) {
+                    result += cho[Math.floor(code / 588)];
+                } else {
+                    result += str.charAt(i);
+                }
+            }
+            return result;
+        }
+
+        function toggleChosungMode() {
+            if (document.body.classList.contains('memorize-mode')) toggleMemorizeMode(); // 암기모드 해제
+
+            isChosungMode = !isChosungMode;
+            document.body.classList.toggle('chosung-mode', isChosungMode);
+            var btn = document.getElementById('chosung-toggle-btn');
+            btn.classList.toggle('active', isChosungMode);
+            btn.innerText = isChosungMode ? "💡 원문 복원" : "💡 초성 퀴즈";
+
+            var targets = document.querySelectorAll('.red, .blue, .yellow, .mint, .orange, .highlight');
+            if (isChosungMode) {
+                originalElementsData = [];
+                targets.forEach(function(el, idx) {
+                    originalElementsData[idx] = el.innerText;
+                    el.innerText = getChosung(el.innerText);
+                });
+            } else {
+                targets.forEach(function(el, idx) {
+                    if (originalElementsData[idx] !== undefined) {
+                        el.innerText = originalElementsData[idx];
+                    }
+                });
+            }
         }
 
         function setTimerSec(sec) {
@@ -2059,11 +1880,62 @@
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
         }
 
+        /* 🌟 [신규 4] 학습 데이터(진도, 북마크, 메모) JSON 백업/복원 엔진 */
+        function exportUserData() {
+            var backupData = {
+                bookmarks: bookmarks,
+                completes: completes,
+                memos: {}
+            };
+            for (var i = 1; i <= totalSubPages; i++) {
+                var memo = localStorage.getItem("user_memo_page_" + i);
+                if (memo) backupData.memos[i] = memo;
+            }
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+            var downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "소방2급_학습데이터_백업.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            alert("💾 메모와 학습 진도가 안전하게 백업 파일로 다운로드되었습니다!");
+        }
+
+        function importUserData(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = JSON.parse(e.target.result);
+                    if (data.bookmarks) localStorage.setItem('user_bookmarks', JSON.stringify(data.bookmarks));
+                    if (data.completes) localStorage.setItem('user_completes', JSON.stringify(data.completes));
+                    if (data.memos) {
+                        for (var key in data.memos) {
+                            localStorage.setItem("user_memo_page_" + key, data.memos[key]);
+                        }
+                    }
+                    alert("📂 백업 데이터를 성공적으로 복원했습니다! 페이지를 새로고침합니다.");
+                    location.reload();
+                } catch(err) {
+                    alert("❌ 파일 형식이 올바르지 않습니다.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
         function updateProgress() {
             var doneCount = completes.length;
             var percent = Math.round((doneCount / totalSubPages) * 100);
             document.getElementById('progress-text').innerText = doneCount + " / " + totalSubPages + " (" + percent + "%)";
             document.getElementById('progress-fill').style.width = percent + "%";
+
+            for (var i = 1; i <= totalSubPages; i++) {
+                var doneBadge = document.getElementById("card-done-" + i);
+                if (doneBadge) {
+                    doneBadge.style.display = completes.includes(i) ? "inline-block" : "none";
+                }
+            }
         }
 
         function toggleComplete(pageNum) {
@@ -2123,7 +1995,7 @@
                 document.getElementById("ch1-main-menu").style.display = "none";
                 document.getElementById("ch1-part1-1-container").style.display = "block";
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function showCh1MainMenu() {
@@ -2139,7 +2011,7 @@
             document.getElementById("page-nav-bar").style.display = "none";
             document.getElementById("ch1-part1-1-container").style.display = "none";
             document.getElementById("ch1-main-menu").style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function showCh11Part(partName) {
@@ -2147,26 +2019,101 @@
                 document.getElementById("ch1-1-main-menu").style.display = "none";
                 document.getElementById("ch1-1-part1-1-container").style.display = "block";
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function showCh11MainMenu() {
             document.getElementById("ch1-1-part1-1-container").style.display = "none";
             document.getElementById("ch1-1-main-menu").style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function showCh3Page(pageNum) {
             document.getElementById("ch3-page-menu").style.display = "none";
             var testPage = document.getElementById("ch3-sub-page-" + pageNum);
             if (testPage) testPage.style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function showCh3Menu() {
             document.getElementById("ch3-sub-page-1").style.display = "none";
             document.getElementById("ch3-page-menu").style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        /* 🌟 [신규 3] 쪽지시험 단답형/선택형 체크 엔진 */
+        function checkMiniChoice(qKey, clickedBtn, correctVal) {
+            var item = clickedBtn.closest('.mini-q-item');
+            var resEl = document.getElementById("res-" + qKey);
+            var isDark = document.body.classList.contains('dark-mode');
+
+            var allBtns = item.querySelectorAll('.mini-opt-grid button');
+            allBtns.forEach(function(btn) {
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+            });
+
+            var userVal = clickedBtn.innerText.trim();
+            resEl.style.display = "block";
+
+            if (userVal === correctVal.trim()) {
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 🎉</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#064e3b" : "#dcfce7";
+                clickedBtn.style.color = isDark ? "#86efac" : "#166534";
+            } else {
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + correctVal + ")</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#7f1d1d" : "#fee2e2";
+                clickedBtn.style.color = isDark ? "#fca5a5" : "#991b1b";
+            }
+        }
+
+        function checkMiniText(qKey, correctList) {
+            var inputEl = document.getElementById("input-" + qKey);
+            var resEl = document.getElementById("res-" + qKey);
+            var isDark = document.body.classList.contains('dark-mode');
+            if (!inputEl) return;
+
+            var userVal = inputEl.value.trim().toLowerCase().replace(/\s+/g, '');
+            if (!userVal) {
+                alert("답안을 입력해주세요!");
+                return;
+            }
+
+            var validAnswers = Array.isArray(correctList) ? correctList : [correctList];
+            var isCorrect = validAnswers.some(function(ans) {
+                return userVal === ans.trim().toLowerCase().replace(/\s+/g, '');
+            });
+
+            resEl.style.display = "block";
+            if (isCorrect) {
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 👏</span>";
+                inputEl.style.borderColor = "#16a34a";
+            } else {
+                var dispAnswer = validAnswers[0];
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + dispAnswer + ")</span>";
+                inputEl.style.borderColor = "#dc2626";
+            }
+        }
+
+        function resetSectionQuiz(secKey) {
+            var items = document.querySelectorAll('.mini-q-item[data-sec="' + secKey + '"]');
+            items.forEach(function(item) {
+                var btns = item.querySelectorAll('button');
+                btns.forEach(function(b) {
+                    b.style.backgroundColor = "";
+                    b.style.color = "";
+                });
+                var inps = item.querySelectorAll('input');
+                inps.forEach(function(inp) {
+                    inp.value = "";
+                    inp.style.borderColor = "";
+                });
+                var res = item.querySelector('[id^="res-"]');
+                if (res) {
+                    res.style.display = "none";
+                    res.innerHTML = "";
+                }
+            });
         }
 
         function checkAnswerByText(qId, clickedBtn, correctText) {
@@ -2307,7 +2254,6 @@
                 document.getElementById('darkmode-toggle-btn').innerText = "☀️ 주간";
             }
             
-            // 상단 메뉴 접기/펼치기 이전 상태 복원
             var isPanelCollapsed = localStorage.getItem('user_top_panel_collapsed') === 'true';
             if (isPanelCollapsed) {
                 document.getElementById("collapsible-control-content").classList.add("collapsed");
@@ -2327,12 +2273,17 @@
             }
             updateBookmarkUI();
             updateTimerUI();
+            updateProgress();
         }
 
         function handleSearch() {
-            var query = document.getElementById("search-input").value.trim().toLowerCase();
+            var input = document.getElementById("search-input");
+            var clearBtn = document.getElementById("search-clear-btn");
+            var query = input.value.trim().toLowerCase();
             var resultsContainer = document.getElementById("search-results");
             resultsContainer.innerHTML = "";
+
+            clearBtn.style.display = input.value.length > 0 ? "block" : "none";
 
             if (query.length < 1) {
                 resultsContainer.style.display = "none";
@@ -2357,7 +2308,9 @@
                         showCh1Part('part1-1');
                         showSubPage(m.pageNum);
                         resultsContainer.style.display = "none";
-                        document.getElementById("search-input").value = "";
+                        input.value = "";
+                        clearBtn.style.display = "none";
+                        input.blur();
                         
                         var targetPage = document.getElementById("sub-page-" + m.pageNum);
                         targetPage.classList.add("search-match-flash");
@@ -2373,6 +2326,14 @@
             }
         }
 
+        function clearSearch() {
+            var input = document.getElementById("search-input");
+            input.value = "";
+            document.getElementById("search-clear-btn").style.display = "none";
+            document.getElementById("search-results").style.display = "none";
+            input.focus();
+        }
+
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -2386,6 +2347,10 @@
             }
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
+
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add("active");
+            }
             
             if (tabName === 'tab-ch1') {
                 currentSubPage = 0;
@@ -2401,16 +2366,14 @@
 
                 document.getElementById("ch1-part1-1-container").style.display = "none";
                 document.getElementById("ch1-main-menu").style.display = "block";
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'instant' });
             }
 
             if (tabName === 'tab-ch1-1') {
                 document.getElementById("ch1-1-part1-1-container").style.display = "none";
                 document.getElementById("ch1-1-main-menu").style.display = "block";
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'instant' });
             }
-            
-            if (evt && evt.currentTarget) evt.currentTarget.classList.add("active");
         }		
 
         function showSubPage(pageNum) {
@@ -2427,7 +2390,7 @@
 
             document.getElementById("page-nav-bar").style.display = "flex";
             updateNavButtons();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function showSubMenu() {
@@ -2441,7 +2404,7 @@
 
             document.getElementById("sub-page-menu").style.display = "block";
             document.getElementById("page-nav-bar").style.display = "none";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function prevSubPage() {
@@ -2469,7 +2432,7 @@
         };
 
         function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         var touchstartX = 0, touchendX = 0, touchstartY = 0, touchendY = 0;
@@ -2489,12 +2452,12 @@
         }, false);
 
         function handleSwipe() {
-            var xDiff = touchendX - touchstartX;
-            var yDiff = touchendY - touchstartY;
+            var xDiff = touchstartX - touchendX;
+            var yDiff = touchstartY - touchendY;
 
             if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
                 if (currentSubPage > 0) {
-                    if (xDiff < 0) nextSubPage();
+                    if (xDiff > 0) nextSubPage();
                     else prevSubPage();
                 }
             }
