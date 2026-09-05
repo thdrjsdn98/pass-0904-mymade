@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>소방안전관리자 2급 - 핵심 요약집</title>
+    <style>
+        :root {
+            --base-font-size: 15px;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-sub: #475569;
+            --border-color: #cbd5e1;
+            --box-bg: #f8fafc;
+        }
+
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-sub: #94a3b8;
+            --border-color: #334155;
+            --box-bg: #334155;
+        }
+
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            background-color: var(--bg-color);
+            -webkit-text-size-adjust: 100%;
+            transition: background-color 0.3s;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.65;
+            color: var(--text-color);
+            padding: 8px !important;
+            word-break: keep-all;
+            font-size: var(--base-font-size);
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .control-bar-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .font-control-bar {
+            background-color: var(--box-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .font-control-title {
+            font-size: 0.85em;
+            font-weight: bold;
+            color: var(--text-sub);
+        }
+        .font-btn-group {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .font-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            cursor: pointer;
+            font-weight: bold;
+            min-height: 34px;
+        }
+        .font-btn.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+
+        .dday-badge {
+            background-color: #ef4444;
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.82em;
+            font-weight: 800;
+            display: inline-block;
+        }
+
+        .progress-box {
+            background-color: var(--box-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: var(--text-sub);
+        }
+        .progress-bar-track {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #2563eb;
+            transition: width 0.3s ease;
+        }
+
+        .search-box-container {
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--box-bg);
+            color: var(--text-color);
+            font-size: 0.9em;
+            outline: none;
+        }
+        .search-results-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 500;
+            display: none;
+        }
+        .search-result-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.88em;
+            cursor: pointer;
+        }
+        .search-result-item:last-child { border-bottom: none; }
+        .search-result-item:active { background-color: #eff6ff; }
+
+        .tab-menu {
+            position: sticky;
+            top: 0;
+            background-color: var(--card-bg);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid var(--border-color);
+            padding: 8px 0 12px 0;
+        }
+        .tab-menu-left {
+            display: flex;
+            gap: 3px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            background-color: var(--box-bg);
+            color: var(--text-sub);
+            border: 1px solid var(--border-color);
+            padding: 8px 8px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.75em;
+            cursor: pointer;
+            white-space: nowrap;
+            min-height: 40px;
+        }
+        .tab-btn.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+            box-shadow: 0 3px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .sub-nav-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .sub-nav-card {
+            background-color: var(--box-bg);
+            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 700;
+            color: var(--text-color);
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 52px;
+        }
+        .sub-nav-card:active {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+            color: #2563eb;
+        }
+
+        .sub-page { 
+            display: none; 
+            touch-action: pan-y;
+        }
+        .sub-page.active { display: block; }
+
+        .sub-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .bookmark-btn {
+            background: none;
+            border: none;
+            font-size: 1.4em;
+            cursor: pointer;
+            color: #cbd5e1;
+            padding: 0 4px;
+        }
+        .bookmark-btn.active { color: #f59e0b; }
+
+        .complete-check-label {
+            font-size: 0.82em;
+            font-weight: bold;
+            color: var(--text-sub);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .page-indicator {
+            font-size: 0.85em;
+            font-weight: 700;
+            color: #2563eb;
+            background-color: #eff6ff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        body.dark-mode .page-indicator {
+            background-color: #1e3a8a;
+            color: #93c5fd;
+        }
+
+        /* 📝 쪽지시험 섹션 스타일 */
+        .quiz-section {
+            margin-top: 25px;
+            padding: 14px;
+            background-color: var(--box-bg);
+            border: 1.5px solid #3b82f6;
+            border-radius: 12px;
+        }
+        .quiz-sec-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+        .quiz-sec-title {
+            font-size: 0.95em;
+            font-weight: bold;
+            color: #2563eb;
+        }
+        body.dark-mode .quiz-sec-title { color: #60a5fa; }
+        .mini-q-item {
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
+        }
+        .mini-q-item:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+        .mini-q-title {
+            font-size: 0.9em;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-color);
+        }
+        .mini-opt-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin: 6px 0;
+        }
+        .mini-text-input {
+            width: 100%;
+            max-width: 220px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 0.88em;
+            outline: none;
+        }
+
+        /* 각주 메모 영역 */
+        .page-memo-section {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: var(--box-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        .page-memo-title {
+            font-size: 0.85em;
+            font-weight: bold;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+        }
+        .page-memo-textarea {
+            width: 100%;
+            height: 70px;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 0.88em;
+            resize: vertical;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .page-nav-bar {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 2px dashed var(--border-color);
+        }
+        .page-nav-btn {
+            flex: 1;
+            background-color: var(--box-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px 6px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            font-weight: 700;
+            color: var(--text-color);
+            text-align: center;
+            cursor: pointer;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page-nav-btn.main-btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+        .page-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .top-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background-color: #1e293b;
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        h1 { font-size: 1.35em; color: var(--text-color); border-bottom: 3px solid #3b82f6; padding-bottom: 8px; margin-top: 5px; }
+        h2 { font-size: 1.15em; color: #1d4ed8; background: #eff6ff; padding: 10px 12px; border-left: 5px solid #3b82f6; border-radius: 6px; margin-top: 10px; }
+        body.dark-mode h2 { background: #1e3a8a; color: #93c5fd; }
+        ul { padding-left: 18px; margin-bottom: 15px; }
+        li { margin-bottom: 10px; font-size: 1em; }
+        
+        .red { color: #dc2626; font-weight: 700; }
+        .red_nb { color: #dc2626; font-weight: 400; }
+        .blue { color: #2563eb; font-weight: 700; }
+        .blue_nb { color: #2563eb; font-weight: 400; }
+        .yellow { color: #d97706; font-weight: 700; }
+        .yellow_nb { color: #d97706; font-weight: 400; }
+        .mint { color: #0d9488; font-weight: 700; }
+        .mint_nb { color: #0d9488; font-weight: 400; }
+        .orange { color: #ea580c; font-weight: 700; }
+        .orange_nb { color: #ea580c; font-weight: 400; }
+
+        .badge {
+            display: inline-block;
+            min-width: 22px;
+            height: 22px;
+            line-height: 22px;
+            text-align: center;
+            border-radius: 50%;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-right: 6px;
+        }
+        .badge.blue { background-color: #2563eb; }
+
+        .highlight {
+            background-color: #fef08a;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        body.memorize-mode .red,
+        body.memorize-mode .blue,
+        body.memorize-mode .yellow,
+        body.memorize-mode .mint,
+        body.memorize-mode .orange,
+        body.memorize-mode .highlight,
+        body.dark-mode.memorize-mode .red,
+        body.dark-mode.memorize-mode .blue,
+        body.dark-mode.memorize-mode .yellow,
+        body.dark-mode.memorize-mode .mint,
+        body.dark-mode.memorize-mode .orange,
+        body.dark-mode.memorize-mode .highlight {
+            background-color: #000000 !important;
+            color: #000000 !important;
+            border-radius: 3px;
+            padding: 0 4px;
+            user-select: none;
+            cursor: pointer;
+            transition: color 0.15s, background-color 0.15s;
+        }
+
+        body.memorize-mode .revealed,
+        body.dark-mode.memorize-mode .revealed {
+            background-color: #fef08a !important;
+            color: #dc2626 !important;
+        }
+
+        body.memorize-mode.press-mode .red:active,
+        body.memorize-mode.press-mode .blue:active,
+        body.memorize-mode.press-mode .yellow:active,
+        body.memorize-mode.press-mode .mint:active,
+        body.memorize-mode.press-mode .orange:active,
+        body.memorize-mode.press-mode .highlight:active,
+        body.dark-mode.memorize-mode.press-mode .red:active,
+        body.dark-mode.memorize-mode.press-mode .blue:active,
+        body.dark-mode.memorize-mode.press-mode .yellow:active,
+        body.dark-mode.memorize-mode.press-mode .mint:active,
+        body.dark-mode.memorize-mode.press-mode .orange:active,
+        body.dark-mode.memorize-mode.press-mode .highlight:active {
+            background-color: #fef08a !important;
+            color: #dc2626 !important;
+        }
+
+        .box { background-color: var(--box-bg); border: 1px solid var(--border-color); padding: 14px; border-radius: 10px; margin: 14px 0; font-size: 0.95em; }
+        .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; border-radius: 8px; border: 1px solid var(--border-color); }
+        .table { width: 100%; min-width: 480px; border-collapse: collapse; }
+        .table th, .table td { border: 1px solid var(--border-color); padding: 10px; text-align: left; font-size: 0.9em; }
+        .table th { background-color: var(--box-bg); color: var(--text-color); font-weight: 700; }
+        
+        .note { background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; color: #991b1b; margin: 14px 0; border-radius: 6px; font-size: 0.9em; }
+        body.dark-mode .note { background-color: #7f1d1d !important; color: #fee2e2 !important; border-left-color: #f87171; }
+
+        .score-board {
+            background-color: var(--box-bg);
+            border: 2px solid #2563eb;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .cover-page { min-height: 65vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .cover-title { font-size: 2em; font-weight: 800; color: #1e3a8a; margin-bottom: 8px; }
+        body.dark-mode .cover-title { color: #93c5fd; }
+        .cover-subtitle { font-size: 1.25em; color: var(--text-sub); margin-bottom: 20px; }
+        .cover-divider { width: 60px; height: 4px; background-color: #2563eb; margin-bottom: 25px; border-radius: 2px; }
+        .cover-info { font-size: 0.9em; color: var(--text-sub); line-height: 1.8; }
+
+        .search-match-flash {
+            animation: flash-animation 1.5s ease-in-out;
+        }
+        @keyframes flash-animation {
+            0% { background-color: #fef08a; }
+            50% { background-color: #fde047; }
+            100% { background-color: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app-viewport">
+        
+        <div class="control-bar-group">
+            <div class="font-control-bar">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="font-control-title">🔤 글자</span>
+                    <div class="font-btn-group">
+                        <button class="font-btn" onclick="changeFontSize(-1)">가-</button>
+                        <button class="font-btn" onclick="resetFontSize()">기본</button>
+                        <button class="font-btn" onclick="changeFontSize(1)">가+</button>
+                    </div>
+                </div>
+                <div class="dday-badge" id="exam-dday-badge">D-Day 계산중</div>
+                <div class="font-btn-group">
+                    <button class="font-btn" id="memorize-toggle-btn" onclick="toggleMemorizeMode()">🙈 암기모드 OFF</button>
+                    <button class="font-btn" id="darkmode-toggle-btn" onclick="toggleDarkMode()">🌙 야간</button>
+                </div>
+            </div>
+
+            <div class="progress-box">
+                <div class="progress-header">
+                    <span>📊 회독 학습 진도율</span>
+                    <span id="progress-text">0 / 9 (0%)</span>
+                </div>
+                <div class="progress-bar-track">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="font-control-bar" id="timer-control-bar" style="display: none; background-color: var(--card-bg);">
+                <span class="font-control-title">⏱️ 표시시간</span>
+                <div class="font-btn-group">
+                    <button class="font-btn active" id="timer-btn-3" onclick="setTimerSec(3)">3초</button>
+                    <button class="font-btn" id="timer-btn-5" onclick="setTimerSec(5)">5초</button>
+                    <button class="font-btn" id="timer-btn-0" onclick="setTimerSec(0)">누를때만</button>
+                </div>
+            </div>
+
+            <div class="search-box-container">
+                <input type="text" id="search-input" class="search-input" placeholder="🔍 궁금한 단어 검색 (예: 무창층, 선임, 겸직)" oninput="handleSearch()">
+                <div id="search-results" class="search-results-list"></div>
+            </div>
+        </div>
+
+        <div class="tab-menu">
+            <div class="tab-menu-left">
+                <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">I. 복습예제</button>
+                <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!');">II. 설비 및 구조</button>
+                <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!');">III. 복합개념</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
+            </div>
+        </div>
+
+        <div id="tab-cover" class="tab-content active">
+            <div class="cover-page">
+                <div class="cover-title">소방안전관리자 2급</div>
+                <div class="cover-subtitle">핵심 요약집</div>
+                <div class="cover-divider"></div>
+                <div class="cover-info">
+                    <p>만든이: 꾸누</p>
+                    <p>목표 시험일: 2026.10.02</p>
+                    <p>버전: V2.6.0 (단원별 쪽지시험 3문항 탑재)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- I. 이론과 개념 탭 -->
+        <div id="tab-ch1" class="tab-content">
+            <h1>소방안전관리자 2급 - <br>I. 이론과 개념</h1>
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
+                <span>만든이: 꾸누</span> | <span>수정일: 2026.09.05</span>
+            </div>
+
+            <div id="ch1-main-menu">
+                <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 학습 파트 선택</div>
+                <div class="sub-nav-grid">
+                    <div class="sub-nav-card" onclick="showCh1Part('part1-1')"><span>Part1-1. 소방관계법령</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part1-2. 건축관계법령은 준비 중입니다!');"><span>Part1-2. 건축관계법령</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-1. 소방안전교육 및 훈련/소방계획의 수립은 준비 중입니다!');"><span>Part2-1. 소방안전교육 및 훈련/소방계획의 수립</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-2. 화재대응 및 피난은 준비 중입니다!');"><span>Part2-2. 화재대응 및 피난</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part3. 응급처치 개요는 준비 중입니다!');"><span>Part3. 응급처치 개요</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part4. 소방학개론은 준비 중입니다!');"><span>Part4. 소방학개론</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part5. 위험물·전기·가스 안전관리는 준비 중입니다!');"><span>Part5. 위험물·전기·가스 안전관리</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part6. 화기취급 감독 및 화재위험작업의 허가·관리는 준비 중입니다!');"><span>Part6. 화기취급 감독 및 화재위험작업의 허가·관리</span><span>➔</span></div>
+                </div>
+            </div>
+
+            <div id="ch1-part1-1-container" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <button class="font-btn" onclick="showCh1MainMenu()" style="font-size: 0.8em;">◀ 파트 목록으로</button>
+                    <button class="font-btn" onclick="filterBookmarks()" style="font-size: 0.8em;">⭐ 북마크 모아보기</button>
+                </div>
+
+                <div id="sub-page-menu">
+                    <div class="sub-nav-grid" id="main-menu-grid">
+                        <div class="sub-nav-card" onclick="showSubPage(1)"><span>1. 주요 소방관계법령 제정 목적</span><span id="card-star-1"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(2)"><span>2. 기본 소방 용어 정리</span><span id="card-star-2"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(3)"><span>3. 무창층 요건 (암기 필수)</span><span id="card-star-3"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(4)"><span>4. 한국소방안전원</span><span id="card-star-4"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(5)"><span>5. 소방안전관리대상물 구분</span><span id="card-star-5"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(6)"><span>6. 소방안전관리자 업무 및 대행</span><span id="card-star-6"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(7)"><span>7. 선임자격 기준 [특/1/2/3급]</span><span id="card-star-7"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(8)"><span>8. 선임 기한 및 신고 절차</span><span id="card-star-8"></span></div>
+                        <div class="sub-nav-card" onclick="showSubPage(9)"><span>9. 소방안전관리자 현황표</span><span id="card-star-9"></span></div>
+                    </div>
+                </div>
+
+                <!-- 소페이지 1 -->
+                <div id="sub-page-1" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">1 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-1" onchange="toggleComplete(1)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-1" onclick="toggleBookmark(1)">☆</button>
+                        </div>
+                    </div>
+                    <h2>1. 주요 소방관계법령의 제정 목적</h2>
+                    <ul>
+                        <li><b>소방<span class="blue">기본법</span></b>: <span class="mint_nb">공공의 안녕 및 질서 유지와 복리증진</span> (<span class="red">예</span>방·<span class="red">경</span>계·<span class="red">진</span>압·<span class="red">구</span>조·구<span class="red">급</span>)</li>
+                        <li><b><span class="blue">화재예방</span> 및 안전관리에 관한 법률</b>: <span class="mint_nb">공공의 안전과 복리증진</span></li>
+                        <li><b><span class="blue">소방시설</span> 설치 및 관리에 관한 법률</b>: <span class="mint_nb">공공의 안전과 복리증진</span></li>
+                    </ul>
+
+                    <!-- 📝 1단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 1단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec1')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec1" id="q-sec1-1">
+                            <div class="mini-q-title">Q1. (객관식) 소방기본법의 궁극적인 제정 목적은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec1-1', this, '공공의 안녕 및 질서 유지와 복리증진')">공공의 안녕 및 질서 유지와 복리증진</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec1-1', this, '공공의 안녕 및 질서 유지와 복리증진')">공공의 안전과 복리증진</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec1-1', this, '공공의 안녕 및 질서 유지와 복리증진')">위험물 시설의 안전 확보</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec1-1', this, '공공의 안녕 및 질서 유지와 복리증진')">소방시설의 규격화</button>
+                            </div>
+                            <div id="res-sec1-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec1" id="q-sec1-2">
+                            <div class="mini-q-title">Q2. (주관식) 화재예방 및 안전관리에 관한 법률의 제정 목적 중 빈칸을 채우시오: "공공의 ( &nbsp; )과 복리증진"</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec1-2" class="mini-text-input" placeholder="단답형 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec1-2', '안전')">확인</button>
+                            </div>
+                            <div id="res-sec1-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec1" id="q-sec1-3">
+                            <div class="mini-q-title">Q3. (객관식) 다음 중 소방기본법에서 규정하는 활동 목적(예·경·진·구·급)에 해당하지 않는 것은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec1-3', this, '건축허가')">예방</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec1-3', this, '건축허가')">진압</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec1-3', this, '건축허가')">구조·구급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec1-3', this, '건축허가')">건축허가</button>
+                            </div>
+                            <div id="res-sec1-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-1" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(1)"></textarea>
+                    </div>
+                </div>
+
+                <!-- 소페이지 2 -->
+                <div id="sub-page-2" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">2 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-2" onchange="toggleComplete(2)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-2" onclick="toggleBookmark(2)">☆</button>
+                        </div>
+                    </div>
+                    <h2>2. 기본 소방 용어 정리</h2>
+                    <ul>
+                        <li><b>소방대상물</b>: 건축물, (운행 중인) 차량, 산림, 물건, 항구에 매어둔 선박, 구조물 <span class="red">(단, 항해 중인 선박 제외)</span></li>
+                        <li><b>특정소방대상물</b>: 소방시설을 설치해야 하는 소방대상물로서 대통령령으로 정하는 것</li>
+                        <li><b>소방시설</b>: 소화설비, 소화용수설비, 소화활동설비, 경보설비, 피난구조설비</li>
+                        <li><b>관계인</b>: <span class="mint">소유자, 관리자, 점유자</span> <span class="red">(소방안전관리자는 원칙상 포함 X)</span></li>
+                        <li><b>소방대</b>: <span class="mint">소방공무원, 의무소방원, 의용소방대원</span> <span class="red">(자위소방대원, 경찰공무원 X)</span></li>
+                        <li><b>소방대장</b>: 본부장 또는 서장 (<span class="highlight">본또서장</span>)</li>
+                        <li><b>피난층</b>: 곧바로 지상으로 나가는 출입구가 있는 층</li>
+                    </ul>
+
+                    <!-- 📝 2단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 2단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec2')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec2" id="q-sec2-1">
+                            <div class="mini-q-title">Q1. (객관식) 소방대상물 중 '선박'에 대한 올바른 설명은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec2-1', this, '항구에 매어둔 선박만 해당')">항구에 매어둔 선박만 해당</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec2-1', this, '항구에 매어둔 선박만 해당')">항해 중인 선박만 해당</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec2-1', this, '항구에 매어둔 선박만 해당')">모든 선박 제외</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec2-1', this, '항구에 매어둔 선박만 해당')">군함만 해당</button>
+                            </div>
+                            <div id="res-sec2-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec2" id="q-sec2-2">
+                            <div class="mini-q-title">Q2. (주관식) 곧바로 지상으로 갈 수 있는 출입구가 있는 층을 뜻하는 용어는?</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec2-2" class="mini-text-input" placeholder="용어 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec2-2', '피난층')">확인</button>
+                            </div>
+                            <div id="res-sec2-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec2" id="q-sec2-3">
+                            <div class="mini-q-title">Q3. (객관식) 다음 중 소방대의 구성원이 아닌 사람은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec2-3', this, '자위소방대원')">소방공무원</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec2-3', this, '자위소방대원')">의무소방원</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec2-3', this, '자위소방대원')">의용소방대원</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec2-3', this, '자위소방대원')">자위소방대원</button>
+                            </div>
+                            <div id="res-sec2-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-2" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(2)"></textarea>
+                    </div>
+                </div>
+
+                <!-- 소페이지 3 -->
+                <div id="sub-page-3" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">3 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-3" onchange="toggleComplete(3)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-3" onclick="toggleBookmark(3)">☆</button>
+                        </div>
+                    </div>
+                    <h2>3. 무창층 요건 (암기 필수)</h2>
+                    <div class="box">
+                        <p style="margin-top:0;"><b>개념</b>: 지상층 개구부 면적의 총합이 해당 층 <span class="highlight">바닥면적의 1/30 이하</span>인 층 (예: 백화점)</p>
+                        <ul style="margin-bottom:0;">
+                            <li>개구부 크기: 지름 <span class="highlight">50cm 이상</span>의 원이 내접할 수 있을 것</li>
+                            <li>개구부 위치: 하단이 바닥으로부터 <span class="highlight">1.2m 이내의 높이</span>에 위치</li>
+                            <li>도로 또는 차량 진입 가능한 빈터를 향할 것</li>
+                            <li>창살 및 장애물이 없고 쉽게 부술 수 있을 것</li>
+                        </ul>
+                    </div>
+
+                    <!-- 📝 3단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 3단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec3')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec3" id="q-sec3-1">
+                            <div class="mini-q-title">Q1. (주관식) 무창층은 개구부 면적 합계가 해당 층 바닥면적의 몇 분의 1 이하인 층인가? (숫자/분수 입력: 예 1/10)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec3-1" class="mini-text-input" placeholder="분수 또는 숫자 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec3-1', ['1/30', '30분의 1', '30분의1'])">확인</button>
+                            </div>
+                            <div id="res-sec3-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec3" id="q-sec3-2">
+                            <div class="mini-q-title">Q2. (객관식) 무창층 개구부의 원 내접 크기 기준은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec3-2', this, '지름 50cm 이상')">지름 30cm 이상</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec3-2', this, '지름 50cm 이상')">지름 40cm 이상</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec3-2', this, '지름 50cm 이상')">지름 50cm 이상</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec3-2', this, '지름 50cm 이상')">지름 60cm 이상</button>
+                            </div>
+                            <div id="res-sec3-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec3" id="q-sec3-3">
+                            <div class="mini-q-title">Q3. (주관식) 무창층 개구부 하단은 해당 층 바닥면으로부터 몇 m 이내의 높이에 위치해야 하는가? (숫자만 입력)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec3-3" class="mini-text-input" placeholder="숫자 입력 (예: 1.5)">
+                                <button class="font-btn" onclick="checkMiniText('sec3-3', ['1.2', '1.2m'])">확인</button>
+                            </div>
+                            <div id="res-sec3-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-3" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(3)"></textarea>
+                    </div>
+                </div>
+
+                <!-- 소페이지 4 -->
+                <div id="sub-page-4" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">4 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-4" onchange="toggleComplete(4)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-4" onclick="toggleBookmark(4)">☆</button>
+                        </div>
+                    </div>
+                    <h2>4. 한국소방안전원</h2>
+                    <ul>
+                        <li><b>설립목적</b>: 소방 및 안전관리 기술의 향상 및 홍보, 소방 종사자 기술 향상, 행정기관 위탁업무 수행</li>
+                        <li><b>안전원의 업무</b>: 교육·연구·조사, 간행물 발간, 대국민 홍보, 국제 협력, 위탁 업무, 기술 지원</li>
+                    </ul>
+                    <div class="note">
+                        <b>!! 오답 체크 (안전원 업무가 아닌 것) !!</b><br>
+                        1) 소방 기술의 개발 (X)<br>
+                        2) 소방 시설의 축조 (X)<br>
+                        3) 위험물 시설의 허가 및 승인 (X)
+                    </div>
+
+                    <!-- 📝 4단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 4단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec4')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec4" id="q-sec4-1">
+                            <div class="mini-q-title">Q1. (객관식) 다음 중 한국소방안전원의 주요 업무가 아닌 것은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec4-1', this, '위험물 시설의 설치 허가')">소방안전 기술 향상 교육</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec4-1', this, '위험물 시설의 설치 허가')">소방 안전 대국민 홍보</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec4-1', this, '위험물 시설의 설치 허가')">소방 관련 간행물 발간</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec4-1', this, '위험물 시설의 설치 허가')">위험물 시설의 설치 허가</button>
+                            </div>
+                            <div id="res-sec4-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec4" id="q-sec4-2">
+                            <div class="mini-q-title">Q2. (주관식) 한국소방안전원은 소방시설의 직접 ( &nbsp; )나 신기술의 직접 개발 업무를 수행하는 기관인가? (O / X)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec4-2" class="mini-text-input" placeholder="O 또는 X">
+                                <button class="font-btn" onclick="checkMiniText('sec4-2', ['X', 'x'])">확인</button>
+                            </div>
+                            <div id="res-sec4-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec4" id="q-sec4-3">
+                            <div class="mini-q-title">Q3. (객관식) 소방안전관리자 강습교육 및 실무교육을 주로 주관·위탁수행하는 기관은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec4-3', this, '한국소방안전원')">한국소방안전원</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec4-3', this, '한국소방안전원')">한국소방산업기술원</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec4-3', this, '한국소방안전원')">지방경찰청</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec4-3', this, '한국소방안전원')">소방공제회</button>
+                            </div>
+                            <div id="res-sec4-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-4" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(4)"></textarea>
+                    </div>
+                </div>
+
+                <!-- 소페이지 5 -->
+                <div id="sub-page-5" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">5 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-5" onchange="toggleComplete(5)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-5" onclick="toggleBookmark(5)">☆</button>
+                        </div>
+                    </div>
+                    <h2>5. 소방안전관리대상물 구분 (특/1/2/3급) &lt;1층=약4m&gt;</h2>
+                    <div class="table-wrapper">
+                        <table class="table">
+                            <tr>
+                                <th>등급</th>
+                                <th>아파트 기준</th>
+                                <th>일반 건축물 기준</th>
+                            </tr>
+                            <tr>
+                                <td><b>특급</b></td>
+                                <td><span class="red">50층 이상</span> 또는 지상높이 <span class="red">200m 이상</span></td>
+                                <td><span class="yellow">30층 이상(지하층 포함)</span> 또는 <span class="yellow">연면적 10만m² 이상</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>1급</b></td>
+                                <td><span class="red">30층 이상</span> 또는 지상높이 <span class="red">120m 이상</span></td>
+                                <td><span class="yellow">11층 이상(지하층 포함)</span> 또는 <span class="yellow">연면적 1.5만m² 이상</span> 또는 <span class="yellow">가스 1천톤 이상</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>2급</b></td>
+                                <td colspan="2"><span class="yellow">스프링클러설비 설치 대상, 가연성 가스 100톤 이상 1천톤 미만, 국보 지정 목조건물 등</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>3급</b></td>
+                                <td colspan="2"><span class="yellow">간이</span> 스프링클러설비 또는 <span class="yellow">자동화재탐지설비</span> 설치 대상</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- 📝 5단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 5단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec5')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec5" id="q-sec5-1">
+                            <div class="mini-q-title">Q1. (객관식) 일반 건축물에서 연면적 10만m² 이상인 대상물의 등급은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec5-1', this, '특급')">특급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec5-1', this, '특급')">1급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec5-1', this, '특급')">2급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec5-1', this, '특급')">3급</button>
+                            </div>
+                            <div id="res-sec5-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec5" id="q-sec5-2">
+                            <div class="mini-q-title">Q2. (주관식) 아파트에서 1급 소방안전관리대상물에 해당하려면 최소 몇 층 이상이어야 하는가? (숫자만 입력)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec5-2" class="mini-text-input" placeholder="층수 숫자 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec5-2', ['30', '30층'])">확인</button>
+                            </div>
+                            <div id="res-sec5-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec5" id="q-sec5-3">
+                            <div class="mini-q-title">Q3. (객관식) 스프링클러설비가 설치된 대상물이 일반적으로 분류되는 등급은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec5-3', this, '2급')">특급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec5-3', this, '2급')">1급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec5-3', this, '2급')">2급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec5-3', this, '2급')">3급</button>
+                            </div>
+                            <div id="res-sec5-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-5" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(5)"></textarea>
+                    </div>
+                </div>
+
+                <!-- 소페이지 6 -->
+                <div id="sub-page-6" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">6 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-6" onchange="toggleComplete(6)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-6" onclick="toggleBookmark(6)">☆</button>
+                        </div>
+                    </div>
+                    <h2>6. 소방안전관리자 업무 및 대행</h2>
+                    <div class="box" style="padding: 10px;">
+                        <ul style="list-style: none; padding-left: 0; margin-bottom: 0;">
+                            <li style="margin-bottom: 8px;"><span class="badge blue">1</span> 소방계획서 작성 및 시행</li>
+                            <li style="margin-bottom: 8px;"><span class="badge blue">2</span> 자위소방대 및 초기대응체계의 구성·운영·교육</li>
+                            <li style="margin-bottom: 8px;"><span class="badge blue">3</span> 피난시설, 방화구획 및 방화시설의 관리</li>
+                            <li style="margin-bottom: 8px;"><span class="badge blue">4</span> 소방시설이나 그 밖의 소방 관련 시설의 관리</li>
+                            <li style="margin-bottom: 8px;"><span class="badge blue">5</span> 소방훈련 및 교육</li>
+                            <li style="margin-bottom: 8px;"><span class="badge blue">6</span> 화기취급의 감독</li>
+                            <li style="margin-bottom: 8px;"><span class="badge blue">7</span> 초기대응체계 구축</li>
+                            <li style="margin-bottom: 8px;"><span class="badge blue">8</span> (3),(4),(6)호 업무수행에 관한 기록·유지 <span class="highlight" style="font-size: 0.85em;">월 1회 이상 작성, 2년간 보관</span></li>
+                            <li style="margin-bottom: 0;"><span class="badge blue">9</span> 그 밖의 소방안전관리에 필요한 업무</li>
+                        </ul>
+                    </div>
+                    <ul style="margin-top: 15px;">
+                        <li><b>업무 대행 가능 항목</b>: 피난·방화시설의 유지·관리, 소방시설 및 관련 시설의 관리 <span class="blue">(3번, 4번 항목만 가능)</span></li>
+                        <li><b>대행 시 강습교육</b>: 선임된 날부터 <span class="highlight">3개월 내에 강습교육</span> 이수</li>
+                    </ul>
+
+                    <!-- 📝 6단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 6단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec6')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec6" id="q-sec6-1">
+                            <div class="mini-q-title">Q1. (객관식) 소방안전관리자의 고유 업무 중 관리업자에게 대행할 수 있는 것은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec6-1', this, '피난시설 및 방화시설의 관리')">소방계획서 작성</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec6-1', this, '피난시설 및 방화시설의 관리')">피난시설 및 방화시설의 관리</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec6-1', this, '피난시설 및 방화시설의 관리')">화기취급의 감독</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec6-1', this, '피난시설 및 방화시설의 관리')">소방훈련 및 교육</button>
+                            </div>
+                            <div id="res-sec6-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec6" id="q-sec6-2">
+                            <div class="mini-q-title">Q2. (주관식) 업무수행 기록·유지는 월 1회 이상 작성하고 몇 년간 보관해야 하는가? (숫자만 입력)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec6-2" class="mini-text-input" placeholder="보관 연수 숫자 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec6-2', ['2', '2년'])">확인</button>
+                            </div>
+                            <div id="res-sec6-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec6" id="q-sec6-3">
+                            <div class="mini-q-title">Q3. (주관식) 업무 대행으로 선임된 소방안전관리자는 선임된 날부터 몇 개월 이내에 강습교육을 이수해야 하는가? (숫자만 입력)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec6-3" class="mini-text-input" placeholder="개월 수 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec6-3', ['3', '3개월'])">확인</button>
+                            </div>
+                            <div id="res-sec6-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-6" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(6)"></textarea>
+                    </div>
+                </div>
+
+                <!-- 소페이지 7 -->
+                <div id="sub-page-7" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">7 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-7" onchange="toggleComplete(7)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-7" onclick="toggleBookmark(7)">☆</button>
+                        </div>
+                    </div>
+                    <h2>7. 선임자격 기준 [특/1/2/3급]</h2>
+                    <div class="box">
+                        <ul style="margin-bottom:0;">
+                            <li><b>특급</b>: <span class="red">소방기술사, 소방시설관리사 // 소방설비기사 + 5년 // 소방설비산업기사 + 7년 // 소방공무원 20년 // 특급시험 합격</span></li>
+                            <li><b>1급</b>: <span class="red">소방설비(산업)기사 // 소방공무원 7년 // 1급시험 합격</span></li>
+                            <li><b>2급</b>: <span class="red">위험물(기능장/산업기사/기능사) // 소방공무원 3년 // 2급시험 합격</span></li>
+                            <li><b>3급</b>: <span class="red">소방공무원 1년 // 3급시험 합격</span></li>
+                            <li style="margin-top: 6px;"><span class="red"><span style="font-size: 1.05em; font-weight: bold;">특·1급은 겸직 불가!!</span></span></li>
+                        </ul>
+                    </div>
+
+                    <!-- 📝 7단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 7단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec7')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec7" id="q-sec7-1">
+                            <div class="mini-q-title">Q1. (객관식) 다른 안전관리자(전기, 가스 등)와의 겸직이 법적으로 엄격히 금지되는 대상물 등급은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec7-1', this, '특급 및 1급')">특급 및 1급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec7-1', this, '특급 및 1급')">1급 및 2급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec7-1', this, '특급 및 1급')">2급 및 3급</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec7-1', this, '특급 및 1급')">전 등급 겸직 가능</button>
+                            </div>
+                            <div id="res-sec7-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec7" id="q-sec7-2">
+                            <div class="mini-q-title">Q2. (주관식) 소방공무원으로 몇 년 이상 근무해야 2급 소방안전관리자 선임 자격을 취득하는가? (숫자만 입력)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec7-2" class="mini-text-input" placeholder="근무 연수 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec7-2', ['3', '3년'])">확인</button>
+                            </div>
+                            <div id="res-sec7-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec7" id="q-sec7-3">
+                            <div class="mini-q-title">Q3. (객관식) 소방설비기사 자격증을 소지하고 특급 선임 자격을 얻기 위한 실무경력은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec7-3', this, '5년 이상')">3년 이상</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec7-3', this, '5년 이상')">5년 이상</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec7-3', this, '5년 이상')">7년 이상</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec7-3', this, '5년 이상')">10년 이상</button>
+                            </div>
+                            <div id="res-sec7-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-7" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(7)"></textarea>
+                    </div>
+                </div>
+
+                <!-- 소페이지 8 -->
+                <div id="sub-page-8" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">8 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-8" onchange="toggleComplete(8)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-8" onclick="toggleBookmark(8)">☆</button>
+                        </div>
+                    </div>
+                    <h2>8. 선임 기한 및 신고 절차</h2>
+                    <div class="box">
+                        <ul style="margin-bottom:0;">
+                            <li><b>선임 기한</b>: 사유 발생일로부터 <span class="highlight">30일 이내</span></li>
+                            <li><b>선임 신고</b>: 선임한 날부터 <span class="highlight">14일 이내</span> 소방본부장 또는 소방서장에 신고</li>
+                            <li><b>선임연기 신청</b>: <span class="red">2/3급 대상물만 가능</span> (특/1급 연기 불가)</li>
+                            <li><b>연기 기간 중 안전관리</b>: <span class="red">관계인</span>이 담당</li>
+                            <li><b>실무교육</b>: 선임된 날부터 <span class="orange">6개월 이내</span> 최초 이수, 이후 <span class="orange">2년 주기</span> 필수 이수</li>
+                        </ul>
+                    </div>
+
+                    <!-- 📝 8단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 8단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec8')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec8" id="q-sec8-1">
+                            <div class="mini-q-title">Q1. (주관식) 소방안전관리자 선임 사유 발생일로부터 며칠 이내에 선임해야 하는가? (숫자만 입력)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec8-1" class="mini-text-input" placeholder="일수 숫자 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec8-1', ['30', '30일'])">확인</button>
+                            </div>
+                            <div id="res-sec8-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec8" id="q-sec8-2">
+                            <div class="mini-q-title">Q2. (주관식) 선임한 날부터 소방본부장 또는 서장에게 신고해야 하는 기한은 며칠 이내인가? (숫자만 입력)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec8-2" class="mini-text-input" placeholder="일수 숫자 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec8-2', ['14', '14일'])">확인</button>
+                            </div>
+                            <div id="res-sec8-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec8" id="q-sec8-3">
+                            <div class="mini-q-title">Q3. (주관식) 선임연기 기간 동안 소방안전관리 업무를 직접 수행해야 하는 주체는?</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec8-3" class="mini-text-input" placeholder="용어 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec8-3', '관계인')">확인</button>
+                            </div>
+                            <div id="res-sec8-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-8" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(8)"></textarea>
+                    </div>
+                </div>
+
+                <!-- 소페이지 9 -->
+                <div id="sub-page-9" class="sub-page">
+                    <div class="sub-page-header">
+                        <div class="page-indicator">9 / 9 PAGE</div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label class="complete-check-label"><input type="checkbox" id="check-page-9" onchange="toggleComplete(9)"> 학습 완료</label>
+                            <button class="bookmark-btn" id="star-btn-9" onclick="toggleBookmark(9)">☆</button>
+                        </div>
+                    </div>
+                    <h2>9. 소방안전관리자 현황표</h2>
+                    <ul>
+                        <li><b>신고 기한</b>: 선임일로부터 14일 이내 (본부장/서장)</li>
+                        <li><b>포함 사항</b>: 대상물 명칭, 소방안전관리자 성명 및 선임일자·연락처, 소방안전관리자의 근무 위치(화재 수신기 위치), 소방안전관리대상물의 등급, 명칭</li>
+                        <li><span class="red">주의</span>: 소방안전관리자의 자격 등급(자격증 종류)은 표기 대상이 아님!</li>
+                    </ul>
+
+                    <!-- 📝 9단원 쪽지시험 -->
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header">
+                            <span class="quiz-sec-title">📝 9단원 개념 점검 쪽지시험 (3문항)</span>
+                            <button class="font-btn" onclick="resetSectionQuiz('sec9')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec9" id="q-sec9-1">
+                            <div class="mini-q-title">Q1. (객관식) 다음 중 소방안전관리자 현황표에 기재하지 않는 것은?</div>
+                            <div class="mini-opt-grid">
+                                <button class="font-btn" onclick="checkMiniChoice('sec9-1', this, '소방안전관리자의 자격증 종류')">대상물 명칭</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec9-1', this, '소방안전관리자의 자격증 종류')">선임일자 및 연락처</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec9-1', this, '소방안전관리자의 자격증 종류')">근무 위치(화재 수신기 위치)</button>
+                                <button class="font-btn" onclick="checkMiniChoice('sec9-1', this, '소방안전관리자의 자격증 종류')">소방안전관리자의 자격증 종류</button>
+                            </div>
+                            <div id="res-sec9-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec9" id="q-sec9-2">
+                            <div class="mini-q-title">Q2. (주관식) 현황표에 기재하는 소방안전관리자의 근무 위치는 주로 어떤 방재 설비의 위치를 말하는가? (초성 힌트: ㅎㅈㅅㅅㄱ)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec9-2" class="mini-text-input" placeholder="설비명 입력">
+                                <button class="font-btn" onclick="checkMiniText('sec9-2', ['화재수신기', '화재 수신기', '수신기'])">확인</button>
+                            </div>
+                            <div id="res-sec9-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                        <div class="mini-q-item" data-sec="sec9" id="q-sec9-3">
+                            <div class="mini-q-title">Q3. (주관식) 소방안전관리자 현황표는 사람들이 보기 쉬운 출입구 부근 등에 게시해야 하는가? (O / X)</div>
+                            <div style="display:flex; gap:6px; margin:6px 0;">
+                                <input type="text" id="input-sec9-3" class="mini-text-input" placeholder="O 또는 X">
+                                <button class="font-btn" onclick="checkMiniText('sec9-3', ['O', 'o'])">확인</button>
+                            </div>
+                            <div id="res-sec9-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="page-memo-section">
+                        <div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div>
+                        <textarea id="memo-input-9" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(9)"></textarea>
+                    </div>
+                </div>
+
+                <div id="page-nav-bar" class="page-nav-bar" style="display: none;">
+                    <button id="btn-prev" class="page-nav-btn" onclick="prevSubPage()">◀ 이전</button>
+                    <button class="page-nav-btn main-btn" onclick="showSubMenu()">📋 단원 목록으로</button>
+                    <button id="btn-next" class="page-nav-btn" onclick="nextSubPage()">다음 ▶</button>
+                </div>
+            </div>
+
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
+                위 해당 저작권은 꾸누에 있으며 무단 복제를 금합니다.
+            </div>
+        </div>
+
+        <!-- I. 복습예제 탭 -->
+        <div id="tab-ch1-1" class="tab-content">
+            <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
+                <span>만든이: 꾸누</span> | <span>버전: V2.6.0</span>
+            </div>
+
+            <div id="ch1-1-main-menu">
+                <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 복습예제 파트 선택</div>
+                <div class="sub-nav-grid">
+                    <div class="sub-nav-card" onclick="showCh11Part('part1-1')"><span>Part1-1. 소방관계법령 (4문항)</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part1-2. 건축관계법령 복습예제는 준비 중입니다!');"><span>Part1-2. 건축관계법령</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-1. 복습예제는 준비 중입니다!');"><span>Part2-1. 소방안전교육 및 훈련/소방계획의 수립</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-2. 복습예제는 준비 중입니다!');"><span>Part2-2. 화재대응 및 피난</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part3. 복습예제는 준비 중입니다!');"><span>Part3. 응급처치 개요</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part4. 복습예제는 준비 중입니다!');"><span>Part4. 소방학개론</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part5. 복습예제는 준비 중입니다!');"><span>Part5. 위험물·전기·가스 안전관리</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part6. 복습예제는 준비 중입니다!');"><span>Part6. 화기취급 감독 및 허가·관리</span><span>➔</span></div>
+                </div>
+            </div>
+
+            <div id="ch1-1-part1-1-container" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 4px; flex-wrap: wrap;">
+                    <button class="font-btn" onclick="showCh11MainMenu()" style="font-size: 0.8em;">◀ 파트 목록으로</button>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="font-btn" onclick="shuffleSection('ch1-1-questions-wrap')" style="font-size: 0.8em; background-color: #8b5cf6; color: #fff;">🔀 문제·보기 섞기</button>
+                        <button class="font-btn" onclick="resetAllQuestions('ch11-', 4)" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff;">🔄 전체 초기화</button>
+                    </div>
+                </div>
+
+                <div id="ch1-1-questions-wrap">
+                    <!-- Q1 -->
+                    <div class="box quiz-box" id="box-ch11-1" style="position: relative;" data-qid="ch11-1" data-correct-text="소방대">
+                        <button class="font-btn" onclick="resetAnswer('ch11-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 화재를 진압하고 화재, 재난·재해 그 밖의 위급한 상황에서 구조·구급활동 등을 하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 뜻하는 용어를 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch11-1-opt-1" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">자위소방대</button>
+                            <button class="font-btn opt-btn" id="ch11-1-opt-2" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">소방대</button>
+                            <button class="font-btn opt-btn" id="ch11-1-opt-3" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">초기대응체계</button>
+                            <button class="font-btn opt-btn" id="ch11-1-opt-4" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">공동소방안전관리협의회</button>
+                        </div>
+                        <div id="q-result-ch11-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch11-1" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 화재 진압 및 위급상황 시 구조·구급활동을 행하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 '소방대'라고 한다.<br><br>
+                            <b>Tip.</b> 소방대를 구성하는 사람들에게 소방공무원, 의무소방원, 의용소방대원이 포함될 수 있다는 것도 기억하는 것이 유리해요~! 참고로 자위소방대는 소방안전관리대상물에서 피해를 최소화를 위해 편성하는 자율 안전관리조직을 말하므로 문제에서 묻고 있는 소방대와는 구분해 주시는 것이 좋습니다.
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="box quiz-box" id="box-ch11-2" style="position: relative;" data-qid="ch11-2" data-correct-text="2명">
+                        <button class="font-btn" onclick="resetAnswer('ch11-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 아파트를 제외하고 연면적이 35,000m²인 특정소방대상물의 소방안전관리보조자 최소 선임 인원수를 구하시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch11-2-opt-1" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">1명</button>
+                            <button class="font-btn opt-btn" id="ch11-2-opt-2" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">2명</button>
+                            <button class="font-btn opt-btn" id="ch11-2-opt-3" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">3명</button>
+                            <button class="font-btn opt-btn" id="ch11-2-opt-4" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">4명</button>
+                        </div>
+                        <div id="q-result-ch11-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch11-2" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> (아파트 제외) 연면적 15,000m² 이상의 특정소방대상물은 소방안전관리보조자 선임 대상물이며 다만, 초과되는 연면적 1만 5천 제곱미터마다 1명 이상을 추가로 선임해야 하므로, 35,000 / 15,000 = 2.33. 이때 소수점 이하를 버린 정수로 계산하므로 소방안전관리보조자 최소 선임 인원수는 2명.
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="box quiz-box" id="box-ch11-3" style="position: relative;" data-qid="ch11-3" data-correct-text="피난층">
+                        <button class="font-btn" onclick="resetAnswer('ch11-3')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q3. 곧바로 지상으로 갈 수 있는 출입구가 있는 층을 뜻하는 용어를 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch11-3-opt-1" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">피난층</button>
+                            <button class="font-btn opt-btn" id="ch11-3-opt-2" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">무창층</button>
+                            <button class="font-btn opt-btn" id="ch11-3-opt-3" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">지하층</button>
+                            <button class="font-btn opt-btn" id="ch11-3-opt-4" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">지상층</button>
+                        </div>
+                        <div id="q-result-ch11-3" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch11-3" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 곧바로 지상으로 갈 수 있는 출입구가 있는 층을 '피난층'이라고 한다. 참고로 '무창층'은 지상층 중에서 일정 요건을 모두 갖춘 개구부의 면적의 합계가 해당 층 바닥면적의 30분의 1 이하가 되는 층을 말하며, '지하층'은 건축물의 바닥이 지표면 아래에 있는 층을 말한다.
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="box quiz-box" id="box-ch11-4" style="position: relative;" data-qid="ch11-4" data-correct-text="해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.">
+                        <button class="font-btn" onclick="resetAnswer('ch11-4')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q4. 다음 중 무창층에서의 개구부의 요건에 대한 설명으로 옳은 것을 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch11-4-opt-1" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">내·외부에서 쉽게 부술 수 없도록 일정 강도 이상을 유지해야 한다.</button>
+                            <button class="font-btn opt-btn" id="ch11-4-opt-2" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">피난상 안전을 위해 창살이 설치되어 있어야 한다.</button>
+                            <button class="font-btn opt-btn" id="ch11-4-opt-3" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.</button>
+                            <button class="font-btn opt-btn" id="ch11-4-opt-4" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">크기는 지름 40cm 이상의 원이 통과할 수 있는 크기로 한다.</button>
+                        </div>
+                        <div id="q-result-ch11-4" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch11-4" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 무창층에서 개구부는 내·외부에서 쉽게 부수거나 열 수 있어야 하고, 쉽게 피난할 수 있도록 창살이나 그 밖의 장애물이 설치되지 않아야 한다. 또한 크기는 지름 '50cm 이상'의 원이 통과할 수 있는 크기여야 하므로 3번을 제외한 나머지 설명들은 옳지 않으며, 이 외에도 도로 또는 차량이 진입할 수 있도록 빈터를 향해 있어야 한다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
+                위 해당 저작권은 꾸누에 있으며 무단 복제를 금합니다.
+            </div>
+        </div>
+
+        <!-- 모의고사 탭 -->
+        <div id="tab-ch3" class="tab-content">
+            <h1>소방안전관리자 2급 - <br>모의고사</h1>
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
+                <span>만든이: 꾸누</span> | <span>버전: V2.6.0</span>
+            </div>
+
+            <div id="ch3-page-menu">
+                <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 모의고사 회차 선택</div>
+                <div class="sub-nav-grid">
+                    <div class="sub-nav-card" onclick="showCh3Page(1)"><span>01. Test (실전 모의고사 10선)</span><span>➔</span></div>
+                </div>
+            </div>
+
+            <div id="ch3-sub-page-1" class="sub-page">
+                <div class="sub-page-header">
+                    <div class="page-indicator">01. Test 회차</div>
+                    <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                        <button class="font-btn" onclick="shuffleSection('ch3-questions-wrap')" style="font-size: 0.8em; background-color: #8b5cf6; color: #fff;">🔀 순서 섞기</button>
+                        <button class="font-btn" id="btn-filter-wrong" onclick="toggleWrongOnly()" style="font-size: 0.8em;">❌ 오답만</button>
+                        <button class="font-btn" onclick="resetAllQuestions('ch3-', 10)" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff;">🔄 전체 리셋</button>
+                        <button class="font-btn" onclick="showCh3Menu()" style="font-size: 0.8em;">📋 목록</button>
+                    </div>
+                </div>
+
+                <div class="score-board">
+                    <span id="quiz-score-text">점수: 0 / 100점 (정답: 0개)</span>
+                    <span id="quiz-pass-text" style="color: #64748b;">응시 중</span>
+                </div>
+
+                <div id="ch3-questions-wrap">
+                    <!-- Q1 -->
+                    <div class="box quiz-box" id="box-ch3-1" style="position: relative;" data-qid="ch3-1" data-correct-text="공공의 안녕 및 질서 유지와 복리증진">
+                        <button class="font-btn" onclick="resetAnswer('ch3-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 소방기본법의 제정 목적으로 가장 적절한 것은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-1-opt-1" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">공공의 안녕 및 질서 유지와 복리증진</button>
+                            <button class="font-btn opt-btn" id="ch3-1-opt-2" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">화재의 예방 및 진압 우선</button>
+                            <button class="font-btn opt-btn" id="ch3-1-opt-3" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">건축물 안전기준 확립</button>
+                            <button class="font-btn opt-btn" id="ch3-1-opt-4" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">위험물 허가 업무 수행</button>
+                        </div>
+                        <div id="q-result-ch3-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-1" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 소방기본법의 목적은 공공의 안녕 및 질서 유지와 복리증진입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="box quiz-box" id="box-ch3-2" style="position: relative;" data-qid="ch3-2" data-correct-text="소방안전관리자">
+                        <button class="font-btn" onclick="resetAnswer('ch3-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 다음 중 소방관계법령상 '관계인'의 범위에 원칙적으로 포함되지 않는 사람은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-2-opt-1" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">소유자</button>
+                            <button class="font-btn opt-btn" id="ch3-2-opt-2" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">관리자</button>
+                            <button class="font-btn opt-btn" id="ch3-2-opt-3" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">소방안전관리자</button>
+                            <button class="font-btn opt-btn" id="ch3-2-opt-4" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">점유자</button>
+                        </div>
+                        <div id="q-result-ch3-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-2" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 관계인은 소유자, 관리자, 점유자입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="box quiz-box" id="box-ch3-3" style="position: relative;" data-qid="ch3-3" data-correct-text="지름 50cm 이상, 1.2m 이내">
+                        <button class="font-btn" onclick="resetAnswer('ch3-3')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q3. 무창층 요건 중 개구부의 크기 및 위치 기준이 옳은 것은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-3-opt-1" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 40cm 이상, 1.5m 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-3-opt-2" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 50cm 이상, 1.2m 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-3-opt-3" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 60cm 이상, 1.0m 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-3-opt-4" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 50cm 이상, 1.5m 이내</button>
+                        </div>
+                        <div id="q-result-ch3-3" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-3" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 지름 50cm 이상의 원이 내접하고 하단이 바닥에서 1.2m 이내여야 합니다.
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="box quiz-box" id="box-ch3-4" style="position: relative;" data-qid="ch3-4" data-correct-text="위험물 시설의 허가 및 승인">
+                        <button class="font-btn" onclick="resetAnswer('ch3-4')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q4. 다음 중 한국소방안전원의 업무가 아닌 것은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-4-opt-1" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">종사자 기술 교육</button>
+                            <button class="font-btn opt-btn" id="ch3-4-opt-2" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">대국민 홍보</button>
+                            <button class="font-btn opt-btn" id="ch3-4-opt-3" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">행정 위탁업무 수행</button>
+                            <button class="font-btn opt-btn" id="ch3-4-opt-4" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">위험물 시설의 허가 및 승인</button>
+                        </div>
+                        <div id="q-result-ch3-4" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-4" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 위험물 시설의 허가/승인은 행정청의 고유 권한입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="box quiz-box" id="box-ch3-5" style="position: relative;" data-qid="ch3-5" data-correct-text="특급">
+                        <button class="font-btn" onclick="resetAnswer('ch3-5')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q5. 아파트로서 50층 이상 또는 지상높이 200m 이상인 건축물의 소방안전관리대상물 등급은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-5-opt-1" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">특급</button>
+                            <button class="font-btn opt-btn" id="ch3-5-opt-2" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">1급</button>
+                            <button class="font-btn opt-btn" id="ch3-5-opt-3" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">2급</button>
+                            <button class="font-btn opt-btn" id="ch3-5-opt-4" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">3급</button>
+                        </div>
+                        <div id="q-result-ch3-5" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-5" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 아파트 50층 이상 또는 200m 이상은 특급입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="box quiz-box" id="box-ch3-6" style="position: relative;" data-qid="ch3-6" data-correct-text="피난·방화시설 및 소방시설 관리">
+                        <button class="font-btn" onclick="resetAnswer('ch3-6')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q6. 관리업자에게 대행시킬 수 있는 업무 범위는?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-6-opt-1" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">소방계획서 작성</button>
+                            <button class="font-btn opt-btn" id="ch3-6-opt-2" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">피난·방화시설 및 소방시설 관리</button>
+                            <button class="font-btn opt-btn" id="ch3-6-opt-3" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">화기취급 감독</button>
+                            <button class="font-btn opt-btn" id="ch3-6-opt-4" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">자위소방대 편성</button>
+                        </div>
+                        <div id="q-result-ch3-6" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-6" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 피난·방화시설 관리 및 소방시설 관리만 대행 가능합니다.
+                        </div>
+                    </div>
+
+                    <!-- Q7 -->
+                    <div class="box quiz-box" id="box-ch3-7" style="position: relative;" data-qid="ch3-7" data-correct-text="특급 및 1급">
+                        <button class="font-btn" onclick="resetAnswer('ch3-7')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q7. 다른 안전관리자와 겸직이 불가능한 등급은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-7-opt-1" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">특급 및 1급</button>
+                            <button class="font-btn opt-btn" id="ch3-7-opt-2" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">1급 및 2급</button>
+                            <button class="font-btn opt-btn" id="ch3-7-opt-3" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">2급 및 3급</button>
+                            <button class="font-btn opt-btn" id="ch3-7-opt-4" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">모든 등급 겸직 가능</button>
+                        </div>
+                        <div id="q-result-ch3-7" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-7" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 특급 및 1급은 겸직이 엄격히 금지됩니다.
+                        </div>
+                    </div>
+
+                    <!-- Q8 -->
+                    <div class="box quiz-box" id="box-ch3-8" style="position: relative;" data-qid="ch3-8" data-correct-text="30일 이내">
+                        <button class="font-btn" onclick="resetAnswer('ch3-8')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q8. 소방안전관리자 선임 기한은 사유 발생일로부터 며칠 이내인가?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-8-opt-1" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">14일 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-8-opt-2" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">20일 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-8-opt-3" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">30일 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-8-opt-4" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">60일 이내</button>
+                        </div>
+                        <div id="q-result-ch3-8" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-8" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 선임은 30일 이내, 신고는 선임일로부터 14일 이내입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q9 -->
+                    <div class="box quiz-box" id="box-ch3-9" style="position: relative;" data-qid="ch3-9" data-correct-text="2급 및 3급">
+                        <button class="font-btn" onclick="resetAnswer('ch3-9')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q9. 소방안전관리자 선임 연기 신청이 가능한 대상물은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-9-opt-1" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">2급 및 3급</button>
+                            <button class="font-btn opt-btn" id="ch3-9-opt-2" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">특급</button>
+                            <button class="font-btn opt-btn" id="ch3-9-opt-3" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">1급</button>
+                            <button class="font-btn opt-btn" id="ch3-9-opt-4" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">전 등급</button>
+                        </div>
+                        <div id="q-result-ch3-9" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-9" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 선임 연기는 2급 및 3급 대상물만 신청 가능합니다.
+                        </div>
+                    </div>
+
+                    <!-- Q10 -->
+                    <div class="box quiz-box" id="box-ch3-10" style="position: relative;" data-qid="ch3-10" data-correct-text="관리자의 자격증 종류">
+                        <button class="font-btn" onclick="resetAnswer('ch3-10')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q10. 현황표에 반드시 표기해야 하는 항목이 아닌 것은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-10-opt-1" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">관리자 성명/연락처</button>
+                            <button class="font-btn opt-btn" id="ch3-10-opt-2" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">근무 위치 (수신기 위치)</button>
+                            <button class="font-btn opt-btn" id="ch3-10-opt-3" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">대상물 등급 및 명칭</button>
+                            <button class="font-btn opt-btn" id="ch3-10-opt-4" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">관리자의 자격증 종류</button>
+                        </div>
+                        <div id="q-result-ch3-10" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-10" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 자격 등급(자격증 종류)은 표기 대상이 아닙니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 25px; text-align: center;">
+                    <button class="page-nav-btn main-btn" onclick="showCh3Menu()" style="display: inline-block; width: auto; padding: 10px 24px;">📋 회차 목록으로</button>
+                </div>
+            </div>
+
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
+                위 해당 저작권은 꾸누에 있으며 무단 복제를 금합니다.
+            </div>
+        </div>
+    </div>
+
+    <button id="top-btn" class="top-btn" onclick="scrollToTop()">▲</button>
+
+    <script>
+        var currentSubPage = 0;
+        var totalSubPages = 9;
+        var bookmarks = JSON.parse(localStorage.getItem('user_bookmarks') || '[]');
+        var completes = JSON.parse(localStorage.getItem('user_completes') || '[]');
+        var currentFontSize = parseInt(localStorage.getItem('user_font_size') || '15', 10);
+        var memorizeTimerSec = parseInt(localStorage.getItem('user_timer_sec') || '3', 10);
+        
+        var quizAnswerState = {}; 
+        var isFilterWrongMode = false;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadSavedStates();
+            setupMemorizeClickEvents();
+            updateProgress();
+            calculateDDay();
+            setupMiniEnterKeys();
+        });
+
+        // 🎯 D-Day 자동 계산 (기준일: 2026-10-02)
+        function calculateDDay() {
+            var targetDate = new Date("2026-10-02T00:00:00+09:00");
+            var now = new Date();
+            var diff = targetDate.getTime() - now.getTime();
+            var days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            var badgeEl = document.getElementById("exam-dday-badge");
+            if (badgeEl) {
+                if (days > 0) badgeEl.innerText = "시험 D-" + days;
+                else if (days === 0) badgeEl.innerText = "시험 D-DAY 🔥";
+                else badgeEl.innerText = "시험 종료 (D+" + Math.abs(days) + ")";
+            }
+        }
+
+        function applyFontSize() {
+            document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
+            localStorage.setItem('user_font_size', currentFontSize);
+        }
+        function changeFontSize(delta) {
+            currentFontSize += delta;
+            if (currentFontSize < 12) currentFontSize = 12;
+            if (currentFontSize > 22) currentFontSize = 22;
+            applyFontSize();
+        }
+        function resetFontSize() {
+            currentFontSize = 15;
+            applyFontSize();
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            var isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('user_dark_mode', isDark);
+            document.getElementById('darkmode-toggle-btn').innerText = isDark ? "☀️ 주간" : "🌙 야간";
+        }
+
+        function toggleMemorizeMode() {
+            document.body.classList.toggle('memorize-mode');
+            var isMemo = document.body.classList.contains('memorize-mode');
+            var btn = document.getElementById('memorize-toggle-btn');
+            btn.innerText = isMemo ? "👁️ 암기모드 ON" : "🙈 암기모드 OFF";
+            btn.classList.toggle('active', isMemo);
+
+            document.getElementById('timer-control-bar').style.display = isMemo ? "flex" : "none";
+            updateTimerUI();
+        }
+
+        function setTimerSec(sec) {
+            memorizeTimerSec = sec;
+            localStorage.setItem('user_timer_sec', sec);
+            updateTimerUI();
+        }
+
+        function updateTimerUI() {
+            document.getElementById('timer-btn-3').classList.toggle('active', memorizeTimerSec === 3);
+            document.getElementById('timer-btn-5').classList.toggle('active', memorizeTimerSec === 5);
+            document.getElementById('timer-btn-0').classList.toggle('active', memorizeTimerSec === 0);
+
+            if (memorizeTimerSec === 0) {
+                document.body.classList.add('press-mode');
+            } else {
+                document.body.classList.remove('press-mode');
+            }
+        }
+
+        function setupMemorizeClickEvents() {
+            var targets = document.querySelectorAll('.red, .blue, .yellow, .mint, .orange, .highlight');
+            targets.forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                    if (!document.body.classList.contains('memorize-mode')) return;
+                    if (memorizeTimerSec === 0) return;
+
+                    if (el.dataset.timerId) {
+                        clearTimeout(parseInt(el.dataset.timerId, 10));
+                    }
+
+                    el.classList.add('revealed');
+
+                    var timerId = setTimeout(function() {
+                        el.classList.remove('revealed');
+                        delete el.dataset.timerId;
+                    }, memorizeTimerSec * 1000);
+
+                    el.dataset.timerId = timerId;
+                });
+            });
+        }
+
+        function savePageMemo(pageNum) {
+            var memoText = document.getElementById("memo-input-" + pageNum).value;
+            localStorage.setItem("user_memo_page_" + pageNum, memoText);
+        }
+
+        function updateProgress() {
+            var doneCount = completes.length;
+            var percent = Math.round((doneCount / totalSubPages) * 100);
+            document.getElementById('progress-text').innerText = doneCount + " / " + totalSubPages + " (" + percent + "%)";
+            document.getElementById('progress-fill').style.width = percent + "%";
+        }
+
+        function toggleComplete(pageNum) {
+            var chk = document.getElementById("check-page-" + pageNum);
+            if (chk.checked) {
+                if (!completes.includes(pageNum)) completes.push(pageNum);
+            } else {
+                var idx = completes.indexOf(pageNum);
+                if (idx > -1) completes.splice(idx, 1);
+            }
+            localStorage.setItem('user_completes', JSON.stringify(completes));
+            updateProgress();
+        }
+
+        function toggleBookmark(pageNum) {
+            var index = bookmarks.indexOf(pageNum);
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+            } else {
+                bookmarks.push(pageNum);
+            }
+            localStorage.setItem('user_bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkUI();
+        }
+
+        function updateBookmarkUI() {
+            for (var i = 1; i <= totalSubPages; i++) {
+                var btn = document.getElementById("star-btn-" + i);
+                var cardStar = document.getElementById("card-star-" + i);
+                var isBookmarked = bookmarks.includes(i);
+                if (btn) {
+                    btn.innerText = isBookmarked ? "★" : "☆";
+                    btn.classList.toggle('active', isBookmarked);
+                }
+                if (cardStar) {
+                    cardStar.innerText = isBookmarked ? " ★" : "";
+                    cardStar.style.color = "#f59e0b";
+                }
+            }
+        }
+
+        function filterBookmarks() {
+            if (bookmarks.length === 0) {
+                alert("등록된 북마크가 없습니다. 소페이지 상단의 별표(☆)를 눌러 추가해보세요!");
+                return;
+            }
+            var cards = document.querySelectorAll("#main-menu-grid .sub-nav-card");
+            cards.forEach(function(card, idx) {
+                var pageNum = idx + 1;
+                card.style.display = bookmarks.includes(pageNum) ? "flex" : "none";
+            });
+            alert("★ 북마크한 " + bookmarks.length + "개 항목만 표시합니다. (전체보려면 다시 단원 목록 클릭)");
+        }
+
+        function showCh1Part(partName) {
+            if (partName === 'part1-1') {
+                document.getElementById("ch1-main-menu").style.display = "none";
+                document.getElementById("ch1-part1-1-container").style.display = "block";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showCh1MainMenu() {
+            currentSubPage = 0;
+            for (var i = 1; i <= totalSubPages; i++) {
+                var page = document.getElementById("sub-page-" + i);
+                if (page) page.style.display = "none";
+            }
+            var cards = document.querySelectorAll("#main-menu-grid .sub-nav-card");
+            cards.forEach(function(card) { card.style.display = "flex"; });
+
+            document.getElementById("sub-page-menu").style.display = "block";
+            document.getElementById("page-nav-bar").style.display = "none";
+            document.getElementById("ch1-part1-1-container").style.display = "none";
+            document.getElementById("ch1-main-menu").style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showCh11Part(partName) {
+            if (partName === 'part1-1') {
+                document.getElementById("ch1-1-main-menu").style.display = "none";
+                document.getElementById("ch1-1-part1-1-container").style.display = "block";
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showCh11MainMenu() {
+            document.getElementById("ch1-1-part1-1-container").style.display = "none";
+            document.getElementById("ch1-1-main-menu").style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showCh3Page(pageNum) {
+            document.getElementById("ch3-page-menu").style.display = "none";
+            var testPage = document.getElementById("ch3-sub-page-" + pageNum);
+            if (testPage) testPage.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showCh3Menu() {
+            document.getElementById("ch3-sub-page-1").style.display = "none";
+            document.getElementById("ch3-page-menu").style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* 📝 쪽지시험 객관식 체크 */
+        function checkMiniChoice(qKey, clickedBtn, correctVal) {
+            var item = clickedBtn.closest('.mini-q-item');
+            var resEl = document.getElementById("res-" + qKey);
+            var isDark = document.body.classList.contains('dark-mode');
+
+            var allBtns = item.querySelectorAll('.mini-opt-grid button');
+            allBtns.forEach(function(btn) {
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+            });
+
+            var userVal = clickedBtn.innerText.trim();
+            resEl.style.display = "block";
+
+            if (userVal === correctVal.trim()) {
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 🎉</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#064e3b" : "#dcfce7";
+                clickedBtn.style.color = isDark ? "#86efac" : "#166534";
+            } else {
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + correctVal + ")</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#7f1d1d" : "#fee2e2";
+                clickedBtn.style.color = isDark ? "#fca5a5" : "#991b1b";
+            }
+        }
+
+        /* 📝 쪽지시험 주관식(단답형) 체크 */
+        function checkMiniText(qKey, correctList) {
+            var inputEl = document.getElementById("input-" + qKey);
+            var resEl = document.getElementById("res-" + qKey);
+            var isDark = document.body.classList.contains('dark-mode');
+            if (!inputEl) return;
+
+            var userVal = inputEl.value.trim().toLowerCase().replace(/\s+/g, '');
+            if (!userVal) {
+                alert("답안을 입력해주세요!");
+                return;
+            }
+
+            var validAnswers = Array.isArray(correctList) ? correctList : [correctList];
+            var isCorrect = validAnswers.some(function(ans) {
+                return userVal === ans.trim().toLowerCase().replace(/\s+/g, '');
+            });
+
+            resEl.style.display = "block";
+            if (isCorrect) {
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 👏</span>";
+                inputEl.style.borderColor = "#16a34a";
+            } else {
+                var dispAnswer = validAnswers[0];
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + dispAnswer + ")</span>";
+                inputEl.style.borderColor = "#dc2626";
+            }
+        }
+
+        /* 쪽지시험 엔터키 처리 */
+        function setupMiniEnterKeys() {
+            document.querySelectorAll('.mini-text-input').forEach(function(inp) {
+                inp.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        var btn = inp.nextElementSibling;
+                        if (btn) btn.click();
+                    }
+                });
+            });
+        }
+
+        /* 🔄 단원 쪽지시험 리셋 */
+        function resetSectionQuiz(secKey) {
+            var items = document.querySelectorAll('.mini-q-item[data-sec="' + secKey + '"]');
+            items.forEach(function(item) {
+                var btns = item.querySelectorAll('button');
+                btns.forEach(function(b) {
+                    b.style.backgroundColor = "";
+                    b.style.color = "";
+                });
+                var inps = item.querySelectorAll('input');
+                inps.forEach(function(inp) {
+                    inp.value = "";
+                    inp.style.borderColor = "";
+                });
+                var res = item.querySelector('[id^="res-"]');
+                if (res) {
+                    res.style.display = "none";
+                    res.innerHTML = "";
+                }
+            });
+        }
+
+        /* 🔀 텍스트 기반 정답 판정 (복습예제/모의고사용) */
+        function checkAnswerByText(qId, clickedBtn, correctText) {
+            var box = clickedBtn.closest('.quiz-box');
+            var resultEl = document.getElementById("q-result-" + qId);
+            var explEl = document.getElementById("q-expl-" + qId);
+            var isDark = document.body.classList.contains('dark-mode');
+
+            var allBtns = box.querySelectorAll('.opt-btn');
+            allBtns.forEach(function(btn) {
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+                btn.style.borderColor = "";
+            });
+
+            var selectedText = clickedBtn.innerText.trim();
+            var isCorrect = (selectedText === correctText.trim());
+            quizAnswerState[qId] = isCorrect;
+
+            if (resultEl) resultEl.style.display = "block";
+            if (explEl) explEl.style.display = "block";
+
+            if (isCorrect) {
+                if (resultEl) resultEl.innerHTML = "<span style='color: " + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 🎉</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#064e3b" : "#dcfce7";
+                clickedBtn.style.color = isDark ? "#86efac" : "#166534";
+            } else {
+                if (resultEl) resultEl.innerHTML = "<span style='color: " + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + correctText + ")</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#7f1d1d" : "#fee2e2";
+                clickedBtn.style.color = isDark ? "#fca5a5" : "#991b1b";
+            }
+
+            if (qId.startsWith('ch3-')) updateQuizScore();
+        }
+
+        function updateQuizScore() {
+            var totalQ = 10;
+            var correctCount = 0;
+            for (var i = 1; i <= totalQ; i++) {
+                if (quizAnswerState['ch3-' + i] === true) correctCount++;
+            }
+            var score = correctCount * 10;
+            document.getElementById('quiz-score-text').innerText = "점수: " + score + " / 100점 (정답: " + correctCount + "개)";
+            
+            var passEl = document.getElementById('quiz-pass-text');
+            if (score >= 70) {
+                passEl.innerText = "합격권 기준 도달! 🏆";
+                passEl.style.color = "#16a34a";
+            } else {
+                passEl.innerText = "합격 기준 미달 (70점 이상 합격)";
+                passEl.style.color = "#dc2626";
+            }
+        }
+
+        function resetAnswer(qId) {
+            var box = document.querySelector('[data-qid="' + qId + '"]') || document.getElementById('box-' + qId);
+            var resultEl = document.getElementById("q-result-" + qId);
+            var explEl = document.getElementById("q-expl-" + qId);
+
+            if (resultEl) {
+                resultEl.style.display = "none";
+                resultEl.innerHTML = "";
+            }
+            if (explEl) explEl.style.display = "none";
+
+            if (box) {
+                var btns = box.querySelectorAll('.opt-btn');
+                btns.forEach(function(b) {
+                    b.style.backgroundColor = "";
+                    b.style.color = "";
+                    b.style.borderColor = "";
+                });
+            }
+
+            delete quizAnswerState[qId];
+            if (qId.startsWith('ch3-')) updateQuizScore();
+        }
+
+        function resetAllQuestions(prefix, totalQ) {
+            for (var i = 1; i <= totalQ; i++) {
+                resetAnswer(prefix + i);
+            }
+            if (isFilterWrongMode) toggleWrongOnly();
+        }
+
+        function toggleWrongOnly() {
+            var btn = document.getElementById('btn-filter-wrong');
+            isFilterWrongMode = !isFilterWrongMode;
+
+            for (var i = 1; i <= 10; i++) {
+                var box = document.getElementById('box-ch3-' + i);
+                if (!box) continue;
+
+                if (isFilterWrongMode) {
+                    if (quizAnswerState['ch3-' + i] === false) {
+                        box.style.display = 'block';
+                    } else {
+                        box.style.display = 'none';
+                    }
+                } else {
+                    box.style.display = 'block';
+                }
+            }
+
+            btn.classList.toggle('active', isFilterWrongMode);
+            btn.innerText = isFilterWrongMode ? "📑 전체 문제 보기" : "❌ 오답만 보기";
+        }
+
+        function shuffleSection(containerId) {
+            var wrap = document.getElementById(containerId);
+            if (!wrap) return;
+
+            var boxes = Array.from(wrap.children);
+            for (var i = boxes.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                wrap.appendChild(boxes[j]);
+            }
+
+            boxes.forEach(function(box) {
+                var optGrid = box.querySelector('.quiz-opt-grid');
+                if (optGrid) {
+                    var btns = Array.from(optGrid.children);
+                    for (var k = btns.length - 1; k > 0; k--) {
+                        var m = Math.floor(Math.random() * (k + 1));
+                        optGrid.appendChild(btns[m]);
+                    }
+                }
+                var qid = box.getAttribute('data-qid');
+                if (qid) resetAnswer(qid);
+            });
+
+            alert("🔀 문제와 보기의 배치가 무작위로 섞였습니다!");
+        }
+
+        function loadSavedStates() {
+            if (localStorage.getItem('user_dark_mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkmode-toggle-btn').innerText = "☀️ 주간";
+            }
+            completes.forEach(function(pageNum) {
+                var chk = document.getElementById("check-page-" + pageNum);
+                if (chk) chk.checked = true;
+            });
+            for (var i = 1; i <= totalSubPages; i++) {
+                var savedMemo = localStorage.getItem("user_memo_page_" + i);
+                if (savedMemo) {
+                    var memoInput = document.getElementById("memo-input-" + i);
+                    if (memoInput) memoInput.value = savedMemo;
+                }
+            }
+            updateBookmarkUI();
+            updateTimerUI();
+        }
+
+        function handleSearch() {
+            var query = document.getElementById("search-input").value.trim().toLowerCase();
+            var resultsContainer = document.getElementById("search-results");
+            resultsContainer.innerHTML = "";
+
+            if (query.length < 1) {
+                resultsContainer.style.display = "none";
+                return;
+            }
+
+            var matches = [];
+            for (var i = 1; i <= totalSubPages; i++) {
+                var pageEl = document.getElementById("sub-page-" + i);
+                if (pageEl && pageEl.innerText.toLowerCase().includes(query)) {
+                    var title = pageEl.querySelector("h2").innerText;
+                    matches.push({ pageNum: i, title: title });
+                }
+            }
+
+            if (matches.length > 0) {
+                matches.forEach(function(m) {
+                    var div = document.createElement("div");
+                    div.className = "search-result-item";
+                    div.innerHTML = "<b>[" + m.pageNum + "페이지]</b> " + m.title;
+                    div.onclick = function() {
+                        showCh1Part('part1-1');
+                        showSubPage(m.pageNum);
+                        resultsContainer.style.display = "none";
+                        document.getElementById("search-input").value = "";
+                        
+                        var targetPage = document.getElementById("sub-page-" + m.pageNum);
+                        targetPage.classList.add("search-match-flash");
+                        setTimeout(function() {
+                            targetPage.classList.remove("search-match-flash");
+                        }, 1500);
+                    };
+                    resultsContainer.appendChild(div);
+                });
+                resultsContainer.style.display = "block";
+            } else {
+                resultsContainer.style.display = "none";
+            }
+        }
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            
+            if (tabName === 'tab-ch1') {
+                document.getElementById("ch1-main-menu").style.display = "block";
+                document.getElementById("ch1-part1-1-container").style.display = "none";
+            }
+            if (tabName === 'tab-ch1-1') {
+                document.getElementById("ch1-1-main-menu").style.display = "block";
+                document.getElementById("ch1-1-part1-1-container").style.display = "none";
+            }
+            
+            if (evt && evt.currentTarget) evt.currentTarget.classList.add("active");
+        }
+
+        function showSubPage(pageNum) {
+            currentSubPage = pageNum;
+            document.getElementById("sub-page-menu").style.display = "none";
+            
+            for (var i = 1; i <= totalSubPages; i++) {
+                var page = document.getElementById("sub-page-" + i);
+                if (page) page.style.display = "none";
+            }
+            
+            var targetPage = document.getElementById("sub-page-" + pageNum);
+            if (targetPage) targetPage.style.display = "block";
+
+            document.getElementById("page-nav-bar").style.display = "flex";
+            updateNavButtons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showSubMenu() {
+            currentSubPage = 0;
+            for (var i = 1; i <= totalSubPages; i++) {
+                var page = document.getElementById("sub-page-" + i);
+                if (page) page.style.display = "none";
+            }
+            var cards = document.querySelectorAll("#main-menu-grid .sub-nav-card");
+            cards.forEach(function(card) { card.style.display = "flex"; });
+
+            document.getElementById("sub-page-menu").style.display = "block";
+            document.getElementById("page-nav-bar").style.display = "none";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevSubPage() {
+            if (currentSubPage > 1) showSubPage(currentSubPage - 1);
+        }
+
+        function nextSubPage() {
+            if (currentSubPage < totalSubPages) showSubPage(currentSubPage + 1);
+        }
+
+        function updateNavButtons() {
+            var btnPrev = document.getElementById("btn-prev");
+            var btnNext = document.getElementById("btn-next");
+            btnPrev.disabled = (currentSubPage <= 1);
+            btnNext.disabled = (currentSubPage >= totalSubPages);
+        }
+
+        window.onscroll = function() {
+            var topBtn = document.getElementById("top-btn");
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                topBtn.style.display = "flex";
+            } else {
+                topBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        var touchstartX = 0, touchendX = 0, touchstartY = 0, touchendY = 0;
+
+        document.addEventListener('touchstart', function(event) {
+            touchstartX = event.changedTouches[0].screenX;
+            touchstartY = event.changedTouches[0].screenY;
+        }, false);
+
+        document.addEventListener('touchend', function(event) {
+            if (event.target.closest('.table-wrapper') || event.target.closest('.search-box-container') || event.target.closest('.page-memo-textarea')) {
+                return;
+            }
+            touchendX = event.changedTouches[0].screenX;
+            touchendY = event.changedTouches[0].screenY;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            var xDiff = touchendX - touchstartX;
+            var yDiff = touchendY - touchstartY;
+
+            if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
+                if (currentSubPage > 0) {
+                    if (xDiff < 0) nextSubPage();
+                    else prevSubPage();
+                }
+            }
+        }
+
+        window.addEventListener('load', function() {
+            applyFontSize();
+        });
+    </script>
+</body>
+</html>
