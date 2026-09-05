@@ -72,7 +72,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* 🎛️ 상단 제어 바 스타일 개선 */
         .control-bar-group {
             display: flex;
             flex-direction: column;
@@ -122,18 +121,55 @@
             border-color: var(--primary);
         }
 
-        .dday-badge {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+        /* 🌟 D-Day & 매일 바뀌는 말씀 위젯 신규 디자인 */
+        .dday-quote-bar {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(239, 68, 68, 0.06));
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #ef4444;
+            padding: 8px 14px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+        body.dark-mode .dday-quote-bar {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border-color: #334155;
+            border-left-color: #f87171;
+        }
+        .dday-capsule {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
             color: #ffffff;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.82em;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8em;
             font-weight: 800;
+            white-space: nowrap;
             letter-spacing: 0.3px;
             box-shadow: 0 2px 5px rgba(239, 68, 68, 0.25);
         }
+        .daily-quote-text {
+            font-size: 0.82em;
+            font-weight: 600;
+            color: var(--text-color);
+            text-align: right;
+            line-height: 1.4;
+            flex: 1;
+        }
+        .daily-quote-text span {
+            color: var(--text-sub);
+            font-size: 0.88em;
+            display: inline-block;
+            margin-left: 4px;
+            font-weight: 400;
+        }
 
-        /* 📊 진도율 게이지 디자인 개선 */
+        /* 📊 진도율 게이지 디자인 */
         .progress-box {
             background-color: var(--box-bg);
             border: 1px solid var(--border-color);
@@ -287,7 +323,7 @@
         }
         .sub-page.active { display: block; }
 
-        /* 🌟 소페이지 상단 툴바 개선 */
+        /* 소페이지 상단 툴바 */
         .sub-page-header {
             display: flex;
             justify-content: space-between;
@@ -551,11 +587,16 @@
                         <button class="font-btn" onclick="changeFontSize(1)">가+</button>
                     </div>
                 </div>
-                <div class="dday-badge" id="exam-dday-badge">D-Day 계산중</div>
                 <div class="font-btn-group">
                     <button class="font-btn" id="memorize-toggle-btn" onclick="toggleMemorizeMode()">🙈 암기모드 OFF</button>
                     <button class="font-btn" id="darkmode-toggle-btn" onclick="toggleDarkMode()">🌙 야간</button>
                 </div>
+            </div>
+
+            <!-- 🌟 D-Day & 매일 갱신되는 성경 말씀/명언 위젯 -->
+            <div class="dday-quote-bar">
+                <div class="dday-capsule" id="exam-dday-badge">D-Day 계산중</div>
+                <div class="daily-quote-text" id="daily-quote-box">오늘의 지혜 로딩 중...</div>
             </div>
 
             <!-- 학습 진도율 바 -->
@@ -605,7 +646,7 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>목표 시험일: 2026.10.02</p>
-                    <p>버전: V2.9.0 (모던 UI &amp; 가독성 강화 개편)</p>
+                    <p>버전: V2.9.5 (매일 바뀌는 지혜의 말씀 탑재)</p>
                 </div>
             </div>
         </div>
@@ -1368,7 +1409,7 @@
         <div id="tab-ch1-1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V2.9.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V2.9.5</span>
             </div>
 
             <div id="ch1-1-main-menu">
@@ -1466,7 +1507,7 @@
         <div id="tab-ch3" class="tab-content">
             <h1>소방안전관리자 2급 - <br>모의고사</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V2.9.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V2.9.5</span>
             </div>
 
             <div id="ch3-page-menu">
@@ -1668,14 +1709,51 @@
         var quizAnswerState = {}; 
         var isFilterWrongMode = false;
 
+        /* 🌟 매일 갱신되는 성경 말씀 및 수험 지혜 명언 리스트 */
+        var dailyQuotes = [
+            { text: "시작은 미약하였으나 네 나중은 심히 창대하리라.", ref: "욥기 8:7" },
+            { text: "두려워하지 말라 내가 너와 함께 함이라.", ref: "이사야 41:10" },
+            { text: "네 길을 여호와께 맡기라 그를 의지하면 그가 이루시고.", ref: "시편 37:5" },
+            { text: "우리가 선을 행하되 낙심하지 말지니 포기하지 아니하면 때가 이르매 거두리라.", ref: "갈라디아서 6:9" },
+            { text: "사람이 마음으로 자기의 길을 계획할지라도 그의 걸음을 인도하시는 이는 여호와시니라.", ref: "잠언 16:9" },
+            { text: "지혜가 제일이니 지혜를 얻으라. 네가 얻은 모든 것을 가지고 명철을 얻을지니라.", ref: "잠언 4:7" },
+            { text: "구하라 그리하면 너희에게 주실 것이요 찾으라 그리하면 찾아낼 것이요.", ref: "마태복음 7:7" },
+            { text: "너의 행사를 여호와께 맡기라 그리하면 네가 경영하는 것이 이루어지리라.", ref: "잠언 16:3" },
+            { text: "내게 능력 주시는 자 안에서 내가 모든 것을 할 수 있느니라.", ref: "빌립보서 4:13" },
+            { text: "일찍 일어나고 늦게 누우며 수고의 떡을 먹음이 헛되지 않도다.", ref: "시편 127:2" },
+            { text: "환난은 인내를, 인내는 연단을, 연단은 소망을 이루는 줄 앎이로다.", ref: "로마서 5:3-4" },
+            { text: "마음의 즐거움은 양약이라도 심령의 근심은 뼈를 마르게 하느니라.", ref: "잠언 17:22" },
+            { text: "스스로 속이지 말라. 사람은 무엇으로 심든지 그대로 거두리라.", ref: "갈라디아서 6:7" },
+            { text: "지혜로운 자의 혀는 지식을 양약되게 하나니.", ref: "잠언 15:2" },
+            { text: "평안을 너희에게 끼치노니 곧 나의 평안을 너희에게 주노라. 너희는 마음에 근심하지도 말고 두려워하지도 말라.", ref: "요한복음 14:27" },
+            { text: "눈물을 흘리며 씨를 뿌리는 자는 기쁨으로 거두리로다.", ref: "시편 126:5" },
+            { text: "지혜 있는 자는 강하고 지식 있는 자는 힘을 더하나니.", ref: "잠언 24:5" },
+            { text: "오직 여호와를 앙망하는 자는 새 힘을 얻으리니 독수리가 날개치며 올라감 같을 것이요.", ref: "이사야 40:31" },
+            { text: "근심이 사람의 마음에 있으면 그것으로 번뇌하게 되나 선한 말은 그것을 즐겁게 하느니라.", ref: "잠언 12:25" },
+            { text: "푯대를 향하여 그리스도 예수 안에서 부르신 부름의 상을 위하여 달려가노라.", ref: "빌립보서 3:14" },
+            { text: "포기하지 않는 끈기는 천재성보다 더 위대한 힘을 발휘한다.", ref: "지혜 격언" },
+            { text: "오늘 흘린 땀방울 하나가 내일의 합격을 증명한다.", ref: "수험 격언" },
+            { text: "자신을 믿어라. 그 믿음이 행동을 낳고 행동이 기적을 낳는다.", ref: "지혜 격언" },
+            { text: "천 리 길도 한 걸음부터, 오늘 본 1페이지가 정상에 닿게 한다.", ref: "학습 격언" },
+            { text: "모든 지킬 만한 것 중에 더욱 네 마음을 지키라 생명의 근원이 이에서 남이니라.", ref: "잠언 4:23" },
+            { text: "반복은 기억의 어머니이자 모든 숙련의 시작이다.", ref: "공부 명언" },
+            { text: "의심은 버리고 확신을 채워라. 준비된 자에게 합격은 당연한 결과다.", ref: "수험 격언" },
+            { text: "너는 범사에 그를 인정하라 그리하면 네 길을 지도하시리라.", ref: "잠언 3:6" },
+            { text: "고난은 나를 단련시키며, 인내는 나에게 합격의 월계관을 씌운다.", ref: "지혜 격언" },
+            { text: "지극히 작은 것에 충성된 자는 큰 것에도 충성되느니라.", ref: "누가복음 16:10" },
+            { text: "스스로를 신뢰하라. 당신은 생각보다 훨씬 더 멀리 갈 수 있다.", ref: "지혜 격언" }
+        ];
+
         document.addEventListener("DOMContentLoaded", function() {
             loadSavedStates();
             setupMemorizeClickEvents();
             updateProgress();
             calculateDDay();
+            renderDailyQuote();
             setupMiniEnterKeys();
         });
 
+        /* 🎯 D-Day 자동 계산 (기준일: 2026-10-02) */
         function calculateDDay() {
             var targetDate = new Date("2026-10-02T00:00:00+09:00");
             var now = new Date();
@@ -1685,7 +1763,21 @@
             if (badgeEl) {
                 if (days > 0) badgeEl.innerText = "시험 D-" + days;
                 else if (days === 0) badgeEl.innerText = "시험 D-DAY 🔥";
-                else badgeEl.innerText = "시험 종료 (D+" + Math.abs(days) + ")";
+                else badgeEl.innerText = "D+" + Math.abs(days);
+            }
+        }
+
+        /* 📜 매일 자정 자동 변경되는 말씀 렌더러 */
+        function renderDailyQuote() {
+            var now = new Date();
+            // 날짜 기반 고유 인덱스 산출 (년 + 월 + 일)
+            var dateSeed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+            var quoteIndex = dateSeed % dailyQuotes.length;
+            var q = dailyQuotes[quoteIndex];
+            
+            var box = document.getElementById("daily-quote-box");
+            if (box) {
+                box.innerHTML = '"' + q.text + '" <span>- ' + q.ref + '</span>';
             }
         }
 
@@ -2199,6 +2291,17 @@
                     else prevSubPage();
                 }
             }
+        }
+
+        function setupMiniEnterKeys() {
+            document.querySelectorAll('.mini-text-input').forEach(function(inp) {
+                inp.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') {
+                        var btn = inp.nextElementSibling;
+                        if (btn) btn.click();
+                    }
+                });
+            });
         }
 
         window.addEventListener('load', function() {
