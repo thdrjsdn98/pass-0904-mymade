@@ -440,7 +440,6 @@
             display: inline-block;
         }
 
-        /* 📝 단원별 쪽지시험 영역 */
         .quiz-section {
             margin-top: 20px;
             padding: 14px;
@@ -631,7 +630,6 @@
             margin: 12px 0;
         }
 
-        /* 🙈 암기모드 스타일 */
         body.memorize-mode .red,
         body.memorize-mode .blue,
         body.memorize-mode .yellow,
@@ -685,7 +683,6 @@
             -webkit-text-fill-color: #dc2626 !important;
         }
 
-        /* 🌟 [신규 1] 초성 모드 스타일 */
         body.chosung-mode .red,
         body.chosung-mode .blue,
         body.chosung-mode .yellow,
@@ -775,7 +772,6 @@
                     </div>
                 </div>
 
-                <!-- 🌟 [신규 4] 데이터 백업 & 복원 도구 바 -->
                 <div class="font-control-bar" style="background-color: var(--card-bg);">
                     <span class="font-control-title">💾 내 학습 데이터 보호</span>
                     <div class="font-btn-group">
@@ -822,7 +818,6 @@
             <div class="tab-menu" id="main-tab-menu">
                 <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
                 <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
-                <!-- 🌟 [신규 2] 핵심 숫자 치트시트 탭 신설 -->
                 <button class="tab-btn" onclick="openTab(event, 'tab-numbers')">📐 숫자·기한 총정리</button>
                 <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">I. 복습예제</button>
                 <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!');">II. 설비 및 구조</button>
@@ -840,12 +835,12 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>목표 시험일: 2026.10.02</p>
-                    <p>버전: V3.3.0 (초성퀴즈·숫자정리·백업 완비 베이스본)</p>
+                    <p>버전: V3.4.0 (복습예제 &amp; 모의고사 100% 정상 복구 완료)</p>
                 </div>
             </div>
         </div>
 
-        <!-- 🌟 [신규 2] 숫자·기한 총정리 치트시트 탭 -->
+        <!-- [4] 숫자·기한 총정리 치트시트 탭 -->
         <div id="tab-numbers" class="tab-content">
             <h1>소방관계법령 - <br>📐 핵심 숫자 &amp; 기한 치트시트</h1>
             <div class="box">
@@ -879,7 +874,7 @@
             </div>
         </div>
 
-        <!-- [4] I. 이론과 개념 탭 -->
+        <!-- [5] I. 이론과 개념 탭 -->
         <div id="tab-ch1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 이론과 개념</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
@@ -933,7 +928,7 @@
                     </div>
                 </div>
 
-                <!-- 1 ~ 11단원 -->
+                <!-- 단원 본문 1~12 (쪽지시험 포함)[span_7](start_span)[span_7](end_span) -->
                 <div id="sub-page-1" class="sub-page">
                     <div class="sub-page-header">
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -1227,7 +1222,6 @@
                         </div>
                     </div>
 
-                    <!-- 🌟 [신규 3] 11단원 학습 후 즉시 복습 쪽지시험 -->
                     <div class="quiz-section">
                         <div class="quiz-sec-header">
                             <span class="quiz-sec-title">📝 11단원 즉시 점검 쪽지시험</span>
@@ -1251,7 +1245,6 @@
                     </div>
                 </div>	
 
-                <!-- 12단원 -->
                 <div id="sub-page-12" class="sub-page">
                     <div class="sub-page-header">
                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -1429,7 +1422,6 @@
                         </div>
                     </div>
 
-                    <!-- 🌟 [신규 3] 12단원 즉시 점검 쪽지시험 -->
                     <div class="quiz-section">
                         <div class="quiz-sec-header">
                             <span class="quiz-sec-title">📝 12단원 즉시 점검 쪽지시험</span>
@@ -1451,7 +1443,7 @@
                     </div>
                 </div>
 
-                <!-- 13 ~ 22단원 빈 틀 -->
+                <!-- 13 ~ 22단원 빈 틀[span_8](start_span)[span_8](end_span) -->
                 <div id="sub-page-13" class="sub-page">
                     <div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">13 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-13" onchange="toggleComplete(13)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-13" onclick="toggleBookmark(13)">☆</button></div></div>
                     <h2>13. 화재안전조사</h2>
@@ -1474,13 +1466,24 @@
             </div>
         </div>
 
-        <!-- [5] I. 복습예제 탭 -->
+        <!-- [6] I. 복습예제 탭 (4문항 100% 정상 복구 완료)[span_9](start_span)[span_9](end_span)[span_10](start_span)[span_10](end_span)[span_11](start_span)[span_11](end_span) -->
         <div id="tab-ch1-1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
+                <span>만든이: 꾸누</span> | <span>버전: V3.4.0</span>
+            </div>
+
             <div id="ch1-1-main-menu">
                 <div style="font-size: 0.9em; font-weight: 700; color: var(--text-sub); margin-bottom: 8px;">📑 복습예제 파트 선택</div>
                 <div class="sub-nav-grid">
                     <div class="sub-nav-card" onclick="showCh11Part('part1-1')"><span>Part1-1. 소방관계법령 (4문항)</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part1-2. 건축관계법령 복습예제는 준비 중입니다!');"><span>Part1-2. 건축관계법령</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-1. 복습예제는 준비 중입니다!');"><span>Part2-1. 소방안전교육 및 훈련/소방계획의 수립</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-2. 복습예제는 준비 중입니다!');"><span>Part2-2. 화재대응 및 피난</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part3. 복습예제는 준비 중입니다!');"><span>Part3. 응급처치 개요</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part4. 복습예제는 준비 중입니다!');"><span>Part4. 소방학개론</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part5. 복습예제는 준비 중입니다!');"><span>Part5. 위험물·전기·가스 안전관리</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part6. 복습예제는 준비 중입니다!');"><span>Part6. 화기취급 감독 및 허가·관리</span><span>➔</span></div>
                 </div>
             </div>
 
@@ -1494,40 +1497,273 @@
                 </div>
 
                 <div id="ch1-1-questions-wrap">
-                    <div class="box quiz-box" id="box-ch11-1" data-qid="ch11-1" data-correct-text="소방대">
-                        <p class="quiz-q-title">Q1. 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체의 용어는?</p>
-                        <div class="quiz-opt-grid">
-                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch11-1', this, '소방대')">자위소방대</button>
-                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch11-1', this, '소방대')">소방대</button>
+                    <!-- Q1 -->
+                    <div class="box quiz-box" id="box-ch11-1" style="position: relative;" data-qid="ch11-1" data-correct-text="소방대">
+                        <button class="font-btn" onclick="resetAnswer('ch11-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 화재를 진압하고 화재, 재난·재해 그 밖의 위급한 상황에서 구조·구급활동 등을 하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 뜻하는 용어를 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch11-1-opt-1" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">자위소방대</button>
+                            <button class="font-btn opt-btn" id="ch11-1-opt-2" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">소방대</button>
+                            <button class="font-btn opt-btn" id="ch11-1-opt-3" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">초기대응체계</button>
+                            <button class="font-btn opt-btn" id="ch11-1-opt-4" onclick="checkAnswerByText('ch11-1', this, '소방대')" style="text-align: left; padding: 10px;">공동소방안전관리협의회</button>
                         </div>
-                        <div id="q-result-ch11-1" style="display:none; font-weight:bold; margin-top:10px;"></div>
-                        <div id="q-expl-ch11-1" class="note" style="display:none;">💡 해설: 소방기본법상 조직체는 '소방대'입니다.</div>
+                        <div id="q-result-ch11-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch11-1" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 화재 진압 및 위급상황 시 구조·구급활동을 행하기 위해 소방공무원, 의무소방원, 의용소방대원으로 구성된 조직체를 '소방대'라고 한다.<br><br>
+                            <b>Tip.</b> 소방대를 구성하는 사람들에게 소방공무원, 의무소방원, 의용소방대원이 포함될 수 있다는 것도 기억하는 것이 유리해요~!
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="box quiz-box" id="box-ch11-2" style="position: relative;" data-qid="ch11-2" data-correct-text="2명">
+                        <button class="font-btn" onclick="resetAnswer('ch11-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 아파트를 제외하고 연면적이 35,000m²인 특정소방대상물의 소방안전관리보조자 최소 선임 인원수를 구하시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch11-2-opt-1" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">1명</button>
+                            <button class="font-btn opt-btn" id="ch11-2-opt-2" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">2명</button>
+                            <button class="font-btn opt-btn" id="ch11-2-opt-3" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">3명</button>
+                            <button class="font-btn opt-btn" id="ch11-2-opt-4" onclick="checkAnswerByText('ch11-2', this, '2명')" style="text-align: left; padding: 10px;">4명</button>
+                        </div>
+                        <div id="q-result-ch11-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch11-2" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> (아파트 제외) 연면적 15,000m² 이상의 특정소방대상물은 보조자 선임 대상이며, 초과되는 연면적 1.5만m²마다 1명 이상 추가 선임합니다. (35,000 / 15,000 = 2.33 -> 정수 2명)
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="box quiz-box" id="box-ch11-3" style="position: relative;" data-qid="ch11-3" data-correct-text="피난층">
+                        <button class="font-btn" onclick="resetAnswer('ch11-3')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q3. 곧바로 지상으로 갈 수 있는 출입구가 있는 층을 뜻하는 용어를 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch11-3-opt-1" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">피난층</button>
+                            <button class="font-btn opt-btn" id="ch11-3-opt-2" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">무창층</button>
+                            <button class="font-btn opt-btn" id="ch11-3-opt-3" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">지하층</button>
+                            <button class="font-btn opt-btn" id="ch11-3-opt-4" onclick="checkAnswerByText('ch11-3', this, '피난층')" style="text-align: left; padding: 10px;">지상층</button>
+                        </div>
+                        <div id="q-result-ch11-3" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch11-3" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 곧바로 지상으로 갈 수 있는 출입구가 있는 층을 '피난층'이라고 합니다.
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="box quiz-box" id="box-ch11-4" style="position: relative;" data-qid="ch11-4" data-correct-text="해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.">
+                        <button class="font-btn" onclick="resetAnswer('ch11-4')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q4. 다음 중 무창층에서의 개구부의 요건에 대한 설명으로 옳은 것을 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch11-4-opt-1" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">내·외부에서 쉽게 부술 수 없도록 일정 강도 이상을 유지해야 한다.</button>
+                            <button class="font-btn opt-btn" id="ch11-4-opt-2" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">피난상 안전을 위해 창살이 설치되어 있어야 한다.</button>
+                            <button class="font-btn opt-btn" id="ch11-4-opt-3" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.</button>
+                            <button class="font-btn opt-btn" id="ch11-4-opt-4" onclick="checkAnswerByText('ch11-4', this, '해당 층의 바닥면으로부터 개구부 하단까지의 높이가 1.2m 이내여야 한다.')" style="text-align: left; padding: 10px;">크기는 지름 40cm 이상의 원이 통과할 수 있는 크기로 한다.</button>
+                        </div>
+                        <div id="q-result-ch11-4" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch11-4" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 무창층 개구부는 내·외부에서 쉽게 부수거나 열 수 있어야 하고 창살이 없어야 하며, 지름 50cm 이상의 원이 통과하고 하단은 바닥면으로부터 1.2m 이내여야 합니다.
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
+                위 해당 저작권은 꾸누에 있으며 무단 복제를 금합니다.
+            </div>
         </div>
 
-        <!-- [6] 모의고사 탭 -->
+        <!-- [7] 모의고사 탭 (Q1~Q10 10문항 100% 정상 복구 완료)[span_12](start_span)[span_12](end_span)[span_13](start_span)[span_13](end_span)[span_14](start_span)[span_14](end_span) -->
         <div id="tab-ch3" class="tab-content">
             <h1>소방안전관리자 2급 - <br>모의고사</h1>
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
+                <span>만든이: 꾸누</span> | <span>버전: V3.4.0</span>
+            </div>
+
             <div id="ch3-page-menu">
+                <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 모의고사 회차 선택</div>
                 <div class="sub-nav-grid">
                     <div class="sub-nav-card" onclick="showCh3Page(1)"><span>01. Test (실전 모의고사 10선)</span><span>➔</span></div>
                 </div>
             </div>
+
             <div id="ch3-sub-page-1" class="sub-page">
-                <div class="score-board"><span id="quiz-score-text">점수: 0 / 100점</span><span id="quiz-pass-text">응시 중</span></div>
-                <div id="ch3-questions-wrap">
-                    <div class="box quiz-box" id="box-ch3-1" data-qid="ch3-1" data-correct-text="공공의 안녕 및 질서 유지와 복리증진">
-                        <p class="quiz-q-title">Q1. 소방기본법 제정 목적은?</p>
-                        <div class="quiz-opt-grid">
-                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')">공공의 안녕 및 질서 유지와 복리증진</button>
-                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')">화재 예방 우선</button>
-                        </div>
-                        <div id="q-result-ch3-1" style="display:none; font-weight:bold; margin-top:10px;"></div>
+                <div class="sub-page-header">
+                    <div class="page-indicator">01. Test 회차</div>
+                    <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                        <button class="font-btn" onclick="shuffleSection('ch3-questions-wrap')" style="font-size: 0.8em; background-color: #8b5cf6; color: #fff;">🔀 순서 섞기</button>
+                        <button class="font-btn" id="btn-filter-wrong" onclick="toggleWrongOnly()" style="font-size: 0.8em;">❌ 오답만</button>
+                        <button class="font-btn" onclick="resetAllQuestions('ch3-', 10)" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff;">🔄 전체 리셋</button>
+                        <button class="font-btn" onclick="showCh3Menu()" style="font-size: 0.8em;">📋 목록</button>
                     </div>
                 </div>
-                <div style="text-align:center; margin-top:20px;"><button class="page-nav-btn main-btn" onclick="showCh3Menu()">📋 회차 목록으로</button></div>
+
+                <div class="score-board">
+                    <span id="quiz-score-text">점수: 0 / 100점 (정답: 0개)</span>
+                    <span id="quiz-pass-text" style="color: #64748b;">응시 중</span>
+                </div>
+
+                <div id="ch3-questions-wrap">
+                    <!-- Q1 -->
+                    <div class="box quiz-box" id="box-ch3-1" style="position: relative;" data-qid="ch3-1" data-correct-text="공공의 안녕 및 질서 유지와 복리증진">
+                        <button class="font-btn" onclick="resetAnswer('ch3-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 소방기본법의 제정 목적으로 가장 적절한 것은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-1-opt-1" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">공공의 안녕 및 질서 유지와 복리증진</button>
+                            <button class="font-btn opt-btn" id="ch3-1-opt-2" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">화재의 예방 및 진압 우선</button>
+                            <button class="font-btn opt-btn" id="ch3-1-opt-3" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">건축물 안전기준 확립</button>
+                            <button class="font-btn opt-btn" id="ch3-1-opt-4" onclick="checkAnswerByText('ch3-1', this, '공공의 안녕 및 질서 유지와 복리증진')" style="text-align: left; padding: 10px;">위험물 허가 업무 수행</button>
+                        </div>
+                        <div id="q-result-ch3-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-1" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 소방기본법의 목적은 공공의 안녕 및 질서 유지와 복리증진입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="box quiz-box" id="box-ch3-2" style="position: relative;" data-qid="ch3-2" data-correct-text="소방안전관리자">
+                        <button class="font-btn" onclick="resetAnswer('ch3-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 다음 중 소방관계법령상 '관계인'의 범위에 원칙적으로 포함되지 않는 사람은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-2-opt-1" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">소유자</button>
+                            <button class="font-btn opt-btn" id="ch3-2-opt-2" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">관리자</button>
+                            <button class="font-btn opt-btn" id="ch3-2-opt-3" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">소방안전관리자</button>
+                            <button class="font-btn opt-btn" id="ch3-2-opt-4" onclick="checkAnswerByText('ch3-2', this, '소방안전관리자')" style="text-align: left; padding: 10px;">점유자</button>
+                        </div>
+                        <div id="q-result-ch3-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-2" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 관계인은 소유자, 관리자, 점유자입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="box quiz-box" id="box-ch3-3" style="position: relative;" data-qid="ch3-3" data-correct-text="지름 50cm 이상, 1.2m 이내">
+                        <button class="font-btn" onclick="resetAnswer('ch3-3')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q3. 무창층 요건 중 개구부의 크기 및 위치 기준이 옳은 것은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-3-opt-1" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 40cm 이상, 1.5m 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-3-opt-2" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 50cm 이상, 1.2m 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-3-opt-3" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 60cm 이상, 1.0m 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-3-opt-4" onclick="checkAnswerByText('ch3-3', this, '지름 50cm 이상, 1.2m 이내')" style="text-align: left; padding: 10px;">지름 50cm 이상, 1.5m 이내</button>
+                        </div>
+                        <div id="q-result-ch3-3" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-3" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 지름 50cm 이상의 원이 내접하고 하단이 바닥에서 1.2m 이내여야 합니다.
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="box quiz-box" id="box-ch3-4" style="position: relative;" data-qid="ch3-4" data-correct-text="위험물 시설의 허가 및 승인">
+                        <button class="font-btn" onclick="resetAnswer('ch3-4')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q4. 다음 중 한국소방안전원의 업무가 아닌 것은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-4-opt-1" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">종사자 기술 교육</button>
+                            <button class="font-btn opt-btn" id="ch3-4-opt-2" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">대국민 홍보</button>
+                            <button class="font-btn opt-btn" id="ch3-4-opt-3" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">행정 위탁업무 수행</button>
+                            <button class="font-btn opt-btn" id="ch3-4-opt-4" onclick="checkAnswerByText('ch3-4', this, '위험물 시설의 허가 및 승인')" style="text-align: left; padding: 10px;">위험물 시설의 허가 및 승인</button>
+                        </div>
+                        <div id="q-result-ch3-4" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-4" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 위험물 시설의 허가/승인은 행정청의 고유 권한입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="box quiz-box" id="box-ch3-5" style="position: relative;" data-qid="ch3-5" data-correct-text="특급">
+                        <button class="font-btn" onclick="resetAnswer('ch3-5')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q5. 아파트로서 50층 이상 또는 지상높이 200m 이상인 건축물의 소방안전관리대상물 등급은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-5-opt-1" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">특급</button>
+                            <button class="font-btn opt-btn" id="ch3-5-opt-2" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">1급</button>
+                            <button class="font-btn opt-btn" id="ch3-5-opt-3" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">2급</button>
+                            <button class="font-btn opt-btn" id="ch3-5-opt-4" onclick="checkAnswerByText('ch3-5', this, '특급')" style="text-align: left; padding: 10px;">3급</button>
+                        </div>
+                        <div id="q-result-ch3-5" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-5" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 아파트 50층 이상 또는 200m 이상은 특급입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q6 -->
+                    <div class="box quiz-box" id="box-ch3-6" style="position: relative;" data-qid="ch3-6" data-correct-text="피난·방화시설 및 소방시설 관리">
+                        <button class="font-btn" onclick="resetAnswer('ch3-6')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q6. 관리업자에게 대행시킬 수 있는 업무 범위는?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-6-opt-1" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">소방계획서 작성</button>
+                            <button class="font-btn opt-btn" id="ch3-6-opt-2" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">피난·방화시설 및 소방시설 관리</button>
+                            <button class="font-btn opt-btn" id="ch3-6-opt-3" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">화기취급 감독</button>
+                            <button class="font-btn opt-btn" id="ch3-6-opt-4" onclick="checkAnswerByText('ch3-6', this, '피난·방화시설 및 소방시설 관리')" style="text-align: left; padding: 10px;">자위소방대 편성</button>
+                        </div>
+                        <div id="q-result-ch3-6" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-6" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 피난·방화시설 관리 및 소방시설 관리만 대행 가능합니다.
+                        </div>
+                    </div>
+
+                    <!-- Q7 -->
+                    <div class="box quiz-box" id="box-ch3-7" style="position: relative;" data-qid="ch3-7" data-correct-text="특급 및 1급">
+                        <button class="font-btn" onclick="resetAnswer('ch3-7')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q7. 다른 안전관리자와 겸직이 불가능한 등급은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-7-opt-1" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">특급 및 1급</button>
+                            <button class="font-btn opt-btn" id="ch3-7-opt-2" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">1급 및 2급</button>
+                            <button class="font-btn opt-btn" id="ch3-7-opt-3" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">2급 및 3급</button>
+                            <button class="font-btn opt-btn" id="ch3-7-opt-4" onclick="checkAnswerByText('ch3-7', this, '특급 및 1급')" style="text-align: left; padding: 10px;">모든 등급 겸직 가능</button>
+                        </div>
+                        <div id="q-result-ch3-7" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-7" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 특급 및 1급은 겸직이 엄격히 금지됩니다.
+                        </div>
+                    </div>
+
+                    <!-- Q8 -->
+                    <div class="box quiz-box" id="box-ch3-8" style="position: relative;" data-qid="ch3-8" data-correct-text="30일 이내">
+                        <button class="font-btn" onclick="resetAnswer('ch3-8')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q8. 소방안전관리자 선임 기한은 사유 발생일로부터 며칠 이내인가?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-8-opt-1" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">14일 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-8-opt-2" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">20일 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-8-opt-3" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">30일 이내</button>
+                            <button class="font-btn opt-btn" id="ch3-8-opt-4" onclick="checkAnswerByText('ch3-8', this, '30일 이내')" style="text-align: left; padding: 10px;">60일 이내</button>
+                        </div>
+                        <div id="q-result-ch3-8" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-8" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 선임은 30일 이내, 신고는 선임일로부터 14일 이내입니다.
+                        </div>
+                    </div>
+
+                    <!-- Q9 -->
+                    <div class="box quiz-box" id="box-ch3-9" style="position: relative;" data-qid="ch3-9" data-correct-text="2급 및 3급">
+                        <button class="font-btn" onclick="resetAnswer('ch3-9')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q9. 소방안전관리자 선임 연기 신청이 가능한 대상물은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-9-opt-1" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">2급 및 3급</button>
+                            <button class="font-btn opt-btn" id="ch3-9-opt-2" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">특급</button>
+                            <button class="font-btn opt-btn" id="ch3-9-opt-3" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">1급</button>
+                            <button class="font-btn opt-btn" id="ch3-9-opt-4" onclick="checkAnswerByText('ch3-9', this, '2급 및 3급')" style="text-align: left; padding: 10px;">전 등급</button>
+                        </div>
+                        <div id="q-result-ch3-9" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-9" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 선임 연기는 2급 및 3급 대상물만 신청 가능합니다.
+                        </div>
+                    </div>
+
+                    <!-- Q10 -->
+                    <div class="box quiz-box" id="box-ch3-10" style="position: relative;" data-qid="ch3-10" data-correct-text="관리자의 자격증 종류">
+                        <button class="font-btn" onclick="resetAnswer('ch3-10')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q10. 현황표에 반드시 표기해야 하는 항목이 아닌 것은?</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" id="ch3-10-opt-1" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">관리자 성명/연락처</button>
+                            <button class="font-btn opt-btn" id="ch3-10-opt-2" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">근무 위치 (수신기 위치)</button>
+                            <button class="font-btn opt-btn" id="ch3-10-opt-3" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">대상물 등급 및 명칭</button>
+                            <button class="font-btn opt-btn" id="ch3-10-opt-4" onclick="checkAnswerByText('ch3-10', this, '관리자의 자격증 종류')" style="text-align: left; padding: 10px;">관리자의 자격증 종류</button>
+                        </div>
+                        <div id="q-result-ch3-10" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch3-10" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 자격 등급(자격증 종류)은 표기 대상이 아닙니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align:center; margin-top:20px;">
+                    <button class="page-nav-btn main-btn" onclick="showCh3Menu()">📋 회차 목록으로</button>
+                </div>
             </div>
         </div>
 
@@ -1553,7 +1789,7 @@
         var isFilterWrongMode = false;
         var wasDarkModeBeforeMemo = false;
         var isChosungMode = false;
-        var originalElementsData = []; // 초성 모드 복원을 위한 원본 저장소
+        var originalElementsData = [];
 
         var bibleQuotes100 = [
             { text: "시작은 미약하였으나 네 나중은 심히 창대하리라.", ref: "욥기 8:7" },
@@ -1768,7 +2004,7 @@
         }
 
         function toggleMemorizeMode() {
-            if (isChosungMode) toggleChosungMode(); // 초성모드가 켜져있으면 해제
+            if (isChosungMode) toggleChosungMode();
 
             document.body.classList.toggle('memorize-mode');
             var isMemo = document.body.classList.contains('memorize-mode');
@@ -1794,7 +2030,6 @@
             updateTimerUI();
         }
 
-        /* 🌟 [신규 1] 한글 초성 추출 및 초성 모드 엔진 */
         function getChosung(str) {
             var cho = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
             var result = "";
@@ -1810,7 +2045,7 @@
         }
 
         function toggleChosungMode() {
-            if (document.body.classList.contains('memorize-mode')) toggleMemorizeMode(); // 암기모드 해제
+            if (document.body.classList.contains('memorize-mode')) toggleMemorizeMode();
 
             isChosungMode = !isChosungMode;
             document.body.classList.toggle('chosung-mode', isChosungMode);
@@ -1880,7 +2115,6 @@
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
         }
 
-        /* 🌟 [신규 4] 학습 데이터(진도, 북마크, 메모) JSON 백업/복원 엔진 */
         function exportUserData() {
             var backupData = {
                 bookmarks: bookmarks,
@@ -2041,7 +2275,6 @@
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
-        /* 🌟 [신규 3] 쪽지시험 단답형/선택형 체크 엔진 */
         function checkMiniChoice(qKey, clickedBtn, correctVal) {
             var item = clickedBtn.closest('.mini-q-item');
             var resEl = document.getElementById("res-" + qKey);
@@ -2432,7 +2665,7 @@
         };
 
         function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'instant' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         var touchstartX = 0, touchendX = 0, touchstartY = 0, touchendY = 0;
