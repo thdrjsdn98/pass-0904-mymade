@@ -97,6 +97,7 @@
                 <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!');">II. 설비 및 구조</button>
                 <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!');">III. 복합개념</button>
                 <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
+                <button class="tab-btn" onclick="openTab(event, 'tab-wrong'); renderWrongNotes();">📕 오답노트 <span id="wrong-count-badge" style="color:#ef4444; font-weight:800; font-size:0.85em;">0개</span></button>
             </div>
         </div>
 
@@ -1139,6 +1140,25 @@
                     </div>
                 </div>
                 <div style="text-align:center; margin-top:20px;"><button class="page-nav-btn main-btn" onclick="showCh3Menu()">📋 회차 목록으로</button></div>
+            </div>
+        </div>
+
+        <!-- 오답노트 탭 -->
+        <div id="tab-wrong" class="tab-content">
+            <h1>소방안전관리자 2급 - <br>📕 나만의 자동 오답노트</h1>
+            <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
+                <span>만든이: 꾸누</span> | <span>실시간 자동 수집</span>
+            </div>
+
+            <div class="box" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 6px; padding: 12px 14px;">
+                <div style="font-size: 0.9em; color: var(--text-color);">
+                    💡 단원별 퀴즈, 복습예제, 모의고사에서 <b>틀린 문제가 자동으로 이곳에 기록</b>됩니다.
+                </div>
+                <button class="font-btn" onclick="clearAllWrongNotes()" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff; padding: 5px 10px;">🗑️ 오답노트 전체 비우기</button>
+            </div>
+
+            <div id="wrong-notes-list">
+                <!-- 자바스크립트로 동적 렌더링 -->
             </div>
         </div>
 
