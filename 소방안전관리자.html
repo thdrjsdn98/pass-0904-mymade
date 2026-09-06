@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <!-- ==========================================================================
-         [1. 문서 메타 설정] 모바일 반응형 뷰포트 배율 고정 및 검색엔진 수집 방지
-         ========================================================================== -->
     <meta charset="UTF-8">
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>소방안전관리자 2급 - 핵심 요약집</title>
 
-    <!-- ==========================================================================
-         [2. CSS 스타일시트] 세그먼트 UI, 다크모드, 암기모드, 반응형 레이아웃
-         ========================================================================== -->
     <style>
         /* 🎨 주간 기본 테마 색상 변수 */
         :root {
             color-scheme: light dark;
-            --base-font-size: 15px;
+            --base-font-size: 14px; /* 🌟 기본 글씨 크기를 기존 15px에서 '가-' 1회 크기인 14px로 변경 */
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --text-color: #0f172a;
@@ -50,7 +44,7 @@
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
         }
 
-        /* 전체 바디 기본 설정 (스크롤, 여백, 폰트) */
+        /* 전체 바디 기본 설정 */
         html, body {
             margin: 0 !important;
             padding: 0 !important;
@@ -71,7 +65,6 @@
             font-size: var(--base-font-size);
         }
 
-        /* 메인 컨테이너 카드 */
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -86,9 +79,9 @@
             border: 1px solid var(--border-color);
         }
 
-        /* ==========================================
-           🌟 [개선된 상단 학습 도구 상자 스타일]
-           ========================================== */
+        /* ==========================================================================
+           🌟 [이미지 시안 100% 반영 상단 학습 도구 상자 스타일]
+           ========================================================================== */
         .control-bar-group {
             display: flex;
             flex-direction: column;
@@ -97,22 +90,21 @@
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
-            padding: 12px;
+            padding: 14px;
             box-shadow: var(--shadow-sm);
         }
 
-        /* 도구 상자 접기/펼치기 헤더 */
+        /* 상단 헤더 (학습 도구 / 메뉴 접기) */
         .panel-toggle-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2px 4px 8px 4px;
-            border-bottom: 1px solid var(--border-color);
             cursor: pointer;
             user-select: none;
+            padding-bottom: 4px;
         }
         .panel-toggle-title {
-            font-size: 0.9em;
+            font-size: 0.95em;
             font-weight: 800;
             color: var(--text-color);
             display: flex;
@@ -123,134 +115,160 @@
             font-size: 0.8em;
             font-weight: 700;
             color: var(--primary);
-            background: var(--primary-light);
-            padding: 4px 10px;
-            border-radius: var(--radius-sm);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
         }
 
         #collapsible-control-content {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            padding-top: 4px;
             transition: all 0.25s ease-in-out;
         }
         #collapsible-control-content.collapsed { display: none !important; }
 
-        /* [개선 1] 글자 크기 조절 라인 (단일 세그먼트 컨트롤) */
-        .font-row {
+        /* 회색 라운드 섹션 박스 (시안 스타일) */
+        .tool-card-box {
+            background-color: #f8fafc;
+            border: 1px solid #edf2f7;
+            border-radius: 12px;
+            padding: 10px 12px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             gap: 8px;
         }
-        .row-label {
+        body.dark-mode .tool-card-box {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+
+        /* 라벨 텍스트 */
+        .tool-label {
             font-size: 0.85em;
             font-weight: 700;
             color: var(--text-sub);
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
-        .segmented-group {
+
+        /* 글자 크기 세그먼트 컨트롤 */
+        .font-control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        .segmented-font-group {
             display: inline-flex;
-            background: var(--box-bg);
+            background: #ffffff;
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
         }
-        .seg-btn {
+        body.dark-mode .segmented-font-group {
+            background: #0f172a;
+        }
+        .seg-font-btn {
             background: transparent;
             color: var(--text-color);
             border: none;
             border-right: 1px solid var(--border-color);
-            padding: 6px 14px;
-            font-size: 0.82em;
+            padding: 6px 16px;
+            font-size: 0.85em;
             font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.15s;
+            min-height: 34px;
         }
-        .seg-btn:last-child { border-right: none; }
-        .seg-btn:active { background-color: var(--primary-light); color: var(--primary); }
-        .seg-btn.active {
+        .seg-font-btn:last-child { border-right: none; }
+        .seg-font-btn.active {
             background-color: var(--primary);
             color: #ffffff;
         }
 
-        /* [개선 2] 학습 모드 3종 버튼 균등 그리드 */
+        /* 3열 모드 버튼 그리드 (암기 / 초성 / 야간) */
         .mode-btn-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
+            gap: 8px;
         }
-        .mode-flat-btn {
-            background-color: var(--box-bg);
+        .mode-item-btn {
+            background-color: #ffffff;
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            padding: 8px 6px;
-            border-radius: var(--radius-sm);
-            font-size: 0.8em;
+            padding: 9px 6px;
+            border-radius: 8px;
+            font-size: 0.82em;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
             transition: all 0.15s ease;
         }
-        .mode-flat-btn:active { transform: translateY(1px); }
-        .mode-flat-btn.active {
+        body.dark-mode .mode-item-btn {
+            background-color: #0f172a;
+        }
+        .mode-item-btn:active { transform: translateY(1px); }
+        .mode-item-btn.active {
             background-color: var(--primary);
             color: #ffffff;
             border-color: var(--primary);
         }
 
-        /* [개선 3] 데이터 보호 백업/복원 라인 */
-        .backup-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* 데이터 보호 2개 버튼 그리드 */
+        .backup-btn-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 8px;
-            padding-top: 4px;
-            border-top: 1px dashed var(--border-color);
         }
-        .backup-btn-group {
-            display: flex;
-            gap: 6px;
-        }
-        .backup-btn {
-            background-color: var(--box-bg);
+        .backup-action-btn {
+            background-color: #ffffff;
             color: var(--text-color);
             border: 1px solid var(--border-color);
-            padding: 6px 10px;
-            border-radius: var(--radius-sm);
-            font-size: 0.78em;
+            padding: 9px 8px;
+            border-radius: 8px;
+            font-size: 0.82em;
             font-weight: 700;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        body.dark-mode .backup-action-btn {
+            background-color: #0f172a;
         }
 
-        /* D-Day & 성경 구절 바 */
+        /* D-Day & 말씀 바 */
         .dday-quote-bar {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.04), rgba(239, 68, 68, 0.05));
-            border: 1px solid var(--border-color);
+            background-color: #ffffff;
+            border: 1px solid #fee2e2;
             border-left: 4px solid #ef4444;
-            padding: 8px 12px;
-            border-radius: var(--radius-md);
+            padding: 9px 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 10px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
         }
         body.dark-mode .dday-quote-bar {
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
-            border-color: #334155;
-            border-left-color: #f87171;
+            background-color: #1e293b;
+            border-color: #7f1d1d;
+            border-left-color: #ef4444;
         }
         .dday-capsule {
             display: inline-flex;
             align-items: center;
-            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            background: #ef4444;
             color: #ffffff;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 8px;
-            font-size: 0.8em;
+            font-size: 0.82em;
             font-weight: 800;
             white-space: nowrap;
         }
@@ -269,39 +287,37 @@
             margin-left: 4px;
         }
 
-        /* 학습 진도율 게이지 바 */
+        /* 진도율 영역 */
         .progress-box {
-            background-color: var(--box-bg);
-            border: 1px solid var(--border-color);
-            padding: 9px 12px;
-            border-radius: var(--radius-md);
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 6px;
+            padding: 2px 0;
         }
         .progress-header {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8em;
+            font-size: 0.82em;
             font-weight: 700;
             color: var(--text-sub);
         }
         .progress-bar-track {
             width: 100%;
-            height: 8px;
-            background-color: var(--border-color);
+            height: 9px;
+            background-color: #e2e8f0;
             border-radius: 6px;
             overflow: hidden;
         }
+        body.dark-mode .progress-bar-track { background-color: #334155; }
         .progress-bar-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #3b82f6, #2563eb);
+            background: #3b82f6;
             border-radius: 6px;
             transition: width 0.35s ease-in-out;
         }
 
-        /* 본문 실시간 단어 검색창 */
+        /* 검색창 영역 */
         .search-box-container {
             position: relative;
             display: flex;
@@ -310,14 +326,15 @@
         .search-input {
             width: 100%;
             padding: 10px 38px 10px 14px;
-            border-radius: var(--radius-md);
+            border-radius: 10px;
             border: 1px solid var(--border-color);
-            background-color: var(--box-bg);
+            background-color: #f8fafc;
             color: var(--text-color);
             font-size: 0.88em;
             outline: none;
             transition: border-color 0.2s;
         }
+        body.dark-mode .search-input { background-color: #1e293b; }
         .search-input:focus {
             border-color: var(--primary);
             background-color: var(--card-bg);
@@ -710,7 +727,7 @@
             margin: 12px 0;
         }
 
-        /* 🙈 암기모드 스타일 (블라인드 가림막) */
+        /* 🙈 암기모드 스타일 */
         body.memorize-mode .red,
         body.memorize-mode .blue,
         body.memorize-mode .yellow,
@@ -829,54 +846,53 @@
     <div class="container" id="app-viewport">
         
         <!-- ==========================================================================
-             [3. 상단 학습 도구 상자] 중첩 박스를 줄이고 세그먼트 버튼을 적용한 새 UI
+             [3. 상단 학습 도구 상자] 이미지 시안 100% 일치 깔끔 정돈 UI
              ========================================================================== -->
         <div class="control-bar-group">
-            <!-- 접기/펼치기 토글 헤더 -->
+            <!-- 도구 상자 접기/펼치기 헤더 -->
             <div class="panel-toggle-bar" onclick="toggleTopPanel()">
                 <span class="panel-toggle-title">
                     <span>⚙️ 학습 도구</span>
-                    <span id="panel-mini-dday" style="color: #ef4444; font-size: 0.88em; margin-left: 4px;"></span>
                 </span>
                 <span class="panel-toggle-btn" id="panel-toggle-btn-text">▲ 메뉴 접기</span>
             </div>
 
             <!-- 접히는 도구 본문 내용 -->
             <div id="collapsible-control-content">
-                <!-- 1라인: 글자 크기 (세그먼트 컨트롤) -->
-                <div class="font-row">
-                    <span class="row-label">🔤 글자 크기</span>
-                    <div class="segmented-group">
-                        <button class="seg-btn" onclick="changeFontSize(-1)">가-</button>
-                        <button class="seg-btn" onclick="resetFontSize()">기본</button>
-                        <button class="seg-btn" onclick="changeFontSize(1)">가+</button>
+                <!-- 1구역 카드: 글자 크기 + 3개 학습 모드 (암기/초성/야간) -->
+                <div class="tool-card-box">
+                    <div class="font-control-row">
+                        <span class="tool-label">🔤 글자 크기</span>
+                        <div class="segmented-font-group">
+                            <button class="seg-font-btn" onclick="changeFontSize(-1)">가-</button>
+                            <button class="seg-font-btn" onclick="resetFontSize()">기본</button>
+                            <button class="seg-font-btn" onclick="changeFontSize(1)">가+</button>
+                        </div>
+                    </div>
+                    <div class="mode-btn-grid">
+                        <button class="mode-item-btn" id="memorize-toggle-btn" onclick="toggleMemorizeMode()">🙈 암기 OFF</button>
+                        <button class="mode-item-btn" id="chosung-toggle-btn" onclick="toggleChosungMode()">💡 초성 퀴즈</button>
+                        <button class="mode-item-btn" id="darkmode-toggle-btn" onclick="toggleDarkMode()">🌙 야간</button>
                     </div>
                 </div>
 
-                <!-- 2라인: 핵심 학습 모드 3버튼 (암기 OFF, 초성 퀴즈, 야간 모드) -->
-                <div class="mode-btn-grid">
-                    <button class="mode-flat-btn" id="memorize-toggle-btn" onclick="toggleMemorizeMode()">🙈 암기 OFF</button>
-                    <button class="mode-flat-btn" id="chosung-toggle-btn" onclick="toggleChosungMode()">💡 초성 퀴즈</button>
-                    <button class="mode-flat-btn" id="darkmode-toggle-btn" onclick="toggleDarkMode()">🌙 야간</button>
-                </div>
-
-                <!-- 3라인: 데이터 백업 및 복원 -->
-                <div class="backup-row">
-                    <span class="row-label">💾 내 학습 데이터 보호</span>
-                    <div class="backup-btn-group">
-                        <button class="backup-btn" onclick="exportUserData()">📥 메모·진도 백업</button>
-                        <button class="backup-btn" onclick="document.getElementById('import-file-input').click()">📤 백업 복원</button>
+                <!-- 2구역 카드: 내 학습 데이터 보호 (메모·진도 백업 / 백업 복원) -->
+                <div class="tool-card-box">
+                    <span class="tool-label">💾 내 학습 데이터 보호</span>
+                    <div class="backup-btn-grid">
+                        <button class="backup-action-btn" onclick="exportUserData()">📥 메모·진도 백업</button>
+                        <button class="backup-action-btn" onclick="document.getElementById('import-file-input').click()">📤 백업 복원</button>
                         <input type="file" id="import-file-input" style="display:none;" accept=".json" onchange="importUserData(event)">
                     </div>
                 </div>
 
-                <!-- 4라인: D-Day 배지 & 24시간 로테이션 성경 구절 -->
+                <!-- 3구역: 시험 D-Day 배지 & 24시간 로테이션 말씀 -->
                 <div class="dday-quote-bar">
                     <div class="dday-capsule" id="exam-dday-badge">D-Day 계산중</div>
                     <div class="daily-quote-text" id="daily-quote-box">말씀 묵상 로딩 중...</div>
                 </div>
 
-                <!-- 5라인: 회독 학습 진도율 게이지 바 -->
+                <!-- 4구역: 회독 학습 진도율 게이지 바 -->
                 <div class="progress-box">
                     <div class="progress-header">
                         <span>📊 회독 학습 진도율</span>
@@ -887,19 +903,19 @@
                     </div>
                 </div>
 
-                <!-- 6라인: 암기모드 노출 타이머 (암기모드 켤 때만 노출) -->
+                <!-- 암기모드 노출 타이머 (암기모드 ON일 때만 flex 표시) -->
                 <div class="timer-row" id="timer-control-bar" style="display: none;">
-                    <span class="row-label">⏱️ 표시시간</span>
-                    <div class="segmented-group">
-                        <button class="seg-btn active" id="timer-btn-3" onclick="setTimerSec(3)">3초</button>
-                        <button class="seg-btn" id="timer-btn-5" onclick="setTimerSec(5)">5초</button>
-                        <button class="seg-btn" id="timer-btn-0" onclick="setTimerSec(0)">누를때만</button>
+                    <span class="tool-label">⏱️ 표시시간</span>
+                    <div class="segmented-font-group">
+                        <button class="seg-font-btn active" id="timer-btn-3" onclick="setTimerSec(3)">3초</button>
+                        <button class="seg-font-btn" id="timer-btn-5" onclick="setTimerSec(5)">5초</button>
+                        <button class="seg-font-btn" id="timer-btn-0" onclick="setTimerSec(0)">누를때만</button>
                     </div>
                 </div>
 
-                <!-- 7라인: 본문 실시간 단어 검색창 -->
+                <!-- 5구역: 본문 실시간 단어 검색창 -->
                 <div class="search-box-container">
-                    <input type="text" id="search-input" class="search-input" placeholder="🔍 궁금한 단어 검색 (예: 무창층, 선임, 자체점검, 화재안전조사)" oninput="handleSearch()">
+                    <input type="text" id="search-input" class="search-input" placeholder="🔍 궁금한 단어 검색 (예: 무창층, 선임, 자체점검, 화재)" oninput="handleSearch()">
                     <button class="search-clear-btn" id="search-clear-btn" onclick="clearSearch()">✕</button>
                     <div id="search-results" class="search-results-list"></div>
                 </div>
@@ -932,7 +948,7 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>목표 시험일: 2026.10.02</p>
-                    <p>버전: V3.7.0 (완전 일치 본문 복구 &amp; 상단 UI 개선)</p>
+                    <p>버전: V3.8.0 (완벽한 상단 UI &amp; 14px 기본 폰트 최적화본)</p>
                 </div>
             </div>
         </div>
@@ -982,7 +998,6 @@
                 <span>만든이: 꾸누</span> | <span>수정일: 2026.09.06</span>
             </div>
 
-            <!-- 파트 선택 메인 메뉴 -->
             <div id="ch1-main-menu">
                 <div style="font-size: 0.9em; font-weight: 700; color: var(--text-sub); margin-bottom: 8px;">📑 학습 파트 선택</div>
                 <div class="sub-nav-grid">
@@ -997,7 +1012,6 @@
                 </div>
             </div>
 
-            <!-- Part1-1 단원 선택 카드 목록 -->
             <div id="ch1-part1-1-container" style="display: none;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
                     <button class="font-btn" onclick="showCh1MainMenu()" style="font-size: 0.82em;">◀ 파트 목록으로</button>
@@ -1031,7 +1045,7 @@
                     </div>
                 </div>
 
-                <!-- 1 ~ 12단원 본문 (원문 100% 완전 일치 복구) -->
+                <!-- 1 ~ 12단원 본문 -->
                 <div id="sub-page-1" class="sub-page">
                     <div class="sub-page-header">
                         <div style="display: flex; align-items: center; gap: 8px;"><div class="page-indicator">1 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size: 0.75em; padding: 4px 8px;">📋 단원 목록</button></div>
@@ -1376,7 +1390,7 @@
         <div id="tab-ch1-1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V3.7.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V3.8.0</span>
             </div>
 
             <div id="ch1-1-main-menu">
@@ -1474,10 +1488,9 @@
         <div id="tab-ch3" class="tab-content">
             <h1>소방안전관리자 2급 - <br>모의고사</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V3.7.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V3.8.0</span>
             </div>
 
-            <!-- 회차 선택 메뉴 -->
             <div id="ch3-page-menu">
                 <div style="font-size: 0.9em; font-weight: bold; color: var(--text-sub); margin-bottom: 8px;">📑 모의고사 회차 선택</div>
                 <div class="sub-nav-grid">
@@ -1486,7 +1499,7 @@
                 </div>
             </div>
 
-            <!-- 회차 1: 10문항 (100점 만점 채점) -->
+            <!-- 회차 1: 10문항 -->
             <div id="ch3-sub-page-1" class="sub-page">
                 <div class="sub-page-header">
                     <div class="page-indicator">01. Test 회차</div>
@@ -1967,7 +1980,7 @@
         var totalSubPages = 22;
         var bookmarks = JSON.parse(localStorage.getItem('user_bookmarks') || '[]');
         var completes = JSON.parse(localStorage.getItem('user_completes') || '[]');
-        var currentFontSize = parseInt(localStorage.getItem('user_font_size') || '15', 10);
+        var currentFontSize = parseInt(localStorage.getItem('user_font_size') || '14', 10); /* 🌟 기본 14px 적용 */
         var memorizeTimerSec = parseInt(localStorage.getItem('user_timer_sec') || '3', 10);
         
         var quizAnswerState = {}; 
@@ -2081,7 +2094,6 @@
             { text: "너의 하나님 여호와가 너의 가운데에 계시니 그는 구원을 베푸실 전능자이시라.", ref: "스바냐 3:17" }
         ];
 
-        /* [3] 페이지 로딩 시 초기화 */
         document.addEventListener("DOMContentLoaded", function() {
             loadSavedStates();
             setupMemorizeClickEvents();
@@ -2091,7 +2103,6 @@
             setupMiniEnterKeys();
         });
 
-        /* [4] 상단 도구 상자 접기/펼치기 토글 */
         function toggleTopPanel() {
             var content = document.getElementById("collapsible-control-content");
             var btnText = document.getElementById("panel-toggle-btn-text");
@@ -2106,14 +2117,12 @@
             }
         }
 
-        /* [5] 시험 D-Day 계산기 (목표일: 2026.10.02) */
         function calculateDDay() {
             var targetDate = new Date("2026-10-02T00:00:00+09:00");
             var now = new Date();
             var diff = targetDate.getTime() - now.getTime();
             var days = Math.ceil(diff / (1000 * 60 * 60 * 24));
             var badgeEl = document.getElementById("exam-dday-badge");
-            var miniBadgeEl = document.getElementById("panel-mini-dday");
             
             var text = "";
             if (days > 0) text = "D-" + days;
@@ -2121,10 +2130,8 @@
             else text = "D+" + Math.abs(days);
 
             if (badgeEl) badgeEl.innerText = "시험 " + text;
-            if (miniBadgeEl) miniBadgeEl.innerText = "(" + text + ")";
         }
 
-        /* [6] 1시간마다 바뀌는 성경 구절 로테이션 엔진 */
         function renderHourlyBibleQuote() {
             var now = new Date();
             var currentHourKey = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + "-" + now.getHours();
@@ -2172,23 +2179,22 @@
             }
         }
 
-        /* [7] 글자 크기 세그먼트 컨트롤 핸들러 */
+        /* 🌟 [글자 크기 14px 기준 변경] */
         function applyFontSize() {
             document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
             localStorage.setItem('user_font_size', currentFontSize);
         }
         function changeFontSize(delta) {
             currentFontSize += delta;
-            if (currentFontSize < 12) currentFontSize = 12;
+            if (currentFontSize < 11) currentFontSize = 11;
             if (currentFontSize > 22) currentFontSize = 22;
             applyFontSize();
         }
         function resetFontSize() {
-            currentFontSize = 15;
+            currentFontSize = 14; /* 🌟 기본 14px 리셋 */
             applyFontSize();
         }
 
-        /* [8] 야간 모드 (다크모드) 토글 */
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             var isDark = document.body.classList.contains('dark-mode');
@@ -2196,7 +2202,6 @@
             document.getElementById('darkmode-toggle-btn').innerText = isDark ? "☀️ 주간" : "🌙 야간";
         }
 
-        /* [9] 암기 모드 (블라인드 가림막) 토글 */
         function toggleMemorizeMode() {
             if (isChosungMode) toggleChosungMode();
 
@@ -2224,7 +2229,6 @@
             updateTimerUI();
         }
 
-        /* [10] 한글 초성 추출 알고리즘 & 초성 퀴즈 모드 */
         function getChosung(str) {
             var cho = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
             var result = "";
@@ -2264,7 +2268,6 @@
             }
         }
 
-        /* [11] 암기모드 타이머 제어 */
         function setTimerSec(sec) {
             memorizeTimerSec = sec;
             localStorage.setItem('user_timer_sec', sec);
@@ -2306,13 +2309,11 @@
             });
         }
 
-        /* [12] 각주 메모장 자동 저장 */
         function savePageMemo(pageNum) {
             var memoText = document.getElementById("memo-input-" + pageNum).value;
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
         }
 
-        /* [13] JSON 형식 내보내기/가져오기 백업 엔진 */
         function exportUserData() {
             var backupData = {
                 bookmarks: bookmarks,
@@ -2356,7 +2357,6 @@
             reader.readAsText(file);
         }
 
-        /* [14] 학습 진도율 게이지 바 업데이트 */
         function updateProgress() {
             var doneCount = completes.length;
             var percent = Math.round((doneCount / totalSubPages) * 100);
@@ -2383,7 +2383,6 @@
             updateProgress();
         }
 
-        /* [15] 북마크(별표) 등록 및 모아보기 */
         function toggleBookmark(pageNum) {
             var index = bookmarks.indexOf(pageNum);
             if (index > -1) {
@@ -2424,7 +2423,6 @@
             alert("★ 북마크한 " + bookmarks.length + "개 항목만 표시합니다. (전체보려면 다시 단원 목록 클릭)");
         }
 
-        /* [16] 화면 내비게이션 및 파트 전환 */
         function showCh1Part(partName) {
             if (partName === 'part1-1') {
                 document.getElementById("ch1-main-menu").style.display = "none";
@@ -2480,7 +2478,6 @@
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
-        /* [17] 단원별 즉시 점검 쪽지시험 채점 로직 */
         function checkMiniChoice(qKey, clickedBtn, correctVal) {
             var item = clickedBtn.closest('.mini-q-item');
             var resEl = document.getElementById("res-" + qKey);
@@ -2555,7 +2552,6 @@
             });
         }
 
-        /* [18] 모의고사 및 복습예제 객관식 채점 및 100점 점수판 */
         function checkAnswerByText(qId, clickedBtn, correctText) {
             var box = clickedBtn.closest('.quiz-box');
             var resultEl = document.getElementById("q-result-" + qId);
@@ -2695,7 +2691,6 @@
             alert("🔀 문제와 보기의 배치가 무작위로 섞였습니다!");
         }
 
-        /* [19] 로컬스토리지 저장 데이터 복원 및 본문 실시간 검색 */
         function loadSavedStates() {
             if (localStorage.getItem('user_dark_mode') === 'true') {
                 document.body.classList.add('dark-mode');
@@ -2782,7 +2777,6 @@
             input.focus();
         }
 
-        /* [20] 대단원 상단 탭 전환 함수 (어디서 들어오든 항상 메인 파트 목록으로 리셋) */
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -2829,7 +2823,6 @@
             }
         }		
 
-        /* [21] 소페이지 및 하단 내비게이션 바 제어 */
         function showSubPage(pageNum) {
             currentSubPage = pageNum;
             document.getElementById("sub-page-menu").style.display = "none";
@@ -2876,7 +2869,6 @@
             btnNext.disabled = (currentSubPage >= totalSubPages);
         }
 
-        /* [22] 상단 이동(Top) 버튼 & 모바일 터치 스와이프 */
         window.onscroll = function() {
             var topBtn = document.getElementById("top-btn");
             if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
