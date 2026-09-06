@@ -330,6 +330,10 @@
         }
 
         function showCh1Part(partName) {
+            // 검색 등으로 다른 파트를 보다가 바로 점프해올 수도 있으니, 둘 다 우선 숨김
+            document.getElementById("ch1-part1-1-container").style.display = "none";
+            document.getElementById("ch1-part1-2-container").style.display = "none";
+
             if (partName === 'part1-1') {
                 document.getElementById("ch1-main-menu").style.display = "none";
                 document.getElementById("ch1-part1-1-container").style.display = "block";
@@ -812,6 +816,14 @@
             }
         }
 
+        // 단원 제목(h2)은 검색 대상에서 빼고, 본문 내용만 검색어와 비교하기 위한 함수
+        function getSearchableBodyText(pageEl) {
+            var clone = pageEl.cloneNode(true);
+            var h2 = clone.querySelector('h2');
+            if (h2) h2.parentNode.removeChild(h2);
+            return (clone.innerText || clone.textContent || "").toLowerCase();
+        }
+
         function handleSearch() {
             var input = document.getElementById("search-input");
             var clearBtn = document.getElementById("search-clear-btn");
@@ -825,7 +837,7 @@
             var matches = [];
             for (var i = 1; i <= totalSubPages; i++) {
                 var pageEl = document.getElementById("sub-page-" + i);
-                if (pageEl && pageEl.innerText.toLowerCase().includes(query)) {
+                if (pageEl && getSearchableBodyText(pageEl).includes(query)) {
                     var title = pageEl.querySelector("h2").innerText;
                     matches.push({ pageNum: i, title: title, part: 'part1-1' });
                 }
@@ -833,7 +845,7 @@
             // Part1-2 (건축관계법령) 단원도 함께 검색
             for (var j = 1; j <= totalSubPagesB2; j++) {
                 var pageElB2 = document.getElementById("sub-page-b2-" + j);
-                if (pageElB2 && pageElB2.innerText.toLowerCase().includes(query)) {
+                if (pageElB2 && getSearchableBodyText(pageElB2).includes(query)) {
                     var titleB2 = pageElB2.querySelector("h2").innerText;
                     matches.push({ pageNum: j, title: titleB2, part: 'part1-2' });
                 }
@@ -845,7 +857,10 @@
                     div.className = "search-result-item";
                     var partLabel = (m.part === 'part1-2') ? "[건축법령 " + m.pageNum + "페이지]" : "[" + m.pageNum + "페이지]";
                     div.innerHTML = "<b>" + partLabel + "</b> " + m.title;
-                    div.onclick = function() {
+
+                    var selectResult = function(e) {
+                        if (e) e.preventDefault(); // 입력창 포커스가 먼저 빠져서(키보드 닫힘) 목록이 밀리기 전에 항목을 확정
+                        openTab(null, 'tab-ch1'); // 표지 등 다른 탭에서 검색했어도 이론과개념 탭으로 전환
                         showCh1Part(m.part);
                         var targetPageEl;
                         if (m.part === 'part1-2') {
@@ -860,6 +875,9 @@
                         input.value = "";
                         clearBtn.style.display = "none";
                     };
+                    // mousedown에서 확정 + preventDefault: 탭하는 순간 입력창이 blur되며 키보드가 닫히기 전에
+                    // 항목을 먼저 확정시켜서, 키보드가 닫히는 reflow로 목록이 밀려도 엉뚱한 항목이 안 눌리게 함
+                    div.addEventListener('mousedown', selectResult);
                     resultsContainer.appendChild(div);
                 });
                 resultsContainer.style.display = "block";
