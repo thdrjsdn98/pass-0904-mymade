@@ -909,17 +909,25 @@
         var exitTrapArmed = false;
 
         function armExitTrap() {
-            history.pushState({ exitTrap: true }, '');
+            // URL 뒤에 흔적(#studying)을 남겨서, 브라우저가 "진짜 이전 페이지가 있다"고
+            // 확실히 인식하게 만듦 (일부 브라우저는 URL 변화 없는 pushState만으로는
+            // 뒤로가기를 그냥 앱 종료로 처리해버리는 경우가 있음)
+            if (location.hash !== '#studying') {
+                history.pushState({ exitTrap: true }, '', '#studying');
+            }
             exitTrapArmed = true;
         }
 
-        window.addEventListener('popstate', function() {
+        function handleBackAttempt() {
             if (exitTrapArmed) {
                 exitTrapArmed = false;
                 var overlay = document.getElementById('exit-confirm-overlay');
                 if (overlay) overlay.style.display = 'flex';
             }
-        });
+        }
+
+        window.addEventListener('popstate', handleBackAttempt);
+        window.addEventListener('hashchange', handleBackAttempt);
 
         function cancelExitApp() {
             var overlay = document.getElementById('exit-confirm-overlay');
@@ -934,6 +942,6 @@
             window.close();
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            armExitTrap();
-        });
+        // 스크립트가 body 맨 아래에 있어 DOM은 이미 준비된 상태이므로 바로 실행
+        armExitTrap();
+        document.addEventListener('DOMContentLoaded', armExitTrap);
