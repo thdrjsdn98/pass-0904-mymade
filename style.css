@@ -440,6 +440,39 @@
             color: var(--primary);
         }
 
+        /* ============================================================
+           📑 탭 메뉴 "일자형" 모드 - 드롭다운 대신 가로로 쭉 나열해서 보여줌
+           ============================================================ */
+        body.flat-tab-menu .tab-dropdown-toggle { display: none; }
+        body.flat-tab-menu .tab-dropdown-list {
+            display: flex !important;
+            flex-direction: row;
+            position: static;
+            box-shadow: none;
+            border: none;
+            background: transparent;
+            border-radius: 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+            gap: 6px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        body.flat-tab-menu .tab-dropdown-list::-webkit-scrollbar { display: none; }
+        body.flat-tab-menu .tab-btn {
+            border: 1px solid transparent;
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+            flex: 0 0 auto;
+            width: auto;
+            min-height: 38px;
+            padding: 8px 12px;
+            font-size: 0.82em;
+        }
+        body.flat-tab-menu .tab-btn.active {
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 

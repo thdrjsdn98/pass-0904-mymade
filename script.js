@@ -767,6 +767,11 @@ var currentSubPage = 0;
                 if (panelContent) panelContent.classList.remove('collapsed');
                 if (panelBtnText) panelBtnText.innerText = "▲ 메뉴 접기";
             }
+            if (localStorage.getItem('user_tab_menu_flat') === 'true') {
+                document.body.classList.add('flat-tab-menu');
+                var tabMenuBtn = document.getElementById('tab-menu-style-btn');
+                if (tabMenuBtn) tabMenuBtn.innerText = "☰ 탭 메뉴: 일자형";
+            }
             completes.forEach(function(pageNum) {
                 var chk = document.getElementById("check-page-" + pageNum);
                 if (chk) chk.checked = true;
@@ -1210,6 +1215,13 @@ var currentSubPage = 0;
         function backToRandomSelect() {
             document.getElementById('ch3-5-select').style.display = 'block';
             document.getElementById('ch3-5-quiz-area').style.display = 'none';
+        }
+
+        function toggleTabMenuStyle() {
+            var isFlat = document.body.classList.toggle('flat-tab-menu');
+            localStorage.setItem('user_tab_menu_flat', isFlat);
+            var btn = document.getElementById('tab-menu-style-btn');
+            btn.innerText = isFlat ? "☰ 탭 메뉴: 일자형" : "▾ 탭 메뉴: 드롭다운형";
         }
 
         function toggleDailyNotify() {
