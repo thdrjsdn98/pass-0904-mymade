@@ -367,7 +367,7 @@
         .tab-dropdown {
             position: relative;
         }
-        .tab-dropdown-toggle {
+		.tab-dropdown-toggle {
             width: 100%;
             display: flex;
             justify-content: space-between;
@@ -381,6 +381,12 @@
             font-size: 0.9em;
             cursor: pointer;
             min-height: 44px;
+            position: relative; /* 🌟 화살표 위치 기준점 추가 */
+            text-align: center;
+        }
+		#tab-dropdown-label {
+            position: static;
+            transform: none;
         }
         .tab-dropdown-list {
             display: none;
@@ -397,7 +403,7 @@
             overflow: hidden;
         }
         .tab-dropdown-list.open { display: flex; }
-        .tab-btn {
+		.tab-btn {
             background-color: transparent;
             color: var(--text-sub);
             border: none;
@@ -406,7 +412,7 @@
             font-weight: 700;
             font-size: 0.88em;
             cursor: pointer;
-            text-align: left;
+            text-align: center; /* 🌟 드롭다운 목록 글씨를 가운데 정렬로 변경 */
             width: 100%;
             transition: all 0.15s ease;
         }

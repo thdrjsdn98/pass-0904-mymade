@@ -87,22 +87,25 @@
             </div>
         </div>
 
-		<!-- 탭 메뉴 (드롭다운 형식) -->
+		<!-- 탭 메뉴 (글씨 바로 오른쪽에 화살표가 붙고 전체가 중앙 정렬되는 구조) -->
         <div class="tab-menu-wrapper">
             <div class="tab-dropdown" id="tab-dropdown-container">
-                <button class="tab-dropdown-toggle" onclick="toggleTabDropdown()">
-                    <span id="tab-dropdown-label">표지</span>
-                    <span id="tab-dropdown-arrow">▼</span>
+                <button class="tab-dropdown-toggle" onclick="toggleTabDropdown()" style="display: flex; justify-content: center; align-items: center; width: 100%; position: relative; background-color: var(--primary-light); color: var(--primary); border: 1px solid rgba(37, 99, 235, 0.2); padding: 12px 16px; border-radius: var(--radius-md); font-weight: 800; font-size: 0.9em; cursor: pointer; min-height: 44px;">
+                    <!-- 🌟 글씨와 화살표를 하나의 묶음(span)으로 감싸서 함께 중앙 정렬시킴 -->
+                    <span style="display: inline-flex; align-items: center; gap: 6px;">
+                        <span id="tab-dropdown-label">표지</span>
+                        <span id="tab-dropdown-arrow">▼</span>
+                    </span>
                 </button>
                 <div class="tab-dropdown-list" id="tab-dropdown-list">
-                    <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
-                    <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
-                    <button class="tab-btn" onclick="openTab(event, 'tab-numbers')">📐 숫자·기한 총정리</button>
-                    <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">I. 복습예제</button>
+                    <button class="tab-btn active" onclick="openTab(event, 'tab-cover'); updateDropdownLabel('표지');">표지</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-ch1'); updateDropdownLabel('I. 이론과 개념');">I. 이론과 개념</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-numbers'); updateDropdownLabel('📐 숫자·기한 총정리');">📐 숫자·기한 총정리</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1'); updateDropdownLabel('I. 복습예제');">I. 복습예제</button>
                     <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!'); closeTabDropdown();">II. 설비 및 구조</button>
                     <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!'); closeTabDropdown();">III. 복합개념</button>
-                    <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
-                    <button class="tab-btn" onclick="openTab(event, 'tab-wrong'); renderWrongNotes();">📕 오답노트 <span id="wrong-count-badge" style="color:#ef4444; font-weight:800; font-size:0.85em;">0개</span></button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-ch3'); updateDropdownLabel('모의고사');">모의고사</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-wrong'); updateDropdownLabel('📕 오답노트'); renderWrongNotes();">📕 오답노트 <span id="wrong-count-badge" style="color:#ef4444; font-weight:800; font-size:0.85em;">0개</span></button>
                 </div>
             </div>
         </div>
@@ -588,16 +591,325 @@
                 </div>
 
                 <!-- 13 ~ 22단원 빈 틀 -->
-                <div id="sub-page-13" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">13 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-13" onchange="toggleComplete(13)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-13" onclick="toggleBookmark(13)">☆</button></div></div><h2>13. 화재안전조사</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-13" class="page-memo-textarea" placeholder="13단원 메모를 입력하세요..." oninput="savePageMemo(13)"></textarea></div></div>
-                <div id="sub-page-14" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">14 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-14" onchange="toggleComplete(14)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-14" onclick="toggleBookmark(14)">☆</button></div></div><h2>14. 단독주택&amp;공공주택</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-14" class="page-memo-textarea" placeholder="14단원 메모를 입력하세요..." oninput="savePageMemo(14)"></textarea></div></div>
-                <div id="sub-page-15" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">15 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-15" onchange="toggleComplete(15)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-15" onclick="toggleBookmark(15)">☆</button></div></div><h2>15. 특별피난계단</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-15" class="page-memo-textarea" placeholder="15단원 메모를 입력하세요..." oninput="savePageMemo(15)"></textarea></div></div>
-                <div id="sub-page-16" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">16 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-16" onchange="toggleComplete(16)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-16" onclick="toggleBookmark(16)">☆</button></div></div><h2>16. 피난.방화시설의 유지.관리 및 금지행위</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-16" class="page-memo-textarea" placeholder="16단원 메모를 입력하세요..." oninput="savePageMemo(16)"></textarea></div></div>
-                <div id="sub-page-17" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">17 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-17" onchange="toggleComplete(17)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-17" onclick="toggleBookmark(17)">☆</button></div></div><h2>17. 옥상광장 출입문 개방 안전관리</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-17" class="page-memo-textarea" placeholder="17단원 메모를 입력하세요..." oninput="savePageMemo(17)"></textarea></div></div>
-                <div id="sub-page-18" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">18 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-18" onchange="toggleComplete(18)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-18" onclick="toggleBookmark(18)">☆</button></div></div><h2>18. 소방안전관리자의 실무교육</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-18" class="page-memo-textarea" placeholder="18단원 메모를 입력하세요..." oninput="savePageMemo(18)"></textarea></div></div>
-                <div id="sub-page-19" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">19 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-19" onchange="toggleComplete(19)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-19" onclick="toggleBookmark(19)">☆</button></div></div><h2>19. 벌칙(벌금 및 과태료)(필수암기)</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-19" class="page-memo-textarea" placeholder="19단원 메모를 입력하세요..." oninput="savePageMemo(19)"></textarea></div></div>
-                <div id="sub-page-20" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">20 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-20" onchange="toggleComplete(20)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-20" onclick="toggleBookmark(20)">☆</button></div></div><h2>20. 화재 예방조치</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-20" class="page-memo-textarea" placeholder="20단원 메모를 입력하세요..." oninput="savePageMemo(20)"></textarea></div></div>
-                <div id="sub-page-21" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">21 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-21" onchange="toggleComplete(21)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-21" onclick="toggleBookmark(21)">☆</button></div></div><h2>21. 방염</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-21" class="page-memo-textarea" placeholder="21단원 메모를 입력하세요..." oninput="savePageMemo(21)"></textarea></div></div>
-                <div id="sub-page-22" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">22 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-22" onchange="toggleComplete(22)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-22" onclick="toggleBookmark(22)">☆</button></div></div><h2>22. 합격표시 및 표지</h2><div class="box"><p>내용을 입력해주세요.</p></div><div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-22" class="page-memo-textarea" placeholder="22단원 메모를 입력하세요..." oninput="savePageMemo(22)"></textarea></div></div>
+                <div id="sub-page-13" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">13 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-13" onchange="toggleComplete(13)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-13" onclick="toggleBookmark(13)">☆</button></div></div><h2>13. 화재안전조사</h2>
+                    <div class="box">
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <tbody>
+                                    <tr><td style="width:22%; text-align:center; font-weight:bold; background-color: var(--box-bg);">주체</td><td>소방청장, 소방본부장 또는 소방서장 (<span class="blue_nb">소방관서장</span>)</td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">대상</td><td>소방대상물, 관계지역 또는 관계인에 대하여</td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">활동</td><td>소방시설등이 소방관계법령에 적합하게 설치·관리되고 있는지, 화재 발생 위험이 있는지 등을 확인하기 위해 <span class="highlight">현장조사·문서열람·보고요구</span> 등을 하는 활동</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">📋 화재안전조사 실시 가능 경우 (핵심만 요약)</div>
+                        <ul style="margin-bottom:0;">
+                            <li>자체점검·화재예방안전진단이 <span class="red">불성실·불완전</span>하다고 인정되는 경우</li>
+                            <li>화재예방강화지구 등 법령으로 실시하도록 규정된 경우</li>
+                            <li>국가적 행사 등 주요 행사 개최 장소 및 주변 지역</li>
+                            <li>화재가 자주 발생했거나 발생 우려가 뚜렷한 곳</li>
+                            <li>재난예측정보·기상예보 등으로 화재 위험이 크다고 판단되는 경우</li>
+                            <li>그 밖에 긴급한 상황으로 인명·재산 피해 우려가 <span class="highlight">현저</span>한 경우</li>
+                        </ul>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">📋 화재안전조사 항목 (13가지 중 시험 빈출 위주)</div>
+                        <ul style="margin-bottom:0;">
+                            <li>화재의 예방조치, 소방안전관리 업무 수행, 피난계획 수립·시행</li>
+                            <li>소화·통보·피난 훈련 및 안전관리 교육</li>
+                            <li>소방시설의 설치·관리, 피난·방화시설(방화구획)의 관리</li>
+                            <li><span class="highlight">방염</span>에 관한 사항, 소방시설등의 <span class="highlight">자체점검</span>에 관한 사항</li>
+                            <li>다중이용업소·위험물안전관리법 등 안전관리에 관한 사항</li>
+                        </ul>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">🔍 조사 방법 & 절차</div>
+                        <ul style="margin-bottom:0;">
+                            <li><b>종합조사:</b> 조사 항목 전부를 확인 / <b>부분조사:</b> 항목 중 일부만 확인</li>
+                            <li>소방관서장은 조사계획(대상·기간·사유)을 인터넷 홈페이지 등에 <span class="highlight">7일 이상</span> 공개</li>
+                            <li><span class="red">사전 통지 없이</span> 조사하는 경우, 조사 전 관계인에게 사유·범위를 현장에서 설명해야 함</li>
+                            <li>소속 공무원을 통해 관계인에게 자료 제출, 현장 조사·질문을 요구할 수 있음</li>
+                        </ul>
+
+                        <div class="highlight-box" style="margin-top:16px;">
+                            <b>💡 결과에 따른 조치명령:</b><br>
+                            소방관서장은 위반 사항에 대해 관계인에게 <span class="red">개수·이전·제거·사용금지(제한)·사용폐쇄·공사정지</span> 등을 명할 수 있고, 필요시 관계 행정기관에 조치를 요청할 수 있음
+                        </div>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 13단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec13')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec13"><div class="mini-q-title">Q1. 화재안전조사를 실시할 수 있는 자는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec13-1', this, '소방청장, 소방본부장 또는 소방서장')">시·도지사</button><button class="font-btn" onclick="checkMiniChoice('sec13-1', this, '소방청장, 소방본부장 또는 소방서장')">소방청장, 소방본부장 또는 소방서장</button></div><div id="res-sec13-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec13"><div class="mini-q-title">Q2. 화재안전조사 계획은 인터넷 홈페이지 등에 며칠 이상 공개해야 하는가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec13-2', this, '7일 이상')">3일 이상</button><button class="font-btn" onclick="checkMiniChoice('sec13-2', this, '7일 이상')">7일 이상</button></div><div id="res-sec13-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec13"><div class="mini-q-title">Q3. 조사 항목 전부를 확인하는 조사 방법은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec13-3', this, '종합조사')">부분조사</button><button class="font-btn" onclick="checkMiniChoice('sec13-3', this, '종합조사')">종합조사</button></div><div id="res-sec13-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-13" class="page-memo-textarea" placeholder="13단원 메모를 입력하세요..." oninput="savePageMemo(13)"></textarea></div></div>
+                <div id="sub-page-14" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">14 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-14" onchange="toggleComplete(14)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-14" onclick="toggleBookmark(14)">☆</button></div></div><h2>14. 단독주택&공동주택</h2>
+                    <div class="box">
+                        <ul style="margin-bottom:0;">
+                            <li>단독주택 및 공동주택의 소유자는 <span class="highlight">소화기</span> 그리고 <span class="highlight">단독경보형감지기</span>를 설치하도록 법적으로 제정되었다.</li>
+                            <li><span class="red">(아파트 및 기숙사는 제외)</span> — 스프링클러·자탐설비 등 별도 소방시설 기준이 적용되는 공동주택이므로 제외됨</li>
+                        </ul>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 14단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec14')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec14"><div class="mini-q-title">Q1. 단독주택·공동주택 소유자가 설치해야 하는 소방시설 2가지는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec14-1', this, '소화기, 단독경보형감지기')">소화기, 단독경보형감지기</button><button class="font-btn" onclick="checkMiniChoice('sec14-1', this, '소화기, 단독경보형감지기')">스프링클러, 자동화재탐지설비</button></div><div id="res-sec14-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec14"><div class="mini-q-title">Q2. 소화기·단독경보형감지기 설치 의무에서 제외되는 대상은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec14-2', this, '아파트 및 기숙사')">단독주택</button><button class="font-btn" onclick="checkMiniChoice('sec14-2', this, '아파트 및 기숙사')">아파트 및 기숙사</button></div><div id="res-sec14-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec14"><div class="mini-q-title">Q3. 이 설치 의무는 누구에게 부과되는가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec14-3', this, '주택의 소유자')">주택의 소유자</button><button class="font-btn" onclick="checkMiniChoice('sec14-3', this, '주택의 소유자')">소방안전관리자</button></div><div id="res-sec14-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-14" class="page-memo-textarea" placeholder="14단원 메모를 입력하세요..." oninput="savePageMemo(14)"></textarea></div></div>
+                <div id="sub-page-15" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">15 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-15" onchange="toggleComplete(15)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-15" onclick="toggleBookmark(15)">☆</button></div></div><h2>15. 특별피난계단</h2>
+                    <div class="box">
+                        <p style="margin-top:0;"><b>개념:</b> 화재 발생 시 화재나 연기 등이 피난·방화시설에 끼치는 영향을 최소화하기 위해 설계된 피난계단의 종류</p>
+                        <div class="highlight-box" style="text-align:center; font-weight:700;">
+                            <span class="highlight">옥내</span> → 복도 → <span class="highlight">부속실</span> → 계단실 → 피난층
+                        </div>
+                        <div class="note" style="margin-top:14px;">
+                            💡 옥내(건축물 내부)에서 계단실로 이어지는 공간 사이에 <span class="red">방화문을 이중 설치</span>하여 화재·연기 확산을 막고 안전하게 대피하도록 구획된 공간이 <b>부속실</b>이다.
+                        </div>
+                        <p style="margin-bottom:0;"><b>피난층</b>이란, 곧바로 <span class="highlight">지상</span>으로 가는 <span class="highlight">출입구</span>가 있는 층이다.</p>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 15단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec15')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec15"><div class="mini-q-title">Q1. 특별피난계단의 피난 이동 경로 순서로 옳은 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec15-1', this, '옥내 → 복도 → 부속실 → 계단실 → 피난층')">옥내 → 복도 → 계단실 → 부속실 → 피난층</button><button class="font-btn" onclick="checkMiniChoice('sec15-1', this, '옥내 → 복도 → 부속실 → 계단실 → 피난층')">옥내 → 복도 → 부속실 → 계단실 → 피난층</button></div><div id="res-sec15-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec15"><div class="mini-q-title">Q2. 옥내와 계단실 사이, 방화문을 이중 설치해 화재·연기 확산을 막는 구획된 공간은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec15-2', this, '부속실')">복도</button><button class="font-btn" onclick="checkMiniChoice('sec15-2', this, '부속실')">부속실</button></div><div id="res-sec15-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec15"><div class="mini-q-title">Q3. '피난층'이란 곧바로 무엇으로 가는 출입구가 있는 층인가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec15-3', this, '지상')">복도</button><button class="font-btn" onclick="checkMiniChoice('sec15-3', this, '지상')">지상</button></div><div id="res-sec15-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-15" class="page-memo-textarea" placeholder="15단원 메모를 입력하세요..." oninput="savePageMemo(15)"></textarea></div></div>
+                <div id="sub-page-16" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">16 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-16" onchange="toggleComplete(16)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-16" onclick="toggleBookmark(16)">☆</button></div></div><h2>16. 피난.방화시설의 유지.관리 및 금지행위</h2>
+                    <div class="box">
+                        <p style="margin-top:0;">「건축법」에서 규정하는 피난·방화시설은 화재 안전 확보에 중요한 기능을 하므로, <span class="red">관계인이 의무적으로 유지·관리</span>해야 한다.</p>
+                        <ul style="margin-bottom:0;">
+                            <li><b>피난시설:</b> 계단(직통·피난계단), 복도, (비상구 포함)출입구, 옥상광장, 피난안전구역, 피난용 승강기·승강장 등</li>
+                            <li><b>방화시설:</b> 방화구획(방화문, 방화셔터, 내화구조의 바닥·벽), 방화벽, 내화성능을 갖춘 내부마감재 등</li>
+                        </ul>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">🚫 금지행위 5가지 유형</div>
+                        <ul style="margin-bottom:0;">
+                            <li><b>① 폐쇄(잠금 포함)행위:</b> 계단·복도에 방범철책 설치로 피난 불가하게 하는 행위, 비상구에 <span class="red">고정식 잠금장치</span> 설치, 쇠창살·용접·합판 등으로 비상구 개방을 막는 행위</li>
+                            <li><b>② 훼손행위:</b> 방화문 철거, 방화문에 <span class="highlight">도어스톱(고임장치)</span> 설치, 자동폐쇄장치 제거, 배연설비 작동 지장</li>
+                            <li><b>③ 설치(적치)행위:</b> 계단·복도·출입구에 물건 적재 및 장애물 방치, 방화셔터 주위 물건 방치</li>
+                            <li><b>④ 변경행위:</b> 방화구획·내부마감재 임의 변경, 방화문을 목재·유리문으로 변경, 임의구획으로 무창층 발생</li>
+                            <li><b>⑤ 용도장애·소방활동 지장 초래 행위:</b> 위 ①~④ 행위로 용도 장애 유발, 소방호스 전개 시 걸림 등으로 소방활동 지장 초래</li>
+                        </ul>
+
+                        <div class="note" style="margin-top:14px;">
+                            💬 <b>시건장치 = 잠금장치.</b> 방화문에 "시건장치를 설치했다"는 것은 잠금장치를 설치했다는 뜻이므로 <span class="red">금지행위에 해당</span>한다. 기본적으로 방화문은 <span class="highlight">닫혀있어야</span> 한다 (불길 확산 방지).
+                        </div>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 16단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec16')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec16"><div class="mini-q-title">Q1. 방화문에 도어스톱(고임장치)을 설치해 항상 열어두는 행위는 어떤 금지행위 유형인가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec16-1', this, '훼손행위')">폐쇄행위</button><button class="font-btn" onclick="checkMiniChoice('sec16-1', this, '훼손행위')">훼손행위</button></div><div id="res-sec16-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec16"><div class="mini-q-title">Q2. 비상구에 고정식 잠금장치(시건장치)를 설치하는 행위는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec16-2', this, '금지행위에 해당')">문제 없음</button><button class="font-btn" onclick="checkMiniChoice('sec16-2', this, '금지행위에 해당')">금지행위에 해당</button></div><div id="res-sec16-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec16"><div class="mini-q-title">Q3. 계단·복도·출입구에 물건을 쌓아 장애물을 방치하는 행위는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec16-3', this, '설치(적치)행위')">변경행위</button><button class="font-btn" onclick="checkMiniChoice('sec16-3', this, '설치(적치)행위')">설치(적치)행위</button></div><div id="res-sec16-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-16" class="page-memo-textarea" placeholder="16단원 메모를 입력하세요..." oninput="savePageMemo(16)"></textarea></div></div>
+                <div id="sub-page-17" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">17 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-17" onchange="toggleComplete(17)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-17" onclick="toggleBookmark(17)">☆</button></div></div><h2>17. 옥상광장 출입문 개방 안전관리</h2>
+                    <div class="box">
+                        <p style="margin-top:0;">다음 대상은 옥상으로 통하는 출입문에, 화재 등 비상 시 소방시스템과 연동되어 잠금 상태가 자동으로 풀리는 <span class="highlight">비상문 자동개폐장치</span>를 설치해야 한다.</p>
+                        <ul style="margin-bottom:0;">
+                            <li><b>①</b> <span class="highlight">5층 이상</span>의 층이 문화 및 집회시설, 종교시설, 판매시설, 장례시설 등으로 쓰이는 경우로, 피난 용도의 광장을 옥상에 설치해야 하는 건축물</li>
+                            <li><b>②</b> 피난 용도의 광장을 옥상에 설치해야 하는 <span class="highlight">다중이용 건축물</span>, 연면적 <span class="highlight">1천㎡ 이상</span>인 공동주택</li>
+                            <li><b>③</b> 옥상공간을 확보해야 하는 대상으로 <span class="highlight">층수가 11층 이상</span>인 건축물로서, 11층 이상인 층의 바닥면적 합계가 <span class="highlight">1만㎡ 이상</span>인 건축물의 출입문</li>
+                        </ul>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 17단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec17')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec17"><div class="mini-q-title">Q1. 화재 등 비상 시 소방시스템과 연동되어 옥상 출입문 잠금이 자동으로 풀리는 장치는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec17-1', this, '비상문 자동개폐장치')">자동폐쇄장치</button><button class="font-btn" onclick="checkMiniChoice('sec17-1', this, '비상문 자동개폐장치')">비상문 자동개폐장치</button></div><div id="res-sec17-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec17"><div class="mini-q-title">Q2. 옥상공간 확보 대상 건축물의 층수 기준은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec17-2', this, '11층 이상')">5층 이상</button><button class="font-btn" onclick="checkMiniChoice('sec17-2', this, '11층 이상')">11층 이상</button></div><div id="res-sec17-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec17"><div class="mini-q-title">Q3. 피난 용도 광장을 옥상에 설치해야 하는 공동주택의 연면적 기준은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec17-3', this, '1천㎡ 이상')">1천㎡ 이상</button><button class="font-btn" onclick="checkMiniChoice('sec17-3', this, '1천㎡ 이상')">1만㎡ 이상</button></div><div id="res-sec17-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-17" class="page-memo-textarea" placeholder="17단원 메모를 입력하세요..." oninput="savePageMemo(17)"></textarea></div></div>
+                <div id="sub-page-18" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">18 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-18" onchange="toggleComplete(18)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-18" onclick="toggleBookmark(18)">☆</button></div></div><h2>18. 소방안전관리자의 실무교육</h2>
+                    <div class="box">
+                        <p style="margin-top:0;"><b>1) 대상:</b> 소방안전관리자 및 보조자로 <span class="red">실제 선임된 사람</span> (자격증만 취득하고 선임되지 않았다면 실무교육 의무 없음)</p>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">2) 실무교육 이수 기간</div>
+                        <ul style="margin-bottom:0;">
+                            <li>선임 후 <span class="highlight">6개월 이내</span> 최초 실시 (단, 소방안전관련 업무경력으로 선임된 <b>보조자</b>는 <span class="highlight">3개월 이내</span>)</li>
+                            <li>최초 실무교육 후 <span class="highlight">2년마다</span> 1회 이상 (2년 후 같은 날의 <span class="red">전날까지</span>)</li>
+                        </ul>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">3) 이수 날짜 계산 기준</div>
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead><tr><th style="text-align:center;">강습 수료 후 1년 이내 선임</th><th style="text-align:center;">강습 수료 후 1년 지나서 선임</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>‘<span class="blue_nb">강습 수료일</span>’에 [6개월 내 최초 실무교육]을 이수한 것으로 인정 → 이후 <span class="highlight">강습 수료일 기준 2년마다</span></td>
+                                        <td>‘<span class="blue_nb">선임된 날</span>’ 기준으로 [6개월 내 최초 실무교육] 이수 → 이후 <span class="highlight">최초 실무교육일 기준 2년마다</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="note" style="margin-top:12px; font-size:0.85em;">
+                            📌 예시: 강습수료 20.08.20, 선임일 21.08.15(1년 이내) → 수료일 기준 2년 후 전날인 <b>22.08.19</b>까지 실무교육<br>
+                            반대로 선임일 21.09.20(1년 경과) → 선임일 기준 6개월 내인 <b>22.03.19</b>까지 최초 실무교육
+                        </div>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">4) 실무교육 미이수 시 제재</div>
+                        <ul style="margin-bottom:0;">
+                            <li>소방청장 권한으로 <span class="highlight">1년 이하</span> 자격정지 + <span class="highlight">50만 원</span>의 과태료 (100만 원 이하 항목)</li>
+                            <li><b>1차:</b> 경고(시정명령) / <b>2차:</b> 자격정지 3개월 / <b>3차:</b> 자격정지 6개월</li>
+                        </ul>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 18단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec18')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec18"><div class="mini-q-title">Q1. 실무교육은 선임 후 최초 몇 개월 이내에 이수해야 하는가? (보조자 원칙)</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec18-1', this, '6개월 이내')">3개월 이내</button><button class="font-btn" onclick="checkMiniChoice('sec18-1', this, '6개월 이내')">6개월 이내</button></div><div id="res-sec18-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec18"><div class="mini-q-title">Q2. 최초 실무교육 이후에는 몇 년마다 1회 이상 받아야 하는가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec18-2', this, '2년마다')">1년마다</button><button class="font-btn" onclick="checkMiniChoice('sec18-2', this, '2년마다')">2년마다</button></div><div id="res-sec18-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec18"><div class="mini-q-title">Q3. 실무교육을 받지 않은 경우 소방청장이 정할 수 있는 자격정지 최대 기간은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec18-3', this, '1년 이하')">6개월 이하</button><button class="font-btn" onclick="checkMiniChoice('sec18-3', this, '1년 이하')">1년 이하</button></div><div id="res-sec18-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-18" class="page-memo-textarea" placeholder="18단원 메모를 입력하세요..." oninput="savePageMemo(18)"></textarea></div></div>
+                <div id="sub-page-19" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">19 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-19" onchange="toggleComplete(19)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-19" onclick="toggleBookmark(19)">☆</button></div></div><h2>19. 벌칙(벌금 및 과태료)(필수암기)</h2>
+                    <div class="box">
+                        <p style="margin-top:0;"><b>1) 벌금:</b> <span class="red">전과기록이 남는</span> 비교적 무거운 벌칙, <span class="highlight">양벌규정</span> 부과 가능</p>
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead><tr><th style="width:16%; text-align:center;">금액</th><th>핵심 위반행위 (예시)</th></tr></thead>
+                                <tbody>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);"><span class="red">5년/5천</span><br>이하</td><td>위력·폭행으로 화재진압·구조 방해, 고의로 소방대 출입/소방차 출동 방해, 장비파손, 소방용수시설·비상소화장치 사용방해<br><span class="blue_nb">※ 소방시설법: 소방시설 폐쇄·차단 → 상해 7년/7천, 사망 10년/1억</span></td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">3년/3천<br>이하</td><td>소방대상물·토지의 강제처분 방해, 화재안전조사 결과 조치명령 위반, 화재예방안전진단 결과 보수·보강 조치명령 위반, 자체점검 이행계획 미이행</td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">1년/1천<br>이하</td><td>소방안전관리자 자격증 대여·알선, 화재예방안전진단 미실시, <span class="highlight">점검 미실시</span> (1년마다 해야 하니 1년/1천으로 암기)</td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">300<br>이하</td><td>화재안전조사 거부·방해·기피, 조치명령 불이행, (총괄)소방안전관리(보조)자 미선임, 위반사실 발견 후 조치 미요구, 자체점검 결과 중대위반사항 미조치</td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">100<br>이하</td><td>생활안전활동 방해, 인명구출·화재진압 조치 안 한 관계인, 피난명령 위반, 물·수도 개폐장치 사용·조작 방해</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="note" style="margin-top:12px; font-size:0.88em;">
+                            💬 <b>양벌규정:</b> 법인 대표자·대리인·사용인 등이 업무 관련 벌금형 위반행위를 하면, 그 행위자 외에 법인·개인에게도 같은 벌금형을 부과. 단, 법인·개인이 <span class="red">상당한 주의·감독을 게을리하지 않았다면</span> 부과하지 않음. (※ 양벌규정은 <span class="highlight">벌금형에만</span> 적용, 과태료엔 적용 안 됨)
+                        </div>
+
+                        <p style="margin: 18px 0 6px 0;"><b>2) 과태료:</b> 법령 위반 시 부과되는 금전적 벌칙, <span class="mint">전과기록 남지 않음</span></p>
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead><tr><th style="width:16%; text-align:center;">금액</th><th>핵심 위반행위 (예시)</th></tr></thead>
+                                <tbody>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">500<br>이하</td><td>화재·구조·구급이 필요한 상황을 <span class="red">거짓으로 신고</span></td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">300<br>이하</td><td>화기취급 위반, 소방안전관리자 겸직, 소방안전관리업무 안 한 관계인, 피난정보 미제공·훈련교육 미실시, 소방시설 미설치·관리, 피난·방화시설(구획) 폐쇄·훼손·변경, 점검기록표 미기록·미게시 <span class="blue_nb">(1차 100 / 2차 200 / 3차 300)</span></td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">200<br>이하</td><td>소방차 출동에 지장을 줌(끼어들기 등), 안전원 사칭, 선임 신고 미이행 <span class="blue_nb">(1개월 미만 50 / 3개월 미만 100 / 3개월 이상·미신고 200)</span></td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">100<br>이하</td><td>소방차 전용구역 주차·진입 방해, <span class="highlight">실무교육 미이수 (소방안전관리자·보조자 50만 원)</span></td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">20<br>이하</td><td>화재로 오인할 불을 피우거나 연막소독 전 미신고 (시장지역, 석유화학공장 지역, 공장·창고·목조건물·위험물시설 밀집지역 등)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="highlight-box" style="margin-top:14px;">
+                            <b>⭐ 비교 암기 (헷갈리기 쉬운 포인트)</b><br>
+                            소방차 출동을 <span class="red">고의로 방해</span> → <b>5년 이하 징역 또는 5천만 원 이하 벌금</b><br>
+                            소방차 출동에 <span class="mint">지장을 줌</span>(끼어들기, 양보 안 함 등) → <b>200만 원 이하 과태료</b>
+                        </div>
+                        <div class="note" style="margin-top:12px; font-size:0.85em;">
+                            💬 <b>화재예방안전진단:</b> 피해 규모가 클 것으로 예상되는 소방대상물의 화재위험요인을 조사·평가하여 개선대책을 수립하는 것. 진단 결과 미제출 시 <span class="highlight">300 이하 과태료</span>
+                        </div>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 19단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec19')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec19"><div class="mini-q-title">Q1. 소방차 출동을 고의로 방해한 경우 처벌 기준은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec19-1', this, '5년 이하 징역 또는 5천만 원 이하 벌금')">200만 원 이하 과태료</button><button class="font-btn" onclick="checkMiniChoice('sec19-1', this, '5년 이하 징역 또는 5천만 원 이하 벌금')">5년 이하 징역 또는 5천만 원 이하 벌금</button></div><div id="res-sec19-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec19"><div class="mini-q-title">Q2. 소방안전관리자 자격증을 다른 사람에게 빌려준 경우의 벌칙은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec19-2', this, '1년 이하 징역 또는 1천만 원 이하 벌금')">300만 원 이하 과태료</button><button class="font-btn" onclick="checkMiniChoice('sec19-2', this, '1년 이하 징역 또는 1천만 원 이하 벌금')">1년 이하 징역 또는 1천만 원 이하 벌금</button></div><div id="res-sec19-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec19"><div class="mini-q-title">Q3. 양벌규정이 적용되는 벌칙 종류는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec19-3', this, '벌금형')">과태료</button><button class="font-btn" onclick="checkMiniChoice('sec19-3', this, '벌금형')">벌금형</button></div><div id="res-sec19-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-19" class="page-memo-textarea" placeholder="19단원 메모를 입력하세요..." oninput="savePageMemo(19)"></textarea></div></div>
+                <div id="sub-page-20" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">20 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-20" onchange="toggleComplete(20)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-20" onclick="toggleBookmark(20)">☆</button></div></div><h2>20. 화재 예방조치</h2>
+                    <div class="box">
+                        <p style="margin-top:0;"><b>1) 화재예방강화지구 지정 대상</b></p>
+                        <ul style="margin-bottom:0;">
+                            <li>시장지역, 석유화학제품 생산공장이 있는 지역</li>
+                            <li>공장·창고 / 목조건물 / 위험물 저장·처리시설 / 노후·불량건축물이 <span class="highlight">밀집한</span> 지역</li>
+                            <li>산업단지, 물류단지</li>
+                            <li><span class="red">소방시설·소방용수시설 또는 소방출동로가 없는</span> 지역</li>
+                            <li>그 밖에 소방관서장이 지정 필요를 인정하는 지역</li>
+                        </ul>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">2) 화재 예방조치 등</div>
+                        <ul style="margin-bottom:0;">
+                            <li>화재예방강화지구 등에서는 누구든지 <span class="red">모닥불·흡연 등 화기 취급, 풍등 등 소형 열기구 날리기, 용접·용단 등 불꽃 발생 행위</span>를 해서는 안 됨 (단, 안전조치를 한 경우는 예외)</li>
+                            <li>소방관서장은 화재 위험이 크거나 소화활동 지장을 줄 수 있는 행위·물건에 대해 <b>금지·제한</b>, 가연성 물건 <b>적재금지·이격·제거</b>, 소방차량 통행 지장 물건 <b>이동</b> 명령 가능</li>
+                            <li>물건 소유자를 알 수 없는 경우, 소속 공무원이 그 물건을 옮기거나 <span class="highlight">보관</span>하는 등 필요한 조치를 할 수 있음</li>
+                        </ul>
+
+                        <div class="note" style="margin-top:14px; font-size:0.88em;">
+                            📌 <b>보관 기간 계산:</b> 옮긴 날부터 <span class="highlight">14일 동안</span> 인터넷 홈페이지 등에 공고, 보관기간은 <span class="highlight">공고 종료일 다음날부터 7일</span><br>
+                            예) 12/1 옮김 → 12/14까지 공고 → 12/15~21 보관 → <b>총 보관기간 21일</b>
+                        </div>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 20단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec20')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec20"><div class="mini-q-title">Q1. 화재예방강화지구 지정 대상이 아닌 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec20-1', this, '소방시설·소방용수시설이 충분히 갖춰진 지역')">시장지역</button><button class="font-btn" onclick="checkMiniChoice('sec20-1', this, '소방시설·소방용수시설이 충분히 갖춰진 지역')">소방시설·소방용수시설이 충분히 갖춰진 지역</button></div><div id="res-sec20-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec20"><div class="mini-q-title">Q2. 12월 1일에 옮긴 물건의 총 보관기간은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec20-2', this, '21일')">14일</button><button class="font-btn" onclick="checkMiniChoice('sec20-2', this, '21일')">21일</button></div><div id="res-sec20-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec20"><div class="mini-q-title">Q3. 옮긴 물건의 보관 사실은 며칠 동안 공고해야 하는가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec20-3', this, '14일')">7일</button><button class="font-btn" onclick="checkMiniChoice('sec20-3', this, '14일')">14일</button></div><div id="res-sec20-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-20" class="page-memo-textarea" placeholder="20단원 메모를 입력하세요..." oninput="savePageMemo(20)"></textarea></div></div>
+                <div id="sub-page-21" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">21 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-21" onchange="toggleComplete(21)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-21" onclick="toggleBookmark(21)">☆</button></div></div><h2>21. 방염</h2>
+                    <div class="box">
+                        <p style="margin-top:0;"><b>1) 목적:</b> <span class="highlight">연소확대 방지·지연</span>, 피난시간 확보, 인명·재산 피해 최소화</p>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">2) 방염대상물품 사용 의무 대상 (핵심 요약)</div>
+                        <ul style="margin-bottom:0;">
+                            <li>근린생활시설(의원·조리원·체력단련장·공연장·종교집회장), 문화·집회·종교·운동시설(수영장 제외)</li>
+                            <li>의료시설, 노유자시설, 교육연구시설 중 합숙소, 숙박(가능)시설</li>
+                            <li>방송국·촬영소, <span class="highlight">다중이용업소</span>, 층수 <span class="highlight">11층 이상</span> (아파트 제외)</li>
+                            <li><span class="red">특이사항:</span> 단란주점·유흥주점·노래연습장 영업장 → 섬유류·합성수지류 소파·의자만 의무 대상</li>
+                        </ul>
+                        <p style="margin: 10px 0 0 0;"><b>대상 물품:</b> 커튼류, 카펫, 벽지류(2mm 미만 종이벽지 제외), 전시·무대용 합판·섬유판, 암막·무대막, 붙박이 가구류, 합판·목재, 칸막이, 흡음재·방음재 등</p>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">방염처리 물품 사용 "권장" 대상</div>
+                        <p style="margin-top:0;">다중이용업소, 의료·노유자시설, 숙박시설, 장례식장, 건축물 내부 천장·벽 부착 가구류 → <span class="mint">침구류, 소파, 의자</span> 사용 권장</p>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">3) 방염처리 물품의 성능검사</div>
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead><tr><th style="text-align:center;">구분</th><th style="text-align:center;">선처리물품</th><th style="text-align:center;">현장처리물품</th></tr></thead>
+                                <tbody>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">정의</td><td>제조·가공 과정에서 방염처리 (커튼류·카펫·합판·목재류 등)</td><td>설치 현장에서 방염처리 (목재 및 합판)</td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">실시기관</td><td><span class="highlight">한국소방산업기술원</span></td><td><span class="highlight">시·도지사(관할 소방서장)</span></td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">검사방법</td><td>신청 수량 중 일정 수량 <span class="blue_nb">표본 추출</span>하여 실시</td><td>일정 크기·수량의 표본을 <span class="blue_nb">제출받아</span> 실시</td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">합격표시</td><td>방염성능검사 <span class="highlight">합격표시</span> 부착</td><td>방염성능검사 <span class="highlight">확인표시</span> 부착</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 21단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec21')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec21"><div class="mini-q-title">Q1. 방염의 목적으로 옳은 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec21-1', this, '연소확대 방지·지연 및 피난시간 확보')">화재 발생 자체를 원천 차단</button><button class="font-btn" onclick="checkMiniChoice('sec21-1', this, '연소확대 방지·지연 및 피난시간 확보')">연소확대 방지·지연 및 피난시간 확보</button></div><div id="res-sec21-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec21"><div class="mini-q-title">Q2. 선처리물품의 방염성능검사 실시기관은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec21-2', this, '한국소방산업기술원')">관할 소방서장</button><button class="font-btn" onclick="checkMiniChoice('sec21-2', this, '한국소방산업기술원')">한국소방산업기술원</button></div><div id="res-sec21-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec21"><div class="mini-q-title">Q3. 단란주점·유흥주점·노래연습장에서 방염대상물품 의무 대상은 무엇인가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec21-3', this, '섬유류·합성수지류를 원료로 한 소파·의자')">벽지류 전체</button><button class="font-btn" onclick="checkMiniChoice('sec21-3', this, '섬유류·합성수지류를 원료로 한 소파·의자')">섬유류·합성수지류를 원료로 한 소파·의자</button></div><div id="res-sec21-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-21" class="page-memo-textarea" placeholder="21단원 메모를 입력하세요..." oninput="savePageMemo(21)"></textarea></div></div>
+                <div id="sub-page-22" class="sub-page"><div class="sub-page-header"><div style="display:flex; align-items:center; gap:8px;"><div class="page-indicator">22 / 22 PAGE</div><button class="font-btn" onclick="showSubMenu()" style="font-size:0.75em; padding:4px 8px;">📋 단원 목록</button></div><div style="display:flex; align-items:center; gap:10px;"><label class="complete-check-label"><input type="checkbox" id="check-page-22" onchange="toggleComplete(22)"> 학습 완료</label><button class="bookmark-btn" id="star-btn-22" onclick="toggleBookmark(22)">☆</button></div></div><h2>22. 합격표시 및 표지</h2>
+                    <div class="box">
+                        <p style="margin-top:0;"><b>1) 방염물품 종별 표시 양식</b></p>
+                        <ul style="margin-bottom:0;">
+                            <li>합격표시를 <b>바로 붙일 수 있는 것</b>(합판, 섬유판, 소파·의자 등) → <span class="highlight">8mm</span></li>
+                            <li>합격표시를 <b>가열하여 붙일 수 있는 것</b>(커튼 등) → <span class="highlight">5mm</span></li>
+                        </ul>
+                        <div class="highlight-box" style="margin-top:12px;">
+                            <b>🔊 암기 Tip!</b> 바로 붙이는 건 <span class="red">빨리빨리 = 8mm</span> / 가열하는 건 <span class="red">오! 뜨거워 = 5mm</span>
+                        </div>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 18px 0 6px 0; color: var(--text-color);">2) 방염성능검사 합격표시 부착방법</div>
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead><tr><th style="text-align:center;">분류</th><th style="text-align:center;">카펫·소파·의자·섬유판</th><th style="text-align:center;">합성수지 벽지류</th><th style="text-align:center;">합판·목재(블라인드)</th><th style="text-align:center;">섬유류</th></tr></thead>
+                                <tbody>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">바탕색채</td><td style="text-align:center;">흰 바탕</td><td style="text-align:center;">은색 바탕</td><td style="text-align:center;">금색 바탕</td><td style="text-align:center;">세탁O: 은색 / 세탁X: 투명</td></tr>
+                                    <tr><td style="text-align:center; font-weight:bold; background-color: var(--box-bg);">검인·글자색</td><td style="text-align:center;">남색</td><td colspan="2" style="text-align:center;">검정색</td><td style="text-align:center;">-</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div style="font-size: 0.95em; font-weight: bold; margin: 16px 0 6px 0; color: var(--text-color);">부착 위치 (핵심)</div>
+                        <ul style="margin-bottom:0;">
+                            <li>합격표시는 시공·설치 이후 <span class="highlight">확인하기 쉬운 위치</span>에 부착</li>
+                            <li>포장단위가 <b>두루마리</b>인 방염물품 → 제품 폭 끝에서 중앙 방향으로 <span class="highlight">최소 20cm 이상</span> 떨어진 지점에 부착</li>
+                            <li>그 밖의 포장단위(장) 또는 훼손 우려 없는 경우 → 제품 폭 끝에서 <span class="highlight">20cm 이내</span> 부착 가능</li>
+                            <li>섬유류는 표면에 <b>가열 부착</b></li>
+                        </ul>
+                    </div>
+                    <div class="quiz-section">
+                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 22단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec22')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
+                        <div class="mini-q-item" data-sec="sec22"><div class="mini-q-title">Q1. 합판·섬유판처럼 합격표시를 바로 붙일 수 있는 물품의 표시 규격은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec22-1', this, '8mm')">5mm</button><button class="font-btn" onclick="checkMiniChoice('sec22-1', this, '8mm')">8mm</button></div><div id="res-sec22-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec22"><div class="mini-q-title">Q2. 커튼처럼 가열하여 합격표시를 붙이는 물품의 표시 규격은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec22-2', this, '5mm')">5mm</button><button class="font-btn" onclick="checkMiniChoice('sec22-2', this, '5mm')">8mm</button></div><div id="res-sec22-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                        <div class="mini-q-item" data-sec="sec22"><div class="mini-q-title">Q3. 두루마리 포장 방염물품의 합격표시 부착 위치 기준은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec22-3', this, '제품 폭 끝에서 중앙 방향으로 최소 20cm 이상')">아무 곳이나 부착 가능</button><button class="font-btn" onclick="checkMiniChoice('sec22-3', this, '제품 폭 끝에서 중앙 방향으로 최소 20cm 이상')">제품 폭 끝에서 중앙 방향으로 최소 20cm 이상</button></div><div id="res-sec22-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
+                    </div>
+                    <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-22" class="page-memo-textarea" placeholder="22단원 메모를 입력하세요..." oninput="savePageMemo(22)"></textarea></div></div>
             </div>
 
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 20px; margin-bottom: 10px;">
