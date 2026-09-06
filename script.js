@@ -1,4 +1,4 @@
-        var currentSubPage = 0;
+var currentSubPage = 0;
         var totalSubPages = 22;
         var bookmarks = JSON.parse(localStorage.getItem('user_bookmarks') || '[]');
         var completes = JSON.parse(localStorage.getItem('user_completes') || '[]');
@@ -11,6 +11,7 @@
         var isChosungMode = false;
         var originalElementsData = [];
         var wrongNotes = JSON.parse(localStorage.getItem('user_wrong_notes') || '{}');
+        var lastSearchQuery = ""; // 검색어 변경 여부 추적용
 
         var bibleQuotes100 = [
             { text: "시작은 미약하였으나 네 나중은 심히 창대하리라.", ref: "욥기 8:7" },
@@ -40,6 +41,16 @@
             setupMiniEnterKeys();
             renderWrongNotes();
             checkDailyNotify();
+
+            // 스크롤바 클릭 시 input 포커스 튐 및 리셋 방지
+            var searchResults = document.getElementById("search-results");
+            if (searchResults) {
+                searchResults.addEventListener('mousedown', function(e) {
+                    if (e.target === searchResults) {
+                        e.preventDefault();
+                    }
+                });
+            }
         });
 
         function toggleTopPanel() {
@@ -330,19 +341,18 @@
         }
 
         function showCh1Part(partName) {
-            // 검색 등으로 다른 파트를 보다가 바로 점프해올 수도 있으니, 둘 다 우선 숨김
             document.getElementById("ch1-part1-1-container").style.display = "none";
             document.getElementById("ch1-part1-2-container").style.display = "none";
 
             if (partName === 'part1-1') {
                 document.getElementById("ch1-main-menu").style.display = "none";
                 document.getElementById("ch1-part1-1-container").style.display = "block";
-                showSubMenu(); // 들어갈 때마다 항상 단원 목록 화면부터 보여줌
+                showSubMenu();
             }
             if (partName === 'part1-2') {
                 document.getElementById("ch1-main-menu").style.display = "none";
                 document.getElementById("ch1-part1-2-container").style.display = "block";
-                showSubMenuB2(); // 들어갈 때마다 항상 단원 목록 화면부터 보여줌
+                showSubMenuB2();
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -364,10 +374,6 @@
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
-        // ============================================================
-        // 🏗 Part1-2. 건축관계법령 (7개 단원) - 소방관계법령(Part1-1)과는
-        // 별도의 진도/북마크/메모를 쓰는 독립된 파트라서 변수명 뒤에 B2를 붙임
-        // ============================================================
         var currentSubPageB2 = 0;
         var totalSubPagesB2 = 7;
         var completesB2 = JSON.parse(localStorage.getItem('user_completes_b2') || '[]');
@@ -490,7 +496,7 @@
             var testPage = document.getElementById("ch3-sub-page-" + pageNum);
             if (testPage) testPage.style.display = "block";
             if (pageNum === 5) {
-                backToRandomSelect(); // 5회차는 들어올 때마다 항상 선택 화면부터 시작
+                backToRandomSelect();
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -629,7 +635,6 @@
             if (qId.startsWith('ch3-5-')) updateQuizScore(5, currentRandomExamCount);
         }
 
-        // 모의고사 단답형(주관식) 문제 채점 함수 - correctList: 정답으로 인정할 문자열들의 배열
         function checkAnswerByInput(qId, inputEl, correctList) {
             var box = inputEl.closest('.quiz-box');
             var resultEl = document.getElementById("q-result-" + qId);
@@ -756,7 +761,6 @@
                 document.body.classList.add('dark-mode');
                 document.getElementById('darkmode-toggle-btn').innerText = "☀️ 주간";
             }
-            // 상단 "학습 도구" 패널: 이전에 펼쳐둔 적이 있으면 그 상태를 기억하고, 처음 방문이면 기본값(닫힘)을 유지
             if (localStorage.getItem('user_top_panel_collapsed') === 'false') {
                 var panelContent = document.getElementById('collapsible-control-content');
                 var panelBtnText = document.getElementById('panel-toggle-btn-text');
@@ -778,7 +782,6 @@
             updateTimerUI();
             updateProgress();
 
-            // Part1-2 (건축관계법령) 저장된 상태 복원
             completesB2.forEach(function(pageNum) {
                 var chk = document.getElementById("check-page-b2-" + pageNum);
                 if (chk) chk.checked = true;
@@ -794,7 +797,6 @@
             updateProgressB2();
         }
 
-        // 검색어가 포함된 가장 작은 단위(span, li, td 등)를 찾아서, 그 위치로 스크롤하고 잠깐 노란색으로 반짝여줌
         function highlightSearchMatch(pageEl, query) {
             var tieredSelectors = ['span', 'li', 'td', 'p', '.note', '.highlight-box', 'h2'];
             var target = null;
@@ -816,7 +818,6 @@
             }
         }
 
-        // 단원 제목(h2)은 검색 대상에서 빼고, 본문 내용만 검색어와 비교하기 위한 함수
         function getSearchableBodyText(pageEl) {
             var clone = pageEl.cloneNode(true);
             var h2 = clone.querySelector('h2');
@@ -829,10 +830,23 @@
             var clearBtn = document.getElementById("search-clear-btn");
             var query = input.value.trim().toLowerCase();
             var resultsContainer = document.getElementById("search-results");
-            resultsContainer.innerHTML = "";
+            
             clearBtn.style.display = input.value.length > 0 ? "block" : "none";
 
-            if (query.length < 1) { resultsContainer.style.display = "none"; return; }
+            if (query.length < 1) { 
+                resultsContainer.style.display = "none"; 
+                resultsContainer.innerHTML = "";
+                lastSearchQuery = "";
+                return; 
+            }
+
+            // 검색어가 동일할 때 스크롤바 클릭 등에 의한 불필요한 innerHTML 초기화 방지
+            if (query === lastSearchQuery && resultsContainer.children.length > 0) {
+                return;
+            }
+            lastSearchQuery = query;
+
+            resultsContainer.innerHTML = "";
 
             var matches = [];
             for (var i = 1; i <= totalSubPages; i++) {
@@ -842,7 +856,6 @@
                     matches.push({ pageNum: i, title: title, part: 'part1-1' });
                 }
             }
-            // Part1-2 (건축관계법령) 단원도 함께 검색
             for (var j = 1; j <= totalSubPagesB2; j++) {
                 var pageElB2 = document.getElementById("sub-page-b2-" + j);
                 if (pageElB2 && getSearchableBodyText(pageElB2).includes(query)) {
@@ -858,9 +871,8 @@
                     var partLabel = (m.part === 'part1-2') ? "[건축법령 " + m.pageNum + "페이지]" : "[" + m.pageNum + "페이지]";
                     div.innerHTML = "<b>" + partLabel + "</b> " + m.title;
 
-                    var selectResult = function(e) {
-                        if (e) e.preventDefault(); // 입력창 포커스가 먼저 빠져서(키보드 닫힘) 목록이 밀리기 전에 항목을 확정
-                        openTab(null, 'tab-ch1'); // 표지 등 다른 탭에서 검색했어도 이론과개념 탭으로 전환
+                    var selectResult = function() {
+                        openTab(null, 'tab-ch1');
                         showCh1Part(m.part);
                         var targetPageEl;
                         if (m.part === 'part1-2') {
@@ -874,10 +886,9 @@
                         resultsContainer.style.display = "none";
                         input.value = "";
                         clearBtn.style.display = "none";
+                        lastSearchQuery = "";
                     };
-                    // mousedown에서 확정 + preventDefault: 탭하는 순간 입력창이 blur되며 키보드가 닫히기 전에
-                    // 항목을 먼저 확정시켜서, 키보드가 닫히는 reflow로 목록이 밀려도 엉뚱한 항목이 안 눌리게 함
-                    div.addEventListener('mousedown', selectResult);
+                    div.onclick = selectResult;
                     resultsContainer.appendChild(div);
                 });
                 resultsContainer.style.display = "block";
@@ -891,11 +902,11 @@
             input.value = "";
             document.getElementById("search-clear-btn").style.display = "none";
             document.getElementById("search-results").style.display = "none";
+            lastSearchQuery = "";
             input.focus();
         }
 
-        // 드롭다운 버튼을 눌렀을 때 목록을 열고 닫음
-        var tabDropdownLabels = {          // 탭 id별로 드롭다운 버튼에 표시할 짧은 이름
+        var tabDropdownLabels = {
             'tab-cover': '표지',
             'tab-ch1': 'I. 이론과 개념',
             'tab-numbers': '📐 숫자·기한 총정리',
@@ -911,7 +922,6 @@
             arrow.innerText = isOpen ? '▲' : '▼';
         }
 
-        // 드롭다운 목록을 강제로 닫음 (탭 선택 후, 또는 바깥을 클릭했을 때 호출)
         function closeTabDropdown() {
             var list = document.getElementById('tab-dropdown-list');
             var arrow = document.getElementById('tab-dropdown-arrow');
@@ -919,7 +929,6 @@
             arrow.innerText = '▼';
         }
 
-        // 드롭다운이 열려있는 상태에서, 메뉴 바깥(다른 곳)을 클릭하면 자동으로 닫히게 함
         document.addEventListener('click', function(e) {
             var container = document.getElementById('tab-dropdown-container');
             if (container && !container.contains(e.target)) {
@@ -941,7 +950,6 @@
             document.getElementById(tabName).classList.add("active");
             if (evt && evt.currentTarget) { evt.currentTarget.classList.add("active"); }
 
-            // 드롭다운 버튼의 표시 글자를 선택한 탭 이름으로 바꾸고, 목록은 닫음
             var labelEl = document.getElementById('tab-dropdown-label');
             if (labelEl && tabDropdownLabels[tabName]) {
                 labelEl.innerText = tabDropdownLabels[tabName];
@@ -1007,12 +1015,18 @@
         var touchstartX = 0, touchendX = 0, touchstartY = 0, touchendY = 0;
 
         document.addEventListener('touchstart', function(event) {
+            if (event.target.closest('.search-results-list') || event.target.closest('.search-box-container')) {
+                return;
+            }
             touchstartX = event.changedTouches[0].screenX;
             touchstartY = event.changedTouches[0].screenY;
         }, false);
 
         document.addEventListener('touchend', function(event) {
-            if (event.target.closest('.table-wrapper') || event.target.closest('.search-box-container') || event.target.closest('.page-memo-textarea')) {
+            if (event.target.closest('.table-wrapper') || 
+                event.target.closest('.search-box-container') || 
+                event.target.closest('.search-results-list') || 
+                event.target.closest('.page-memo-textarea')) {
                 return;
             }
             touchendX = event.changedTouches[0].screenX;
@@ -1043,9 +1057,6 @@
             });
         }
 
-        // ==========================================
-        // 📕 나만의 자동 오답노트 관리 함수
-        // ==========================================
         function renderWrongNotes() {
             var container = document.getElementById("wrong-notes-list");
             var countBadge = document.getElementById("wrong-count-badge");
@@ -1099,15 +1110,9 @@
             }
         }
 
-        // ============================================================
-        // 🚪 뒤로가기 버튼으로 앱 종료할 때 확인 팝업 띄우기
-        // ============================================================
         var exitTrapArmed = false;
 
         function armExitTrap() {
-            // URL 뒤에 흔적(#studying)을 남겨서, 브라우저가 "진짜 이전 페이지가 있다"고
-            // 확실히 인식하게 만듦 (일부 브라우저는 URL 변화 없는 pushState만으로는
-            // 뒤로가기를 그냥 앱 종료로 처리해버리는 경우가 있음)
             if (location.hash !== '#studying') {
                 history.pushState({ exitTrap: true }, '', '#studying');
             }
@@ -1128,24 +1133,18 @@
         function cancelExitApp() {
             var overlay = document.getElementById('exit-confirm-overlay');
             if (overlay) overlay.style.display = 'none';
-            armExitTrap(); // 다시 뒤로가기 함정을 걸어서 계속 공부하게 함
+            armExitTrap();
         }
 
         function confirmExitApp() {
             var overlay = document.getElementById('exit-confirm-overlay');
             if (overlay) overlay.style.display = 'none';
-            // 앱 종료 시도 (환경에 따라 바로 안 닫힐 수 있음 - 그럴 땐 뒤로가기 한 번 더 누르면 종료됨)
             window.close();
         }
 
-        // 스크립트가 body 맨 아래에 있어 DOM은 이미 준비된 상태이므로 바로 실행
         armExitTrap();
         document.addEventListener('DOMContentLoaded', armExitTrap);
 
-
-        // ============================================================
-        // 🎲 랜덤 뽑기 모의고사 (05회차) - 전체 130문제 풀에서 매번 랜덤 출제
-        // ============================================================
         var questionPool = [{"unit":null,"type":"mc","q":"소방기본법의 제정 목적으로 가장 적절한 것은?","opts":["공공의 안녕 및 질서 유지와 복리증진","화재의 예방 및 진압 우선","건축물 안전기준 확립","위험물 허가 업무 수행"],"correct":"공공의 안녕 및 질서 유지와 복리증진","expl":"소방기본법의 목적은 공공의 안녕 및 질서 유지와 복리증진입니다."},{"unit":null,"type":"mc","q":"다음 중 소방관계법령상 '관계인'의 범위에 포함되지 않는 사람은?","opts":["소유자","관리자","소방안전관리자","점유자"],"correct":"소방안전관리자","expl":"관계인은 소유자, 관리자, 점유자입니다."},{"unit":null,"type":"mc","q":"무창층 요건 중 개구부의 크기 및 위치 기준이 옳은 것은?","opts":["지름 40cm 이상, 1.5m 이내","지름 50cm 이상, 1.2m 이내","지름 60cm 이상, 1.0m 이내","지름 50cm 이상, 1.5m 이내"],"correct":"지름 50cm 이상, 1.2m 이내","expl":"지름 50cm 이상 내접원, 하단 바닥에서 1.2m 이내입니다."},{"unit":null,"type":"mc","q":"다음 중 한국소방안전원의 업무가 아닌 것은?","opts":["종사자 기술 교육","대국민 홍보","행정 위탁업무 수행","위험물 시설의 허가 및 승인"],"correct":"위험물 시설의 허가 및 승인","expl":"위험물 시설의 허가/승인은 행정관청의 업무입니다."},{"unit":null,"type":"mc","q":"아파트로서 50층 이상 또는 지상높이 200m 이상인 건축물의 소방안전관리대상물 등급은?","opts":["특급","1급","2급","3급"],"correct":"특급","expl":"아파트 50층 이상 또는 200m 이상은 특급입니다."},{"unit":null,"type":"mc","q":"관리업자에게 대행시킬 수 있는 업무 범위는?","opts":["소방계획서 작성","피난·방화시설 및 소방시설 관리","화기취급 감독","자위소방대 편성"],"correct":"피난·방화시설 및 소방시설 관리","expl":"피난·방화시설 관리 및 소방시설 관리만 대행 가능합니다."},{"unit":null,"type":"mc","q":"다른 안전관리자와 겸직이 불가능한 등급은?","opts":["특급 및 1급","1급 및 2급","2급 및 3급","모든 등급 겸직 가능"],"correct":"특급 및 1급","expl":"특급 및 1급은 겸직이 엄격히 금지됩니다."},{"unit":null,"type":"mc","q":"소방안전관리자 선임 기한은 사유 발생일로부터 며칠 이내인가?","opts":["14일 이내","20일 이내","30일 이내","60일 이내"],"correct":"30일 이내","expl":"선임은 30일 이내, 신고는 선임일로부터 14일 이내입니다."},{"unit":null,"type":"mc","q":"소방안전관리자 선임 연기 신청이 가능한 대상물은?","opts":["2급 및 3급","특급","1급","전 등급"],"correct":"2급 및 3급","expl":"선임 연기는 2급 및 3급 대상물만 신청 가능합니다."},{"unit":null,"type":"mc","q":"현황표에 반드시 표기해야 하는 항목이 아닌 것은?","opts":["관리자 성명/연락처","근무 위치 (수신기 위치)","대상물 등급 및 명칭","관리자의 자격증 종류"],"correct":"관리자의 자격증 종류","expl":"자격 등급(자격증 종류)은 표기 대상이 아닙니다."},{"unit":1,"type":"mc","q":"「화재의 예방 및 안전관리에 관한 법률」의 제정 목적으로 옳은 것은?","opts":["공공의 안녕 및 질서 유지와 복리증진","공공의 안전과 복리증진","소방시설의 규격화 및 산업 육성","국민의 재산권 보호와 피해보상"],"correct":"공공의 안전과 복리증진","expl":"화재예방법과 소방시설법의 목적은 '공공의 안전과 복리증진'이며, 소방기본법의 목적은 '공공의 안녕 및 질서 유지와 복리증진'입니다."},{"unit":2,"type":"mc","q":"소방관계법령상 '소방대상물'에 해당하지 않는 것은?","opts":["항구에 매어둔 선박","도로상에서 운행 중인 차량","산림 및 야외 물건","공해상을 항해 중인 선박"],"correct":"공해상을 항해 중인 선박","expl":"선박은 '항구에 매어둔 선박'만 소방대상물이며, 항해 중인 선박은 제외됩니다."},{"unit":2,"type":"mc","q":"소방기본법령상 화재 현장에서 소방대를 지휘하는 '소방대장'에 해당하는 사람은?","opts":["소방청장 또는 시·도지사","소방본부장 또는 소방서장","의용소방대장","자위소방대장"],"correct":"소방본부장 또는 소방서장","expl":"소방대장은 화재 현장에서 소방대를 지휘하는 '소방본부장 또는 소방서장(본또서장)' 등 현장지휘관을 말합니다."},{"unit":3,"type":"mc","q":"'무창층'이란 지상층 중 유효 개구부 면적의 합계가 해당 층 바닥면적의 얼마 이하가 되는 층인가?","opts":["1/10 이하","1/20 이하","1/30 이하","1/50 이하"],"correct":"1/30 이하","expl":"무창층은 개구부 면적의 합계가 해당 층 바닥면적의 30분의 1 이하인 지상층을 말합니다."},{"unit":4,"type":"mc","q":"다음 중 한국소방안전원의 업무 범위에 속하지 않는 것은?","opts":["소방안전에 관한 대국민 교육 및 홍보","소방기술과 안전관리에 관한 조사·연구","소방안전에 관한 간행물 발간","소방용품의 형식승인 및 제품검사"],"correct":"소방용품의 형식승인 및 제품검사","expl":"소방용품의 형식승인 및 제품검사는 '한국소방산업기술원(KFI)'의 고유 업무입니다."},{"unit":5,"type":"mc","q":"'1급 소방안전관리대상물'의 기준에 해당하는 것은?","opts":["연면적 10만m² 이상인 특정소방대상물","50층 이상이거나 높이 200m 이상인 아파트","30층 이상이거나 지상높이 120m 이상인 아파트","자동화재탐지설비만 설치된 대상물"],"correct":"30층 이상이거나 지상높이 120m 이상인 아파트","expl":"아파트 30층 이상 또는 120m 이상은 1급입니다. (연면적 10만m² 및 아파트 50층/200m 이상은 특급)"},{"unit":5,"type":"mc","q":"'간이스프링클러설비' 또는 '자동화재탐지설비'만 설치된 특정소방대상물의 등급은?","opts":["특급 소방안전관리대상물","1급 소방안전관리대상물","2급 소방안전관리대상물","3급 소방안전관리대상물"],"correct":"3급 소방안전관리대상물","expl":"간이스프링클러설비 또는 자동화재탐지설비 설치 대상은 3급입니다. (일반 스프링클러설비 설치 대상은 2급)"},{"unit":6,"type":"mc","q":"소방안전관리자의 피난·방화시설 관리 및 화기취급 감독 업무일지 작성 주기 및 보관 연수는?","opts":["주 1회 이상 작성, 1년간 보관","월 1회 이상 작성, 2년간 보관","분기 1회 이상 작성, 3년간 보관","반기 1회 이상 작성, 5년간 보관"],"correct":"월 1회 이상 작성, 2년간 보관","expl":"업무수행에 관한 기록·유지는 월 1회 이상 작성하고, 작성한 날부터 2년간 보관해야 합니다."},{"unit":6,"type":"mc","q":"관리업자에게 업무를 대행하게 하여 선임된 소방안전관리자는 선임일로부터 몇 개월 이내에 강습교육을 이수해야 하는가?","opts":["1개월 이내","2개월 이내","3개월 이내","6개월 이내"],"correct":"3개월 이내","expl":"업무 대행 시 소방안전관리자는 선임된 날부터 3개월 이내에 안전원이 실시하는 강습교육을 이수해야 합니다."},{"unit":7,"type":"mc","q":"다음 중 '2급 소방안전관리자'로 선임될 수 있는 자격 기준에 해당하는 사람은?","opts":["소방공무원으로 1년 이상 근무한 자","경찰공무원으로 3년 이상 근무한 자","위험물기능사 자격 취득자","의용소방대원으로 3년 이상 근무한 자"],"correct":"위험물기능사 자격 취득자","expl":"위험물기능장, 위험물산업기사, 위험물기능사는 2급 선임 자격이 주어집니다. (소방공무원은 3년 이상 근무해야 2급)"},{"unit":8,"type":"mc","q":"2·3급 대상물에서 선임연기 승인을 받은 기간 동안 소방안전관리 업무를 수행해야 하는 자는?","opts":["소방본부장 또는 서장","관계인","인근 소방안전관리자","한국소방안전원장"],"correct":"관계인","expl":"선임 연기 기간 중에는 관계인이 직접 소방안전관리 업무를 수행해야 합니다."},{"unit":8,"type":"mc","q":"소방안전관리자 '실무교육' 이수 기한 및 주기로 옳은 것은?","opts":["선임된 날부터 3개월 이내 이수, 이후 1년 주기","선임된 날부터 6개월 이내 이수, 이후 2년 주기","선임된 날부터 1년 이내 이수, 이후 2년 주기","선임된 날부터 6개월 이내 이수, 이후 3년 주기"],"correct":"선임된 날부터 6개월 이내 이수, 이후 2년 주기","expl":"최초 실무교육은 선임일로부터 6개월 이내, 이후에는 2년마다 1회씩 이수해야 합니다."},{"unit":9,"type":"mc","q":"소방안전관리자 현황표에 기재하는 관리자의 '근무 위치'는 원칙적으로 어디를 의미하는가?","opts":["건물 주출입구 안내데스크","소방 펌프실","화재수신기 설치 장소","옥상 출입문 앞"],"correct":"화재수신기 설치 장소","expl":"현황표의 근무 위치는 평상시 감시 및 제어가 이루어지는 '화재수신기 설치 장소(방재실, 경비실 등)'를 뜻합니다."},{"unit":10,"type":"mc","q":"건설현장 소방안전관리자 선임 신고 시 첨부해야 하는 서류 4종에 해당하지 않는 것은?","opts":["건설현장 소방안전관리자 선임신고서","소방안전관리자 자격증","건설현장 공사 계약서 (사본)","시공사의 사업자등록증 사본"],"correct":"시공사의 사업자등록증 사본","expl":"첨부서류 4가지는 ①선임신고서, ②자격증, ③강습교육 수료증, ④공사 계약서 사본입니다."},{"unit":11,"type":"mc","q":"소방본부장 또는 서장이 의료·노유자시설 등에 불시 소방훈련을 실시하려는 경우, 며칠 전까지 관계인에게 사전 통지해야 하는가?","opts":["3일 전까지","7일 전까지","10일 전까지","14일 전까지"],"correct":"10일 전까지","expl":"불시 소방훈련 사전 통지는 실시 10일 전까지, 평가결과서 통보는 훈련 종료일로부터 10일 이내입니다."},{"unit":11,"type":"mc","q":"관계인이 소방훈련 및 교육을 실시한 후 작성한 훈련결과기록부의 자체 보관 기간은?","opts":["실시한 날부터 1년간","소방훈련 및 교육을 실시한 날부터 2년간","실시한 날부터 3년간","영구 보관"],"correct":"소방훈련 및 교육을 실시한 날부터 2년간","expl":"소방훈련 및 교육 결과기록부는 실시한 날부터 2년간 보관해야 합니다."},{"unit":12,"type":"mc","q":"다음 중 법령상 자체점검 중 '작동점검'을 면제(제외)받는 대상물은?","opts":["1급 소방안전관리대상물","스프링클러가 설치된 아파트","특급 소방안전관리대상물","다중이용업소가 입점한 연면적 3천m² 상가"],"correct":"특급 소방안전관리대상물","expl":"특급 대상물은 종합점검을 반기별(연 2회)로 고강도로 실시하므로 작동점검 대상에서 제외됩니다."},{"unit":12,"type":"mc","q":"다음 중 자체점검 중 '종합점검' 대상에 해당하지 않는 것은?","opts":["스프링클러설비가 설치된 연면적 2천m² 근린생활시설","호스릴 방식의 물분무등소화설비만 설치된 연면적 6천m² 공장","다중이용업 영업장이 설치된 연면적 2천m² 특정소방대상물","제연설비가 설치된 터널"],"correct":"호스릴 방식의 물분무등소화설비만 설치된 연면적 6천m² 공장","expl":"물분무등소화설비 연면적 5천m² 이상 기준에서 '호스릴 방식만을 설치한 곳은 제외'합니다."},{"unit":12,"type":"mc","q":"건축물의 사용승인일이 4월 12일이며, 종합점검과 작동점검을 모두 받아야 하는 특정소방대상물의 작동점검 실시 기한은?","opts":["4월 30일","6월 30일","10월 31일","12월 31일"],"correct":"10월 31일","expl":"둘 다 받는 건물은 사용승인 달인 4월에 종합점검을 받고, 6개월이 되는 달인 10월에 작동점검을 실시합니다."},{"unit":12,"type":"mc","q":"소방시설관리업자가 자체점검을 마친 경우, 점검표를 첨부하여 점검 결과를 관계인에게 제출해야 하는 기한은?","opts":["7일 이내","10일 이내","14일 이내","15일 이내"],"correct":"10일 이내","expl":"관리업자는 점검이 끝난 날부터 10일 이내에 관계인에게 제출하고, 관계인은 15일 이내에 소방서에 보고합니다."},{"unit":13,"type":"mc","q":"화재안전조사 계획을 인터넷 홈페이지 등에 공개해야 하는 기간은?","opts":["3일 이상","7일 이상","14일 이상","30일 이상"],"correct":"7일 이상","expl":"화재안전조사 계획(대상·기간·사유 등)은 조사 전 7일 이상 공개해야 합니다."},{"unit":13,"type":"mc","q":"화재안전조사 항목 전부를 확인하는 조사 방법은?","opts":["부분조사","종합조사","정기조사","수시조사"],"correct":"종합조사","expl":"조사 항목 전부를 확인하면 종합조사, 일부만 확인하면 부분조사입니다."},{"unit":13,"type":"short","q":"화재안전조사를 실시할 수 있는 자는 소방청장, 소방본부장 또는 무엇인가?","answers":["소방서장"],"expl":"화재안전조사 주체는 소방청장, 소방본부장 또는 소방서장(소방관서장)입니다."},{"unit":13,"type":"mc","q":"화재안전조사 결과에 따라 소방관서장이 관계인에게 명할 수 없는 것은?","opts":["개수(고치거나 다시 만듦)","이전·제거","사용금지 또는 제한","형사처벌"],"correct":"형사처벌","expl":"소방관서장은 개수·이전·제거·사용금지(제한)·사용폐쇄·공사정지 등을 명할 수 있으나, 형사처벌은 법원의 권한입니다."},{"unit":14,"type":"mc","q":"단독주택 및 공동주택의 소유자가 설치해야 하는 소방시설은?","opts":["스프링클러설비, 자동화재탐지설비","소화기, 단독경보형감지기","옥내소화전, 옥외소화전","제연설비, 배연설비"],"correct":"소화기, 단독경보형감지기","expl":"단독주택·공동주택 소유자는 소화기와 단독경보형감지기를 설치해야 합니다."},{"unit":14,"type":"mc","q":"소화기·단독경보형감지기 설치 의무에서 제외되는 대상은?","opts":["단독주택","연립주택","다세대주택","아파트 및 기숙사"],"correct":"아파트 및 기숙사","expl":"아파트 및 기숙사는 별도의 소방시설 기준이 적용되어 이 규정에서 제외됩니다."},{"unit":14,"type":"short","q":"소화기·단독경보형감지기 설치 의무는 주택의 누구에게 있는가?","answers":["소유자"],"expl":"설치 의무는 단독주택·공동주택의 소유자에게 있습니다."},{"unit":14,"type":"mc","q":"다음 중 소화기·단독경보형감지기 설치 의무 적용을 받는 대상은?","opts":["아파트","기숙사","연립주택","오피스텔(업무시설)"],"correct":"연립주택","expl":"아파트·기숙사는 제외 대상이며, 연립주택은 공동주택으로서 적용 대상입니다."},{"unit":15,"type":"mc","q":"특별피난계단의 피난 이동 경로 순서로 옳은 것은?","opts":["옥내 → 계단실 → 부속실 → 복도 → 피난층","옥내 → 복도 → 부속실 → 계단실 → 피난층","옥내 → 부속실 → 복도 → 계단실 → 피난층","복도 → 옥내 → 부속실 → 계단실 → 피난층"],"correct":"옥내 → 복도 → 부속실 → 계단실 → 피난층","expl":"특별피난계단의 이동 경로는 옥내 → 복도 → 부속실 → 계단실 → 피난층 순서입니다."},{"unit":15,"type":"mc","q":"옥내와 계단실 사이, 방화문을 이중 설치해 화재·연기 확산을 막는 구획된 공간은?","opts":["복도","부속실","피난층","옥상광장"],"correct":"부속실","expl":"방화문을 이중 설치하여 화재·연기의 영향을 최소화한 공간이 부속실입니다."},{"unit":15,"type":"short","q":"'피난층'이란 곧바로 어디로 가는 출입구가 있는 층인가?","answers":["지상"],"expl":"피난층은 곧바로 지상으로 나가는 출입구가 있는 층입니다."},{"unit":15,"type":"mc","q":"특별피난계단을 설계하는 주된 목적은?","opts":["건축비 절감","화재·연기의 영향 최소화","소음 차단","냉난방 효율 향상"],"correct":"화재·연기의 영향 최소화","expl":"특별피난계단은 화재·연기가 피난·방화시설에 끼치는 영향을 최소화하기 위해 설계됩니다."},{"unit":16,"type":"mc","q":"방화문에 도어스톱(고임장치)을 설치해 항상 열어두는 행위는 어떤 금지행위 유형인가?","opts":["폐쇄행위","훼손행위","설치(적치)행위","변경행위"],"correct":"훼손행위","expl":"자동폐쇄장치의 기능을 저해하는 도어스톱 설치는 훼손행위에 해당합니다."},{"unit":16,"type":"mc","q":"비상구에 고정식 잠금장치(시건장치)를 설치하는 행위는?","opts":["문제 없음","금지행위(폐쇄행위)에 해당","권장 사항","소방서 승인 시 가능"],"correct":"금지행위(폐쇄행위)에 해당","expl":"비상구에 고정식 잠금장치를 설치해 쉽게 열 수 없게 하는 것은 폐쇄행위로 금지됩니다."},{"unit":16,"type":"short","q":"시건장치는 어떤 장치와 같은 의미인가?","answers":["잠금장치","잠금"],"expl":"시건장치는 잠금장치와 같은 뜻으로, 방화문에 시건장치가 있으면 금지행위에 해당합니다."},{"unit":16,"type":"mc","q":"계단·복도·출입구에 물건을 쌓아 장애물을 방치하는 행위는?","opts":["폐쇄행위","훼손행위","설치(적치)행위","변경행위"],"correct":"설치(적치)행위","expl":"계단·복도·출입구에 물건을 적재하거나 장애물을 방치하는 것은 설치(적치)행위입니다."},{"unit":17,"type":"mc","q":"화재 등 비상 시 소방시스템과 연동되어 옥상 출입문 잠금이 자동으로 풀리는 장치는?","opts":["자동폐쇄장치","비상문 자동개폐장치","방화셔터","자동화재탐지설비"],"correct":"비상문 자동개폐장치","expl":"이러한 대상물은 비상 시 잠금이 자동으로 풀리는 비상문 자동개폐장치를 설치해야 합니다."},{"unit":17,"type":"mc","q":"옥상공간을 확보해야 하는 대상 건축물의 층수 기준은?","opts":["5층 이상","11층 이상","15층 이상","20층 이상"],"correct":"11층 이상","expl":"층수가 11층 이상이고 11층 이상 층의 바닥면적 합계가 1만㎡ 이상인 건축물이 해당됩니다."},{"unit":17,"type":"short","q":"피난 용도 광장을 옥상에 설치해야 하는 공동주택의 연면적 기준은 몇 ㎡ 이상인가? (숫자만 입력)","answers":["1000","1천"],"expl":"연면적 1천㎡ 이상인 공동주택이 해당됩니다."},{"unit":17,"type":"mc","q":"5층 이상의 층이 문화 및 집회시설, 종교시설, 판매시설 등으로 쓰이는 경우 설치해야 하는 것은?","opts":["비상문 자동개폐장치 및 옥상 피난 광장","소화기만 추가 비치","스프링클러설비만 추가 설치","해당 없음"],"correct":"비상문 자동개폐장치 및 옥상 피난 광장","expl":"이런 대상은 피난 용도 광장을 옥상에 설치하고 비상문 자동개폐장치를 갖춰야 합니다."},{"unit":18,"type":"mc","q":"소방안전관리자 실무교육을 받아야 하는 대상은?","opts":["자격증만 취득한 사람 전원","실제로 선임된 소방안전관리자 및 보조자","소방공무원 전원","건축주 전원"],"correct":"실제로 선임된 소방안전관리자 및 보조자","expl":"자격증만 취득하고 선임되지 않았다면 실무교육 의무는 없습니다."},{"unit":18,"type":"mc","q":"소방안전관련 업무경력으로 선임된 '보조자'의 최초 실무교육 이수 기한은?","opts":["1개월 이내","3개월 이내","6개월 이내","1년 이내"],"correct":"3개월 이내","expl":"일반 소방안전관리자·보조자는 6개월 이내, 경력으로 선임된 보조자는 3개월 이내입니다."},{"unit":18,"type":"short","q":"최초 실무교육 이후에는 몇 년마다 1회 이상 실무교육을 받아야 하는가? (숫자만 입력)","answers":["2"],"expl":"최초 실무교육 후에는 2년마다 1회 이상 실무교육을 받아야 합니다."},{"unit":18,"type":"mc","q":"실무교육을 받지 않은 경우 소방청장이 정할 수 있는 자격정지의 최대 기간은?","opts":["3개월 이하","6개월 이하","1년 이하","2년 이하"],"correct":"1년 이하","expl":"소방청장은 1년 이하의 기간을 정해 자격을 정지시킬 수 있습니다."},{"unit":19,"type":"mc","q":"소방차 출동을 고의로 방해한 경우의 처벌 기준은?","opts":["200만 원 이하 과태료","5년 이하 징역 또는 5천만 원 이하 벌금","100만 원 이하 과태료","1년 이하 징역"],"correct":"5년 이하 징역 또는 5천만 원 이하 벌금","expl":"고의 방해는 벌금형(5년/5천만원 이하), 단순히 지장을 준 경우는 200만원 이하 과태료입니다."},{"unit":19,"type":"mc","q":"소방안전관리자 자격증을 다른 사람에게 빌려준 경우의 벌칙은?","opts":["300만 원 이하 과태료","1년 이하 징역 또는 1천만 원 이하 벌금","경고 조치만","처벌 규정 없음"],"correct":"1년 이하 징역 또는 1천만 원 이하 벌금","expl":"자격증 대여·알선은 1년 이하 징역 또는 1천만 원 이하 벌금에 해당합니다."},{"unit":19,"type":"short","q":"양벌규정은 벌금형과 과태료 중 어디에만 적용되는가?","answers":["벌금형","벌금"],"expl":"양벌규정은 벌금형에만 적용되며, 과태료에는 적용되지 않습니다."},{"unit":19,"type":"mc","q":"화재·구조·구급이 필요한 상황을 거짓으로 신고한 경우의 과태료는?","opts":["100만 원 이하","200만 원 이하","500만 원 이하","20만 원 이하"],"correct":"500만 원 이하","expl":"거짓 신고는 500만 원 이하의 과태료에 해당하는 가장 높은 과태료 항목 중 하나입니다."},{"unit":20,"type":"mc","q":"화재예방강화지구 지정 대상이 아닌 것은?","opts":["시장지역","석유화학제품 생산공장이 있는 지역","소방시설·소방용수시설이 충분히 갖춰진 지역","노후·불량건축물이 밀집한 지역"],"correct":"소방시설·소방용수시설이 충분히 갖춰진 지역","expl":"오히려 소방시설·소방용수시설 또는 소방출동로가 '없는' 지역이 지정 대상입니다."},{"unit":20,"type":"mc","q":"화재예방강화지구 등에서 원칙적으로 금지되는 행위가 아닌 것은?","opts":["모닥불 피우기","풍등 등 소형 열기구 날리기","안전조치를 한 용접·용단 작업","흡연 등 화기 취급"],"correct":"안전조치를 한 용접·용단 작업","expl":"행안부령에 따라 안전조치를 한 경우는 예외로 인정됩니다."},{"unit":20,"type":"short","q":"소방관서장이 옮긴 물건은 그 날부터 며칠 동안 보관 사실을 공고해야 하는가? (숫자만 입력)","answers":["14"],"expl":"옮긴 날부터 14일 동안 인터넷 홈페이지 등에 공고해야 합니다."},{"unit":20,"type":"mc","q":"물건의 보관기간은 공고 기간 종료일 다음날부터 며칠로 하는가?","opts":["3일","5일","7일","14일"],"correct":"7일","expl":"보관기간은 공고 종료일 다음날부터 7일입니다. (예: 12/1 옮김 → 12/14까지 공고 → 12/15~21 보관, 총 21일)"},{"unit":21,"type":"mc","q":"방염의 목적으로 옳은 것은?","opts":["화재 발생 자체를 원천 차단","연소확대 방지·지연 및 피난시간 확보","건축 비용 절감","소음 차단"],"correct":"연소확대 방지·지연 및 피난시간 확보","expl":"방염의 목적은 연소확대 방지·지연, 피난시간 확보, 인명·재산 피해 최소화입니다."},{"unit":21,"type":"mc","q":"방염대상물품 중 '선처리물품'의 방염성능검사 실시기관은?","opts":["한국소방산업기술원","관할 소방서장","시·도지사","소방청"],"correct":"한국소방산업기술원","expl":"선처리물품은 한국소방산업기술원, 현장처리물품은 시·도지사(관할 소방서장)가 검사합니다."},{"unit":21,"type":"short","q":"현장처리물품의 방염성능검사 실시기관은 시·도지사 또는 관할 무엇인가?","answers":["소방서장"],"expl":"현장처리물품은 시·도지사(관할 소방서장)가 검사를 실시합니다."},{"unit":21,"type":"mc","q":"단란주점·유흥주점·노래연습장 영업장에서 방염대상물품 의무 대상은?","opts":["벽지류 전체","천장재 전체","섬유류·합성수지류를 원료로 한 소파·의자","카펫 전체"],"correct":"섬유류·합성수지류를 원료로 한 소파·의자","expl":"이 업종들은 섬유류·합성수지류 소파·의자에 대해서만 방염 의무가 적용됩니다."},{"unit":22,"type":"mc","q":"합판·섬유판·소파·의자처럼 합격표시를 '바로' 붙일 수 있는 물품의 표시 규격은?","opts":["5mm","8mm","10mm","15mm"],"correct":"8mm","expl":"바로 붙이는 방식은 8mm입니다. (암기: 빨리빨리=8mm)"},{"unit":22,"type":"mc","q":"커튼처럼 '가열'하여 합격표시를 붙이는 물품의 표시 규격은?","opts":["5mm","8mm","10mm","15mm"],"correct":"5mm","expl":"가열하여 붙이는 방식은 5mm입니다. (암기: 오! 뜨거워=5mm)"},{"unit":22,"type":"short","q":"두루마리 포장 방염물품의 합격표시는 제품 폭 끝에서 중앙 방향으로 최소 몇 cm 이상 떨어진 지점에 부착하는가? (숫자만 입력)","answers":["20"],"expl":"두루마리 포장 방염물품은 폭 끝에서 중앙 방향으로 최소 20cm 이상 떨어진 지점에 부착합니다."},{"unit":22,"type":"mc","q":"카펫·소파·의자·섬유판용 합격표시의 바탕색은?","opts":["흰 바탕","은색 바탕","금색 바탕","투명 바탕"],"correct":"흰 바탕","expl":"카펫·소파·의자·섬유판은 흰 바탕에 남색 글자로 표시합니다."},{"unit":1,"type":"mc","q":"소방기본법의 제정 목적으로 옳은 것은?","opts":["공공의 안전과 복리증진","공공의 안녕 및 질서 유지와 복리증진","국민 재산권 보호 최우선","소방시설의 규격화"],"correct":"공공의 안녕 및 질서 유지와 복리증진","expl":"소방기본법의 목적은 공공의 안녕 및 질서 유지와 복리증진입니다."},{"unit":1,"type":"mc","q":"화재예방 및 안전관리에 관한 법률의 제정 목적으로 옳은 것은?","opts":["공공의 안녕 및 질서 유지","공공의 안전과 복리증진","위험물 시설의 안전 확보","건축허가 절차 간소화"],"correct":"공공의 안전과 복리증진","expl":"화재예방법과 소방시설법의 목적은 '공공의 안전과 복리증진'입니다."},{"unit":1,"type":"short","q":"소방기본법에서 규정하는 5대 활동 목적 중 화재를 끄는 활동은 무엇인가?","answers":["진압"],"expl":"예방·경계·진압·구조·구급 중 화재를 끄는 활동이 진압입니다."},{"unit":2,"type":"mc","q":"소방대상물에 해당하지 않는 것은?","opts":["건축물","항구에 매어둔 선박","항해 중인 선박","산림"],"correct":"항해 중인 선박","expl":"항해 중인 선박은 소방대상물에서 제외됩니다."},{"unit":2,"type":"mc","q":"관계인에 해당하지 않는 자는?","opts":["소유자","관리자","점유자","소방안전관리자"],"correct":"소방안전관리자","expl":"소방안전관리자는 원칙적으로 관계인에 포함되지 않습니다."},{"unit":2,"type":"short","q":"곧바로 지상으로 나가는 출입구가 있는 층을 무엇이라 하는가?","answers":["피난층"],"expl":"피난층은 곧바로 지상으로 나가는 출입구가 있는 층입니다."},{"unit":3,"type":"mc","q":"무창층의 개구부 면적 기준으로 옳은 것은?","opts":["바닥면적의 1/20 이하","바닥면적의 1/30 이하","바닥면적의 1/50 이하","바닥면적의 1/10 이하"],"correct":"바닥면적의 1/30 이하","expl":"무창층은 개구부 면적의 합계가 바닥면적의 1/30 이하인 층입니다."},{"unit":3,"type":"short","q":"무창층 개구부 하단이 바닥면으로부터 몇 m 이내에 위치해야 하는가? (숫자만 입력)","answers":["1.2"],"expl":"개구부 하단은 바닥면으로부터 1.2m 이내에 위치해야 합니다."},{"unit":3,"type":"short","q":"무창층 개구부는 지름 몇 cm 이상의 원이 내접할 수 있어야 하는가? (숫자만 입력)","answers":["50"],"expl":"개구부는 지름 50cm 이상의 원이 내접할 수 있어야 합니다."},{"unit":4,"type":"mc","q":"한국소방안전원의 업무가 아닌 것은?","opts":["교육·연구·조사","대국민 홍보","위탁 업무 수행","소방시설의 축조"],"correct":"소방시설의 축조","expl":"소방시설의 축조는 안전원의 업무가 아닙니다."},{"unit":4,"type":"short","q":"한국소방안전원의 주요 목적 중 하나로, 소방 및 안전관리 기술의 향상과 무엇을 하는가? (두 글자)","answers":["홍보"],"expl":"안전원은 소방·안전관리 기술 향상 및 홍보 등을 목적으로 합니다."},{"unit":5,"type":"mc","q":"특급 소방안전관리대상물의 아파트 기준으로 옳은 것은?","opts":["30층 이상 또는 120m 이상","50층 이상 또는 200m 이상","11층 이상 또는 연면적 1.5만m² 이상","층수 무관"],"correct":"50층 이상 또는 200m 이상","expl":"특급 아파트 기준은 50층 이상 또는 지상높이 200m 이상입니다."},{"unit":5,"type":"mc","q":"2급 소방안전관리대상물에 해당하는 것은?","opts":["스프링클러설비 설치 대상","30층 이상 아파트","11층 이상 일반건축물","연면적 10만m² 이상"],"correct":"스프링클러설비 설치 대상","expl":"2급 대상물은 스프링클러설비 설치 대상, 가연성가스 100톤~1천톤 미만 등입니다."},{"unit":5,"type":"short","q":"1급 일반건축물 기준은 11층 이상 또는 연면적 몇 만m² 이상인가? (숫자만 입력)","answers":["1.5"],"expl":"1급 일반건축물은 11층 이상 또는 연면적 1.5만m² 이상입니다."},{"unit":6,"type":"mc","q":"소방안전관리자 업무 대행이 가능한 항목은?","opts":["소방계획서 작성","피난·방화시설의 유지·관리","자위소방대 구성·운영","소방훈련 및 교육"],"correct":"피난·방화시설의 유지·관리","expl":"업무 대행은 피난·방화시설의 유지·관리, 소방시설의 관리(3, 4번 항목)만 가능합니다."},{"unit":6,"type":"short","q":"업무 대행 시 선임된 날부터 몇 개월 내에 강습교육을 이수해야 하는가? (숫자만 입력)","answers":["3"],"expl":"업무 대행 시 선임일로부터 3개월 내에 강습교육을 이수해야 합니다."},{"unit":6,"type":"mc","q":"소방안전관리자 업무수행 기록·유지는 얼마나 자주 작성해야 하는가?","opts":["주 1회 이상","월 1회 이상","분기 1회","연 1회"],"correct":"월 1회 이상","expl":"업무수행 기록은 월 1회 이상 작성하고 2년간 보관해야 합니다."},{"unit":7,"type":"mc","q":"타 안전관리자와 겸직이 절대 불가능한 등급은?","opts":["2급 및 3급","특급 및 1급","1급 및 2급","전체 등급"],"correct":"특급 및 1급","expl":"특급 및 1급 소방안전관리자는 겸직이 절대 불가능합니다."},{"unit":7,"type":"mc","q":"소방공무원 경력 3년 이상으로 선임 가능한 등급은?","opts":["특급","1급","2급","3급"],"correct":"2급","expl":"소방공무원 3년 이상 경력자는 2급 선임이 가능합니다."},{"unit":7,"type":"short","q":"소방공무원 경력 몇 년 이상이면 3급 선임이 가능한가? (숫자만 입력)","answers":["1"],"expl":"소방공무원 1년 이상 경력자는 3급 선임이 가능합니다."},{"unit":8,"type":"short","q":"소방안전관리자 선임 기한은 사유 발생일로부터 몇 일 이내인가? (숫자만 입력)","answers":["30"],"expl":"선임 기한은 사유 발생일로부터 30일 이내입니다."},{"unit":8,"type":"short","q":"소방안전관리자 선임 신고는 선임일로부터 며칠 이내인가? (숫자만 입력)","answers":["14"],"expl":"선임 신고는 선임일로부터 14일 이내에 해야 합니다."},{"unit":8,"type":"mc","q":"선임연기 신청이 가능한 대상물은?","opts":["특급 및 1급 대상물","2급 및 3급 대상물","모든 대상물","해당 없음"],"correct":"2급 및 3급 대상물","expl":"선임연기 신청은 2급·3급 대상물만 가능하며, 특급·1급은 연기가 불가합니다."},{"unit":9,"type":"short","q":"소방안전관리자 현황표 신고 기한은 선임일로부터 며칠 이내인가? (숫자만 입력)","answers":["14"],"expl":"현황표 신고 기한은 선임일로부터 14일 이내입니다."},{"unit":9,"type":"mc","q":"소방안전관리자 현황표에 표기하지 않는 항목은?","opts":["대상물 명칭","선임일자 및 연락처","근무 위치(수신기 위치)","자격증 종류(자격 등급)"],"correct":"자격증 종류(자격 등급)","expl":"자격증 종류(자격 등급)는 현황표 표기 대상이 아닙니다."},{"unit":9,"type":"short","q":"현황표에 기재하는 근무 위치는 주로 어떤 설비의 위치를 말하는가? (설비명)","answers":["화재수신기","화재 수신기","수신기"],"expl":"근무 위치는 주로 화재수신기의 위치를 의미합니다."},{"unit":10,"type":"mc","q":"건설현장 소방안전관리자 선임 신고 의무자는?","opts":["소방서장","공사시공자","건축주","감리자"],"correct":"공사시공자","expl":"건설현장 소방안전관리자 선임 신고는 공사시공자가 합니다."},{"unit":10,"type":"short","q":"건설현장 소방안전관리자 선임 신고 기한은 선임일로부터 며칠 이내인가? (숫자만 입력)","answers":["14"],"expl":"선임일로부터 14일 이내에 신고해야 합니다."},{"unit":11,"type":"short","q":"특급 및 1급 대상물의 소방훈련·교육 결과 제출 기한은 훈련일로부터 며칠 이내인가? (숫자만 입력)","answers":["30"],"expl":"특급·1급 관계인은 훈련 실시 후 30일 이내에 결과를 제출해야 합니다."},{"unit":11,"type":"short","q":"소방훈련 및 교육은 최소 연 몇 회 이상 실시해야 하는가? (숫자만 입력)","answers":["1"],"expl":"소방훈련 및 교육은 연 1회 이상 실시해야 합니다."},{"unit":11,"type":"mc","q":"불시 소방훈련 사전 통지 기한은?","opts":["5일 전까지","10일 전까지","20일 전까지","통지 불필요"],"correct":"10일 전까지","expl":"불시 소방훈련은 실시 10일 전까지 관계인에게 통지해야 합니다."},{"unit":12,"type":"mc","q":"작동점검만 받는 대상의 점검 실시 시기는?","opts":["사용승인일이 속하는 달의 말일까지","연중 아무 때나","분기별 1회","반기별 1회"],"correct":"사용승인일이 속하는 달의 말일까지","expl":"작동점검만 받는 대상은 사용승인일이 속하는 달의 말일까지 실시합니다."},{"unit":12,"type":"mc","q":"종합점검 대상에 해당하지 않는 것은?","opts":["스프링클러설비 설치 대상","다중이용업소 연면적 2천m² 이상","제연설비 설치 터널","연면적 500m² 소규모 근린생활시설"],"correct":"연면적 500m² 소규모 근린생활시설","expl":"연면적 500m²의 소규모 근린생활시설은 종합점검 대상에 해당하지 않습니다."},{"unit":12,"type":"short","q":"자체점검 결과보고서는 점검 완료일로부터 며칠 이내에 관리업자가 관계인에게 제출하는가? (숫자만 입력)","answers":["10"],"expl":"관리업자는 점검 완료일로부터 10일 이내에 결과보고서를 제출합니다."},{"unit":13,"type":"short","q":"화재안전조사 계획은 며칠 이상 공개해야 하는가? (숫자만 입력)","answers":["7"],"expl":"화재안전조사 계획은 조사 전 7일 이상 공개해야 합니다."},{"unit":13,"type":"mc","q":"조사 항목 일부만 확인하는 조사 방법은?","opts":["종합조사","부분조사","정기조사","특별조사"],"correct":"부분조사","expl":"일부 항목만 확인하는 것은 부분조사입니다."},{"unit":13,"type":"short","q":"화재안전조사 실시 주체는 소방청장, 소방본부장 또는 무엇인가?","answers":["소방서장"],"expl":"화재안전조사 주체는 소방청장, 소방본부장 또는 소방서장입니다."},{"unit":14,"type":"mc","q":"소화기·단독경보형감지기 설치 의무에서 제외되는 대상은?","opts":["단독주택","연립주택","다세대주택","아파트 및 기숙사"],"correct":"아파트 및 기숙사","expl":"아파트 및 기숙사는 이 규정에서 제외됩니다."},{"unit":14,"type":"short","q":"소화기·단독경보형감지기 설치 의무는 누구에게 있는가? (두 글자)","answers":["소유자"],"expl":"설치 의무는 주택의 소유자에게 있습니다."},{"unit":15,"type":"mc","q":"특별피난계단의 피난 이동 경로 순서로 옳은 것은?","opts":["옥내→계단실→부속실→복도→피난층","옥내→복도→부속실→계단실→피난층","복도→옥내→부속실→계단실→피난층","옥내→부속실→복도→계단실→피난층"],"correct":"옥내→복도→부속실→계단실→피난층","expl":"이동 경로는 옥내→복도→부속실→계단실→피난층 순서입니다."},{"unit":15,"type":"short","q":"옥내와 계단실 사이 방화문 이중구획된 공간을 무엇이라 하는가? (세 글자)","answers":["부속실"],"expl":"방화문을 이중 설치한 구획 공간이 부속실입니다."},{"unit":16,"type":"mc","q":"방화문에 도어스톱을 설치해 항상 열어두는 행위는?","opts":["폐쇄행위","훼손행위","설치(적치)행위","변경행위"],"correct":"훼손행위","expl":"자동폐쇄장치 기능을 저해하는 도어스톱 설치는 훼손행위입니다."},{"unit":16,"type":"mc","q":"계단·복도·출입구에 물건을 쌓아 장애물을 방치하는 행위는?","opts":["폐쇄행위","훼손행위","설치(적치)행위","변경행위"],"correct":"설치(적치)행위","expl":"물건 적재 및 장애물 방치는 설치(적치)행위입니다."},{"unit":16,"type":"short","q":"시건장치는 어떤 장치와 같은 의미인가? (세 글자)","answers":["잠금장치"],"expl":"시건장치는 잠금장치와 같은 의미입니다."},{"unit":17,"type":"mc","q":"비상시 옥상 출입문 잠금이 자동으로 풀리는 장치는?","opts":["자동폐쇄장치","비상문 자동개폐장치","방화셔터","배연설비"],"correct":"비상문 자동개폐장치","expl":"비상 시 잠금이 자동으로 풀리는 장치는 비상문 자동개폐장치입니다."},{"unit":17,"type":"short","q":"옥상공간 확보 대상 건축물의 층수 기준은 몇 층 이상인가? (숫자만 입력)","answers":["11"],"expl":"층수가 11층 이상인 건축물이 대상입니다."},{"unit":17,"type":"short","q":"피난 용도 광장을 옥상에 설치해야 하는 공동주택의 연면적 기준은 몇 ㎡ 이상인가? (숫자만 입력)","answers":["1000","1천"],"expl":"연면적 1천㎡ 이상인 공동주택이 대상입니다."},{"unit":18,"type":"mc","q":"실무교육 대상은?","opts":["자격증 취득자 전원","실제 선임된 소방안전관리자 및 보조자","소방공무원 전원","건축주"],"correct":"실제 선임된 소방안전관리자 및 보조자","expl":"자격증만 취득하고 선임되지 않았다면 실무교육 의무가 없습니다."},{"unit":18,"type":"mc","q":"최초 실무교육 이후 재교육 주기는?","opts":["1년마다","2년마다","3년마다","5년마다"],"correct":"2년마다","expl":"최초 실무교육 이후에는 2년마다 1회 이상 받아야 합니다."},{"unit":18,"type":"short","q":"실무교육 미이수 시 부과될 수 있는 과태료는 몇 만 원인가? (숫자만 입력)","answers":["50"],"expl":"실무교육 미이수 시 50만 원의 과태료가 부과될 수 있습니다."},{"unit":19,"type":"mc","q":"소방차 출동을 고의로 방해한 경우의 처벌은?","opts":["200만 원 이하 과태료","5년 이하 징역 또는 5천만 원 이하 벌금","100만 원 이하 과태료","처벌 없음"],"correct":"5년 이하 징역 또는 5천만 원 이하 벌금","expl":"고의 방해는 5년 이하 징역 또는 5천만 원 이하 벌금에 해당합니다."},{"unit":19,"type":"short","q":"양벌규정이 적용되는 벌칙 종류는 무엇인가? (예: 벌금형)","answers":["벌금형","벌금"],"expl":"양벌규정은 벌금형에만 적용되며 과태료에는 적용되지 않습니다."},{"unit":19,"type":"short","q":"소방안전관리자 자격증을 빌려준 경우 처벌은 1년 이하 징역 또는 몇 천만 원 이하 벌금인가? (숫자만 입력)","answers":["1"],"expl":"자격증 대여는 1년 이하 징역 또는 1천만 원 이하 벌금에 해당합니다."},{"unit":20,"type":"mc","q":"화재예방강화지구 지정 대상이 아닌 것은?","opts":["시장지역","석유화학제품 생산공장 지역","소방시설이 충분히 갖춰진 지역","노후·불량건축물 밀집 지역"],"correct":"소방시설이 충분히 갖춰진 지역","expl":"오히려 소방시설·소방용수시설이 없는 지역이 지정 대상입니다."},{"unit":20,"type":"short","q":"옮긴 물건은 그 날부터 며칠 동안 보관 사실을 공고해야 하는가? (숫자만 입력)","answers":["14"],"expl":"옮긴 날부터 14일 동안 공고해야 합니다."},{"unit":20,"type":"short","q":"물건 보관 기간은 공고 종료일 다음날부터 며칠인가? (숫자만 입력)","answers":["7"],"expl":"보관기간은 공고 종료일 다음날부터 7일입니다."},{"unit":21,"type":"mc","q":"방염의 목적으로 옳은 것은?","opts":["화재 발생 자체를 원천 차단","연소확대 방지·지연 및 피난시간 확보","건축비 절감","소음 차단"],"correct":"연소확대 방지·지연 및 피난시간 확보","expl":"방염의 목적은 연소확대 방지·지연 및 피난시간 확보입니다."},{"unit":21,"type":"short","q":"선처리물품의 방염성능검사 실시기관은? (기관명)","answers":["한국소방산업기술원"],"expl":"선처리물품은 한국소방산업기술원이 검사를 실시합니다."},{"unit":22,"type":"mc","q":"합격표시를 바로 붙일 수 있는 물품의 표시 규격은?","opts":["5mm","8mm","10mm","15mm"],"correct":"8mm","expl":"바로 붙이는 방식은 8mm입니다."},{"unit":22,"type":"short","q":"가열하여 합격표시를 붙이는 방식의 표시 규격은 몇 mm인가? (숫자만 입력)","answers":["5"],"expl":"가열하여 붙이는 방식은 5mm입니다."}];
 
         var currentRandomExamCount = 0;
@@ -1153,7 +1152,6 @@
         function startRandomExam(n) {
             currentRandomExamCount = n;
 
-            // Fisher-Yates 셔플로 문제풀 전체를 섞은 뒤 앞에서 n개만 사용
             var shuffled = questionPool.slice();
             for (var i = shuffled.length - 1; i > 0; i--) {
                 var j = Math.floor(Math.random() * (i + 1));
@@ -1171,23 +1169,23 @@
                 if (q.type === "mc") {
                     var optsHtml = "";
                     q.opts.forEach(function(opt) {
-                        optsHtml += '<button class="font-btn opt-btn" onclick="checkAnswerByText(&#39;' + qid + '&#39;, this, &#39;' + q.correct + '&#39;)">' + opt + '</button>';
+                        optsHtml += '<button class="font-btn opt-btn" onclick="checkAnswerByText(\'' + qid + '\', this, \'' + q.correct + '\')">' + opt + '</button>';
                     });
                     html += '<div class="box quiz-box" id="box-' + qid + '" data-qid="' + qid + '" data-correct-text="' + q.correct.replace(/"/g, '&quot;') + '">' +
-                        '<button class="font-btn" onclick="resetAnswer(&#39;' + qid + '&#39;); updateQuizScore(5, ' + n + ');" style="float:right; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>' +
+                        '<button class="font-btn" onclick="resetAnswer(\'' + qid + '\'); updateQuizScore(5, ' + n + ');" style="float:right; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>' +
                         '<p class="quiz-q-title" style="font-weight: bold; margin-top:0;">' + qtext + '</p>' +
                         '<div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">' + optsHtml + '</div>' +
                         '<div id="q-result-' + qid + '" style="margin-top: 10px; font-weight: bold; display: none;"></div>' +
                         '<div id="q-expl-' + qid + '" class="note" style="display: none;">💡 해설: ' + q.expl + '</div>' +
                         '</div>';
                 } else {
-                    var answersLiteral = "[" + q.answers.map(function(a) { return "&#39;" + a + "&#39;"; }).join(", ") + "]";
+                    var answersLiteral = "[" + q.answers.map(function(a) { return "'" + a + "'"; }).join(", ") + "]";
                     html += '<div class="box quiz-box" id="box-' + qid + '" data-qid="' + qid + '">' +
-                        '<button class="font-btn" onclick="resetAnswer(&#39;' + qid + '&#39;); updateQuizScore(5, ' + n + ');" style="float:right; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>' +
+                        '<button class="font-btn" onclick="resetAnswer(\'' + qid + '\'); updateQuizScore(5, ' + n + ');" style="float:right; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>' +
                         '<p class="quiz-q-title" style="font-weight: bold; margin-top:0;">' + qtext + ' <span class="blue_nb" style="font-size:0.8em;">(단답형)</span></p>' +
                         '<div style="display:flex; gap:6px; margin:12px 0;">' +
                         '<input type="text" id="input-' + qid + '" class="mini-text-input" placeholder="정답 입력" style="max-width:180px;">' +
-                        '<button class="font-btn" onclick="checkAnswerByInput(&#39;' + qid + '&#39;, document.getElementById(&#39;input-' + qid + '&#39;), ' + answersLiteral + ')">확인</button>' +
+                        '<button class="font-btn" onclick="checkAnswerByInput(\'' + qid + '\', document.getElementById(\'input-' + qid + '\'), ' + answersLiteral + ')">확인</button>' +
                         '</div>' +
                         '<div id="q-result-' + qid + '" style="margin-top: 10px; font-weight: bold; display: none;"></div>' +
                         '<div id="q-expl-' + qid + '" class="note" style="display: none;">💡 해설: ' + q.expl + '</div>' +
@@ -1199,14 +1197,13 @@
             document.getElementById('ch3-5-select').style.display = 'none';
             document.getElementById('ch3-5-quiz-area').style.display = 'block';
 
-            // 이전 회차 채점 기록 초기화
             for (var key in quizAnswerState) {
                 if (key.indexOf('ch3-5-') === 0) delete quizAnswerState[key];
             }
             filterWrongModes[5] = false;
 
             updateQuizScore(5, n);
-            setupMiniEnterKeys(); // 새로 생긴 단답형 입력창에도 Enter키 동작 적용
+            setupMiniEnterKeys();
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
@@ -1215,11 +1212,6 @@
             document.getElementById('ch3-5-quiz-area').style.display = 'none';
         }
 
-        // ============================================================
-        // 🔔 매일 알림 (앱을 열 때, 오늘 아직 안 열었으면 알림 표시)
-        // 주의: 서버가 없는 순수 웹앱이라 앱을 완전히 꺼둔 상태에서는
-        // 알림을 보낼 수 없음 - 앱을 여는 순간 "오늘 처음이면" 알림을 띄우는 방식
-        // ============================================================
         function toggleDailyNotify() {
             var btn = document.getElementById('notify-toggle-btn');
             var isEnabled = localStorage.getItem('user_notify_enabled') === 'true';

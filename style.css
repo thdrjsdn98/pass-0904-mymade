@@ -336,10 +336,23 @@
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            max-height: 240px;
+            max-height: 340px;
             overflow-y: auto;
             z-index: 500;
             display: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--text-sub) transparent;
+        }
+        .search-results-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .search-results-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .search-results-list::-webkit-scrollbar-thumb {
+            background-color: var(--text-sub);
+            border-radius: 4px;
+            border: 2px solid var(--card-bg);
         }
         .search-result-item {
             padding: 11px 14px;
