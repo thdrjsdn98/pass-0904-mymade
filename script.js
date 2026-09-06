@@ -1,0 +1,683 @@
+        var currentSubPage = 0;
+        var totalSubPages = 22;
+        var bookmarks = JSON.parse(localStorage.getItem('user_bookmarks') || '[]');
+        var completes = JSON.parse(localStorage.getItem('user_completes') || '[]');
+        var currentFontSize = parseInt(localStorage.getItem('user_font_size') || '14', 10);
+        var memorizeTimerSec = parseInt(localStorage.getItem('user_timer_sec') || '3', 10);
+        
+        var quizAnswerState = {}; 
+        var isFilterWrongMode1 = false;
+        var isFilterWrongMode2 = false;
+        var wasDarkModeBeforeMemo = false;
+        var isChosungMode = false;
+        var originalElementsData = [];
+
+        var bibleQuotes100 = [
+            { text: "시작은 미약하였으나 네 나중은 심히 창대하리라.", ref: "욥기 8:7" },
+            { text: "두려워하지 말라 내가 너와 함께 함이라 놀라지 말라 나는 네 하나님이 됨이라.", ref: "이사야 41:10" },
+            { text: "네 길을 여호와께 맡기라 그를 의지하면 그가 이루시고.", ref: "시편 37:5" },
+            { text: "우리가 선을 행하되 낙심하지 말지니 포기하지 아니하면 때가 이르매 거두리라.", ref: "갈라디아서 6:9" },
+            { text: "사람이 마음으로 자기의 길을 계획할지라도 그의 걸음을 인도하시는 이는 여호와시니라.", ref: "잠언 16:9" },
+            { text: "지혜가 제일이니 지혜를 얻으라 네가 얻은 모든 것을 가지고 명철을 얻을지니라.", ref: "잠언 4:7" }
+        ];
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadSavedStates();
+            setupMemorizeClickEvents();
+            updateProgress();
+            calculateDDay();
+            renderHourlyBibleQuote();
+            setupMiniEnterKeys();
+        });
+
+        function toggleTopPanel() {
+            var content = document.getElementById("collapsible-control-content");
+            var btnText = document.getElementById("panel-toggle-btn-text");
+            var isCollapsed = content.classList.toggle("collapsed");
+            
+            if (isCollapsed) {
+                btnText.innerText = "▼ 메뉴 펼치기";
+                localStorage.setItem("user_top_panel_collapsed", "true");
+            } else {
+                btnText.innerText = "▲ 메뉴 접기";
+                localStorage.setItem("user_top_panel_collapsed", "false");
+            }
+        }
+
+        function calculateDDay() {
+            var targetDate = new Date("2026-10-02T00:00:00+09:00");
+            var now = new Date();
+            var diff = targetDate.getTime() - now.getTime();
+            var days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            var badgeEl = document.getElementById("exam-dday-badge");
+            
+            var text = "";
+            if (days > 0) text = "D-" + days;
+            else if (days === 0) text = "D-DAY 🔥";
+            else text = "D+" + Math.abs(days);
+
+            if (badgeEl) badgeEl.innerText = "시험 " + text;
+        }
+
+        function renderHourlyBibleQuote() {
+            var now = new Date();
+            var currentHourKey = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate() + "-" + now.getHours();
+            
+            var savedHourKey = localStorage.getItem("last_quote_hour_key");
+            var savedQuoteIndex = localStorage.getItem("current_quote_index");
+            var chosenIndex = 0;
+
+            if (savedHourKey === currentHourKey && savedQuoteIndex !== null) {
+                chosenIndex = parseInt(savedQuoteIndex, 10);
+            } else {
+                chosenIndex = Math.floor(Math.random() * bibleQuotes100.length);
+                localStorage.setItem("last_quote_hour_key", currentHourKey);
+                localStorage.setItem("current_quote_index", chosenIndex);
+            }
+
+            var q = bibleQuotes100[chosenIndex] || bibleQuotes100[0];
+            var box = document.getElementById("daily-quote-box");
+            if (box) {
+                box.innerHTML = '"' + q.text + '" <span>- ' + q.ref + '</span>';
+            }
+        }
+
+        function applyFontSize() {
+            document.documentElement.style.setProperty('--base-font-size', currentFontSize + 'px');
+            localStorage.setItem('user_font_size', currentFontSize);
+        }
+        function changeFontSize(delta) {
+            currentFontSize += delta;
+            if (currentFontSize < 11) currentFontSize = 11;
+            if (currentFontSize > 22) currentFontSize = 22;
+            applyFontSize();
+        }
+        function resetFontSize() {
+            currentFontSize = 14;
+            applyFontSize();
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            var isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('user_dark_mode', isDark);
+            document.getElementById('darkmode-toggle-btn').innerText = isDark ? "☀️ 주간" : "🌙 야간";
+        }
+
+        function toggleMemorizeMode() {
+            if (isChosungMode) toggleChosungMode();
+
+            document.body.classList.toggle('memorize-mode');
+            var isMemo = document.body.classList.contains('memorize-mode');
+            var btn = document.getElementById('memorize-toggle-btn');
+            btn.innerText = isMemo ? "👁️ 암기 ON" : "🙈 암기 OFF";
+            btn.classList.toggle('active', isMemo);
+
+            document.getElementById('timer-control-bar').style.display = isMemo ? "flex" : "none";
+            updateTimerUI();
+        }
+
+        function getChosung(str) {
+            var cho = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+            var result = "";
+            for (var i = 0; i < str.length; i++) {
+                var code = str.charCodeAt(i) - 44032;
+                if (code >= 0 && code <= 11171) {
+                    result += cho[Math.floor(code / 588)];
+                } else {
+                    result += str.charAt(i);
+                }
+            }
+            return result;
+        }
+
+        function toggleChosungMode() {
+            if (document.body.classList.contains('memorize-mode')) toggleMemorizeMode();
+
+            isChosungMode = !isChosungMode;
+            document.body.classList.toggle('chosung-mode', isChosungMode);
+            var btn = document.getElementById('chosung-toggle-btn');
+            btn.classList.toggle('active', isChosungMode);
+            btn.innerText = isChosungMode ? "💡 원문 복원" : "💡 초성 퀴즈";
+
+            var targets = document.querySelectorAll('.red, .blue, .yellow, .mint, .orange, .highlight');
+            if (isChosungMode) {
+                originalElementsData = [];
+                targets.forEach(function(el, idx) {
+                    originalElementsData[idx] = el.innerText;
+                    el.innerText = getChosung(el.innerText);
+                });
+            } else {
+                targets.forEach(function(el, idx) {
+                    if (originalElementsData[idx] !== undefined) {
+                        el.innerText = originalElementsData[idx];
+                    }
+                });
+            }
+        }
+
+        function setTimerSec(sec) {
+            memorizeTimerSec = sec;
+            localStorage.setItem('user_timer_sec', sec);
+            updateTimerUI();
+        }
+
+        function updateTimerUI() {
+            document.getElementById('timer-btn-3').classList.toggle('active', memorizeTimerSec === 3);
+            document.getElementById('timer-btn-5').classList.toggle('active', memorizeTimerSec === 5);
+            document.getElementById('timer-btn-0').classList.toggle('active', memorizeTimerSec === 0);
+
+            if (memorizeTimerSec === 0) {
+                document.body.classList.add('press-mode');
+            } else {
+                document.body.classList.remove('press-mode');
+            }
+        }
+
+        function setupMemorizeClickEvents() {
+            var targets = document.querySelectorAll('.red, .blue, .yellow, .mint, .orange, .highlight');
+            targets.forEach(function(el) {
+                el.addEventListener('click', function(e) {
+                    if (!document.body.classList.contains('memorize-mode')) return;
+                    if (memorizeTimerSec === 0) return;
+
+                    if (el.dataset.timerId) {
+                        clearTimeout(parseInt(el.dataset.timerId, 10));
+                    }
+
+                    el.classList.add('revealed');
+
+                    var timerId = setTimeout(function() {
+                        el.classList.remove('revealed');
+                        delete el.dataset.timerId;
+                    }, memorizeTimerSec * 1000);
+
+                    el.dataset.timerId = timerId;
+                });
+            });
+        }
+
+        function savePageMemo(pageNum) {
+            var memoText = document.getElementById("memo-input-" + pageNum).value;
+            localStorage.setItem("user_memo_page_" + pageNum, memoText);
+        }
+
+        function exportUserData() {
+            var backupData = { bookmarks: bookmarks, completes: completes, memos: {} };
+            for (var i = 1; i <= totalSubPages; i++) {
+                var memo = localStorage.getItem("user_memo_page_" + i);
+                if (memo) backupData.memos[i] = memo;
+            }
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+            var downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "소방2급_학습데이터_백업.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            alert("💾 메모와 학습 진도가 안전하게 백업 파일로 다운로드되었습니다!");
+        }
+
+        function importUserData(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = JSON.parse(e.target.result);
+                    if (data.bookmarks) localStorage.setItem('user_bookmarks', JSON.stringify(data.bookmarks));
+                    if (data.completes) localStorage.setItem('user_completes', JSON.stringify(data.completes));
+                    if (data.memos) {
+                        for (var key in data.memos) {
+                            localStorage.setItem("user_memo_page_" + key, data.memos[key]);
+                        }
+                    }
+                    alert("📂 백업 데이터를 성공적으로 복원했습니다! 페이지를 새로고침합니다.");
+                    location.reload();
+                } catch(err) {
+                    alert("❌ 파일 형식이 올바르지 않습니다.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function updateProgress() {
+            var doneCount = completes.length;
+            var percent = Math.round((doneCount / totalSubPages) * 100);
+            document.getElementById('progress-text').innerText = doneCount + " / " + totalSubPages + " (" + percent + "%)";
+            document.getElementById('progress-fill').style.width = percent + "%";
+
+            for (var i = 1; i <= totalSubPages; i++) {
+                var doneBadge = document.getElementById("card-done-" + i);
+                if (doneBadge) {
+                    doneBadge.style.display = completes.includes(i) ? "inline-block" : "none";
+                }
+            }
+        }
+
+        function toggleComplete(pageNum) {
+            var chk = document.getElementById("check-page-" + pageNum);
+            if (chk.checked) {
+                if (!completes.includes(pageNum)) completes.push(pageNum);
+            } else {
+                var idx = completes.indexOf(pageNum);
+                if (idx > -1) completes.splice(idx, 1);
+            }
+            localStorage.setItem('user_completes', JSON.stringify(completes));
+            updateProgress();
+        }
+
+        function toggleBookmark(pageNum) {
+            var index = bookmarks.indexOf(pageNum);
+            if (index > -1) {
+                bookmarks.splice(index, 1);
+            } else {
+                bookmarks.push(pageNum);
+            }
+            localStorage.setItem('user_bookmarks', JSON.stringify(bookmarks));
+            updateBookmarkUI();
+        }
+
+        function updateBookmarkUI() {
+            for (var i = 1; i <= totalSubPages; i++) {
+                var btn = document.getElementById("star-btn-" + i);
+                var cardStar = document.getElementById("card-star-" + i);
+                var isBookmarked = bookmarks.includes(i);
+                if (btn) {
+                    btn.innerText = isBookmarked ? "★" : "☆";
+                    btn.classList.toggle('active', isBookmarked);
+                }
+                if (cardStar) {
+                    cardStar.innerText = isBookmarked ? " ★" : "";
+                    cardStar.style.color = "#f59e0b";
+                }
+            }
+        }
+
+        function filterBookmarks() {
+            if (bookmarks.length === 0) {
+                alert("등록된 북마크가 없습니다.");
+                return;
+            }
+            var cards = document.querySelectorAll("#main-menu-grid .sub-nav-card");
+            cards.forEach(function(card, idx) {
+                var pageNum = idx + 1;
+                card.style.display = bookmarks.includes(pageNum) ? "flex" : "none";
+            });
+        }
+
+        function showCh1Part(partName) {
+            if (partName === 'part1-1') {
+                document.getElementById("ch1-main-menu").style.display = "none";
+                document.getElementById("ch1-part1-1-container").style.display = "block";
+            }
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function showCh1MainMenu() {
+            currentSubPage = 0;
+            for (var i = 1; i <= totalSubPages; i++) {
+                var page = document.getElementById("sub-page-" + i);
+                if (page) page.style.display = "none";
+            }
+            var cards = document.querySelectorAll("#main-menu-grid .sub-nav-card");
+            cards.forEach(function(card) { card.style.display = "flex"; });
+
+            document.getElementById("sub-page-menu").style.display = "block";
+            document.getElementById("page-nav-bar").style.display = "none";
+            document.getElementById("ch1-part1-1-container").style.display = "none";
+            document.getElementById("ch1-main-menu").style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function showCh11Part(partName) {
+            if (partName === 'part1-1') {
+                document.getElementById("ch1-1-main-menu").style.display = "none";
+                document.getElementById("ch1-1-part1-1-container").style.display = "block";
+            }
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function showCh11MainMenu() {
+            document.getElementById("ch1-1-part1-1-container").style.display = "none";
+            document.getElementById("ch1-1-main-menu").style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function showCh3Page(pageNum) {
+            document.getElementById("ch3-page-menu").style.display = "none";
+            document.getElementById("ch3-sub-page-1").style.display = "none";
+            document.getElementById("ch3-sub-page-2").style.display = "none";
+            
+            var testPage = document.getElementById("ch3-sub-page-" + pageNum);
+            if (testPage) testPage.style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function showCh3Menu() {
+            document.getElementById("ch3-sub-page-1").style.display = "none";
+            document.getElementById("ch3-sub-page-2").style.display = "none";
+            document.getElementById("ch3-page-menu").style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function checkMiniChoice(qKey, clickedBtn, correctVal) {
+            var item = clickedBtn.closest('.mini-q-item');
+            var resEl = document.getElementById("res-" + qKey);
+            var isDark = document.body.classList.contains('dark-mode');
+
+            var allBtns = item.querySelectorAll('.mini-opt-grid button');
+            allBtns.forEach(function(btn) {
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+            });
+
+            var userVal = clickedBtn.innerText.trim();
+            resEl.style.display = "block";
+
+            if (userVal === correctVal.trim()) {
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 🎉</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#064e3b" : "#dcfce7";
+                clickedBtn.style.color = isDark ? "#86efac" : "#166534";
+            } else {
+                resEl.innerHTML = "<span style='color:" + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + correctVal + ")</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#7f1d1d" : "#fee2e2";
+                clickedBtn.style.color = isDark ? "#fca5a5" : "#991b1b";
+            }
+        }
+
+        function resetSectionQuiz(secKey) {
+            var items = document.querySelectorAll('.mini-q-item[data-sec="' + secKey + '"]');
+            items.forEach(function(item) {
+                var btns = item.querySelectorAll('button');
+                btns.forEach(function(b) {
+                    b.style.backgroundColor = "";
+                    b.style.color = "";
+                });
+                var res = item.querySelector('[id^="res-"]');
+                if (res) {
+                    res.style.display = "none";
+                    res.innerHTML = "";
+                }
+            });
+        }
+
+        function checkAnswerByText(qId, clickedBtn, correctText) {
+            var box = clickedBtn.closest('.quiz-box');
+            var resultEl = document.getElementById("q-result-" + qId);
+            var explEl = document.getElementById("q-expl-" + qId);
+            var isDark = document.body.classList.contains('dark-mode');
+
+            var allBtns = box.querySelectorAll('.opt-btn');
+            allBtns.forEach(function(btn) {
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+                btn.style.borderColor = "";
+            });
+
+            var selectedText = clickedBtn.innerText.trim();
+            var isCorrect = (selectedText === correctText.trim());
+            quizAnswerState[qId] = isCorrect;
+
+            if (resultEl) resultEl.style.display = "block";
+            if (explEl) explEl.style.display = "block";
+
+            if (isCorrect) {
+                if (resultEl) resultEl.innerHTML = "<span style='color: " + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 🎉</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#064e3b" : "#dcfce7";
+                clickedBtn.style.color = isDark ? "#86efac" : "#166534";
+            } else {
+                if (resultEl) resultEl.innerHTML = "<span style='color: " + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + correctText + ")</span>";
+                clickedBtn.style.backgroundColor = isDark ? "#7f1d1d" : "#fee2e2";
+                clickedBtn.style.color = isDark ? "#fca5a5" : "#991b1b";
+            }
+
+            if (qId.startsWith('ch3-1-')) updateQuizScore(1, 10);
+            if (qId.startsWith('ch3-2-')) updateQuizScore(2, 20);
+        }
+
+        function updateQuizScore(subPageNum, totalQ) {
+            var correctCount = 0;
+            var pointsPerQ = 100 / totalQ;
+            for (var i = 1; i <= totalQ; i++) {
+                if (quizAnswerState['ch3-' + subPageNum + '-' + i] === true) correctCount++;
+            }
+            var score = Math.round(correctCount * pointsPerQ);
+            document.getElementById('quiz-score-text-' + subPageNum).innerText = "점수: " + score + " / 100점 (정답: " + correctCount + "개)";
+            
+            var passEl = document.getElementById('quiz-pass-text-' + subPageNum);
+            if (score >= 70) {
+                passEl.innerText = "합격권 도달! 🏆";
+                passEl.style.color = "#16a34a";
+            } else {
+                passEl.innerText = "합격 기준 미달 (70점 이상 합격)";
+                passEl.style.color = "#dc2626";
+            }
+        }
+
+        function resetAnswer(qId) {
+            var box = document.querySelector('[data-qid="' + qId + '"]') || document.getElementById('box-' + qId);
+            var resultEl = document.getElementById("q-result-" + qId);
+            var explEl = document.getElementById("q-expl-" + qId);
+
+            if (resultEl) { resultEl.style.display = "none"; resultEl.innerHTML = ""; }
+            if (explEl) explEl.style.display = "none";
+
+            if (box) {
+                var btns = box.querySelectorAll('.opt-btn');
+                btns.forEach(function(b) { b.style.backgroundColor = ""; b.style.color = ""; b.style.borderColor = ""; });
+            }
+            delete quizAnswerState[qId];
+        }
+
+        function resetAllQuestions(prefix, totalQ) {
+            for (var i = 1; i <= totalQ; i++) { resetAnswer(prefix + i); }
+        }
+
+        function toggleWrongOnly(subPageNum, totalQ) {
+            var btn = document.getElementById('btn-filter-wrong-' + subPageNum);
+            var isCurrentMode = (subPageNum === 1) ? isFilterWrongMode1 : isFilterWrongMode2;
+            isCurrentMode = !isCurrentMode;
+            if (subPageNum === 1) isFilterWrongMode1 = isCurrentMode;
+            else isFilterWrongMode2 = isCurrentMode;
+
+            for (var i = 1; i <= totalQ; i++) {
+                var box = document.getElementById('box-ch3-' + subPageNum + '-' + i);
+                if (!box) continue;
+
+                if (isCurrentMode) {
+                    if (quizAnswerState['ch3-' + subPageNum + '-' + i] === false) {
+                        box.style.display = 'block';
+                    } else {
+                        box.style.display = 'none';
+                    }
+                } else {
+                    box.style.display = 'block';
+                }
+            }
+
+            btn.classList.toggle('active', isCurrentMode);
+            btn.innerText = isCurrentMode ? "📑 전체 문제 보기" : "❌ 오답만 보기";
+        }
+
+        function shuffleSection(containerId) {
+            var wrap = document.getElementById(containerId);
+            if (!wrap) return;
+            var boxes = Array.from(wrap.children);
+            for (var i = boxes.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                wrap.appendChild(boxes[j]);
+            }
+            alert("🔀 문제 순서가 섞였습니다!");
+        }
+
+        function loadSavedStates() {
+            if (localStorage.getItem('user_dark_mode') === 'true') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkmode-toggle-btn').innerText = "☀️ 주간";
+            }
+            completes.forEach(function(pageNum) {
+                var chk = document.getElementById("check-page-" + pageNum);
+                if (chk) chk.checked = true;
+            });
+            for (var i = 1; i <= totalSubPages; i++) {
+                var savedMemo = localStorage.getItem("user_memo_page_" + i);
+                if (savedMemo) {
+                    var memoInput = document.getElementById("memo-input-" + i);
+                    if (memoInput) memoInput.value = savedMemo;
+                }
+            }
+            updateBookmarkUI();
+            updateTimerUI();
+            updateProgress();
+        }
+
+        function handleSearch() {
+            var input = document.getElementById("search-input");
+            var clearBtn = document.getElementById("search-clear-btn");
+            var query = input.value.trim().toLowerCase();
+            var resultsContainer = document.getElementById("search-results");
+            resultsContainer.innerHTML = "";
+            clearBtn.style.display = input.value.length > 0 ? "block" : "none";
+
+            if (query.length < 1) { resultsContainer.style.display = "none"; return; }
+
+            var matches = [];
+            for (var i = 1; i <= totalSubPages; i++) {
+                var pageEl = document.getElementById("sub-page-" + i);
+                if (pageEl && pageEl.innerText.toLowerCase().includes(query)) {
+                    var title = pageEl.querySelector("h2").innerText;
+                    matches.push({ pageNum: i, title: title });
+                }
+            }
+
+            if (matches.length > 0) {
+                matches.forEach(function(m) {
+                    var div = document.createElement("div");
+                    div.className = "search-result-item";
+                    div.innerHTML = "<b>[" + m.pageNum + "페이지]</b> " + m.title;
+                    div.onclick = function() {
+                        showCh1Part('part1-1');
+                        showSubPage(m.pageNum);
+                        resultsContainer.style.display = "none";
+                        input.value = "";
+                        clearBtn.style.display = "none";
+                    };
+                    resultsContainer.appendChild(div);
+                });
+                resultsContainer.style.display = "block";
+            } else {
+                resultsContainer.style.display = "none";
+            }
+        }
+
+        function clearSearch() {
+            var input = document.getElementById("search-input");
+            input.value = "";
+            document.getElementById("search-clear-btn").style.display = "none";
+            document.getElementById("search-results").style.display = "none";
+            input.focus();
+        }
+
+        function openTab(evt, tabName) {
+            var tabcontent = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            var tablinks = document.getElementsByClassName("tab-btn");
+            for (var i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            if (evt && evt.currentTarget) { evt.currentTarget.classList.add("active"); }
+
+            if (tabName === 'tab-ch1') {
+                showCh1MainMenu();
+            }
+            if (tabName === 'tab-ch3') {
+                showCh3Menu();
+            }
+        }		
+
+        function showSubPage(pageNum) {
+            currentSubPage = pageNum;
+            document.getElementById("sub-page-menu").style.display = "none";
+            for (var i = 1; i <= totalSubPages; i++) {
+                var page = document.getElementById("sub-page-" + i);
+                if (page) page.style.display = "none";
+            }
+            var targetPage = document.getElementById("sub-page-" + pageNum);
+            if (targetPage) targetPage.style.display = "block";
+
+            document.getElementById("page-nav-bar").style.display = "flex";
+            updateNavButtons();
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function showSubMenu() {
+            currentSubPage = 0;
+            for (var i = 1; i <= totalSubPages; i++) {
+                var page = document.getElementById("sub-page-" + i);
+                if (page) page.style.display = "none";
+            }
+            document.getElementById("sub-page-menu").style.display = "block";
+            document.getElementById("page-nav-bar").style.display = "none";
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function prevSubPage() { if (currentSubPage > 1) showSubPage(currentSubPage - 1); }
+        function nextSubPage() { if (currentSubPage < totalSubPages) showSubPage(currentSubPage + 1); }
+
+        function updateNavButtons() {
+            document.getElementById("btn-prev").disabled = (currentSubPage <= 1);
+            document.getElementById("btn-next").disabled = (currentSubPage >= totalSubPages);
+        }
+
+        window.onscroll = function() {
+            var topBtn = document.getElementById("top-btn");
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                topBtn.style.display = "flex";
+            } else {
+                topBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        var touchstartX = 0, touchendX = 0, touchstartY = 0, touchendY = 0;
+
+        document.addEventListener('touchstart', function(event) {
+            touchstartX = event.changedTouches[0].screenX;
+            touchstartY = event.changedTouches[0].screenY;
+        }, false);
+
+        document.addEventListener('touchend', function(event) {
+            if (event.target.closest('.table-wrapper') || event.target.closest('.search-box-container') || event.target.closest('.page-memo-textarea')) {
+                return;
+            }
+            touchendX = event.changedTouches[0].screenX;
+            touchendY = event.changedTouches[0].screenY;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            var xDiff = touchstartX - touchendX;
+            var yDiff = touchstartY - touchendY;
+
+            if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
+                if (currentSubPage > 0) {
+                    if (xDiff > 0) nextSubPage();
+                    else prevSubPage();
+                }
+            }
+        }
+
+        function setupMiniEnterKeys() {
+            document.querySelectorAll('.mini-text-input').forEach(function(inp) {
+                inp.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') { var btn = inp.nextElementSibling; if (btn) btn.click(); }
+                });
+            });
+        }
