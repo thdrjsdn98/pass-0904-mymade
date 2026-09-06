@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>소방안전관리자 2급 - 핵심 요약집</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="소방2급 요약집">
 </head>
 <body>
 
@@ -2825,5 +2833,15 @@
     <button id="top-btn" class="top-btn" onclick="scrollToTop()">▲</button>
 
     <script src="script.js"></script>
+    <script>
+        // PWA 서비스워커 등록 (지원 안 하는 브라우저는 그냥 무시됨)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./sw.js').catch(function(err) {
+                    console.log('서비스워커 등록 실패:', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>
