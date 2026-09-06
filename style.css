@@ -783,3 +783,11 @@
             50% { background-color: #fde047; }
             100% { background-color: transparent; }
         }
+
+        /* 오답노트 전용 스타일 */
+        .wrong-note-card {
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .wrong-note-card:hover {
+            box-shadow: var(--shadow-md);
+        }
