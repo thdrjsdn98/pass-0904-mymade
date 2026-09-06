@@ -807,11 +807,8 @@
             </div>
 
             <div id="collapsible-control-content">
-                
-                <!-- 실선 구분선 -->
                 <div class="tool-divider-solid"></div>
 
-                <!-- 글자 크기 + 모드 버튼 -->
                 <div class="tool-flat-section">
                     <div class="font-control-row">
                         <span class="tool-label">🔤 글자 크기</span>
@@ -828,10 +825,8 @@
                     </div>
                 </div>
 
-                <!-- 점선 구분선 -->
                 <div class="tool-divider-dashed"></div>
 
-                <!-- 데이터 보호 -->
                 <div class="tool-flat-section">
                     <span class="tool-label">💾 내 학습 데이터 보호</span>
                     <div class="backup-btn-grid">
@@ -895,7 +890,7 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>목표 시험일: 2026.10.02</p>
-                    <p>버전: V4.3.0 (완성본)</p>
+                    <p>버전: V4.4.0 (완전 복구 완성본)</p>
                 </div>
             </div>
         </div>
@@ -944,6 +939,13 @@
                 <div style="font-size: 0.9em; font-weight: 700; color: var(--text-sub); margin-bottom: 8px;">📑 학습 파트 선택</div>
                 <div class="sub-nav-grid">
                     <div class="sub-nav-card" onclick="showCh1Part('part1-1')"><span>Part1-1. 소방관계법령 (22개 단원)</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part1-2. 건축관계법령은 준비 중입니다!');"><span>Part1-2. 건축관계법령</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-1. 소방안전교육 및 훈련/소방계획의 수립은 준비 중입니다!');"><span>Part2-1. 소방안전교육 및 훈련/소방계획의 수립</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part2-2. 화재대응 및 피난은 준비 중입니다!');"><span>Part2-2. 화재대응 및 피난</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part3. 응급처치 개요는 준비 중입니다!');"><span>Part3. 응급처치 개요</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part4. 소방학개론은 준비 중입니다!');"><span>Part4. 소방학개론</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part5. 위험물·전기·가스 안전관리는 준비 중입니다!');"><span>Part5. 위험물·전기·가스 안전관리</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="alert('Part6. 화기취급 감독 및 화재위험작업의 허가·관리는 준비 중입니다!');"><span>Part6. 화기취급 감독 및 화재위험작업의 허가·관리</span><span>➔</span></div>
                 </div>
             </div>
 
@@ -989,12 +991,6 @@
                         <li><b><span class="blue">화재예방</span> 및 안전관리에 관한 법률</b>: <span class="mint_nb">공공의 안전과 복리증진</span></li>
                         <li><b><span class="blue">소방시설</span> 설치 및 관리에 관한 법률</b>: <span class="mint_nb">공공의 안전과 복리증진</span></li>
                     </ul>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 1단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec1')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec1"><div class="mini-q-title">Q1. 소방기본법의 제정 목적으로 옳은 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec1-1', this, '공공의 안녕 및 질서 유지와 복리증진')">공공의 안전과 복리증진</button><button class="font-btn" onclick="checkMiniChoice('sec1-1', this, '공공의 안녕 및 질서 유지와 복리증진')">공공의 안녕 및 질서 유지와 복리증진</button></div><div id="res-sec1-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec1"><div class="mini-q-title">Q2. 화재예방법의 제정 목적으로 옳은 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec1-2', this, '공공의 안전과 복리증진')">공공의 안녕 및 질서 유지</button><button class="font-btn" onclick="checkMiniChoice('sec1-2', this, '공공의 안전과 복리증진')">공공의 안전과 복리증진</button></div><div id="res-sec1-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec1"><div class="mini-q-title">Q3. 소방시설법의 제정 목적으로 옳은 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec1-3', this, '공공의 안전과 복리증진')">공공의 안전과 복리증진</button><button class="font-btn" onclick="checkMiniChoice('sec1-3', this, '공공의 안전과 복리증진')">국민 재산 보호 최우선</button></div><div id="res-sec1-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-1" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(1)"></textarea></div>
                 </div>
 
@@ -1008,12 +1004,6 @@
                         <li><b>소방대장</b>: 본부장 또는 서장 (<span class="highlight">본또서장</span>)</li>
                         <li><b>피난층</b>: 곧바로 지상으로 나가는 출입구가 있는 층</li>
                     </ul>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 2단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec2')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec2"><div class="mini-q-title">Q1. 소방대상물에 해당하지 않는 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec2-1', this, '항해 중인 선박')">항구에 매어둔 선박</button><button class="font-btn" onclick="checkMiniChoice('sec2-1', this, '항해 중인 선박')">항해 중인 선박</button></div><div id="res-sec2-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec2"><div class="mini-q-title">Q2. 관계인 범위에 포함되지 않는 사람은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec2-2', this, '소방안전관리자')">점유자</button><button class="font-btn" onclick="checkMiniChoice('sec2-2', this, '소방안전관리자')">소방안전관리자</button></div><div id="res-sec2-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec2"><div class="mini-q-title">Q3. 소방대에 포함되지 않는 조직은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec2-3', this, '자위소방대')">의용소방대원</button><button class="font-btn" onclick="checkMiniChoice('sec2-3', this, '자위소방대')">자위소방대</button></div><div id="res-sec2-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-2" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(2)"></textarea></div>
                 </div>
 
@@ -1028,12 +1018,6 @@
                             <li>도로 또는 진입 가능한 빈터를 향할 것, 쉽게 부술 수 있을 것</li>
                         </ul>
                     </div>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 3단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec3')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec3"><div class="mini-q-title">Q1. 무창층 면적 기준은 바닥면적의 얼마 이하인가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec3-1', this, '1/30 이하')">1/20 이하</button><button class="font-btn" onclick="checkMiniChoice('sec3-1', this, '1/30 이하')">1/30 이하</button></div><div id="res-sec3-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec3"><div class="mini-q-title">Q2. 개구부 내접원 지름 기준은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec3-2', this, '50cm 이상')">40cm 이상</button><button class="font-btn" onclick="checkMiniChoice('sec3-2', this, '50cm 이상')">50cm 이상</button></div><div id="res-sec3-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec3"><div class="mini-q-title">Q3. 개구부 하단에서 바닥까지의 높이 기준은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec3-3', this, '1.2m 이내')">1.0m 이내</button><button class="font-btn" onclick="checkMiniChoice('sec3-3', this, '1.2m 이내')">1.2m 이내</button></div><div id="res-sec3-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-3" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(3)"></textarea></div>
                 </div>
 
@@ -1044,12 +1028,6 @@
                         <li><b>주요 업무</b>: 기술 향상 교육, 연구·조사, 간행물 발간, 대국민 홍보, 위탁업무</li>
                         <li><span class="red">주의: 시설 축조, 기술 개발 직접 수행, 위험물 허가/승인은 업무 아님!</span></li>
                     </ul>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 4단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec4')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec4"><div class="mini-q-title">Q1. 한국소방안전원의 업무가 아닌 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec4-1', this, '위험물 시설 허가 및 승인')">대국민 홍보</button><button class="font-btn" onclick="checkMiniChoice('sec4-1', this, '위험물 시설 허가 및 승인')">위험물 시설 허가 및 승인</button></div><div id="res-sec4-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec4"><div class="mini-q-title">Q2. 한국소방안전원의 고유 업무는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec4-2', this, '기술 향상 교육 및 홍보')">위험물 시설 승인</button><button class="font-btn" onclick="checkMiniChoice('sec4-2', this, '기술 향상 교육 및 홍보')">기술 향상 교육 및 홍보</button></div><div id="res-sec4-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec4"><div class="mini-q-title">Q3. 한국소방안전원이 직접 수행하지 않는 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec4-3', this, '건축물 소방시설 시공')">간행물 발간</button><button class="font-btn" onclick="checkMiniChoice('sec4-3', this, '건축물 소방시설 시공')">건축물 소방시설 시공</button></div><div id="res-sec4-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-4" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(4)"></textarea></div>
                 </div>
 
@@ -1065,12 +1043,6 @@
                             <tr><td><b>3급</b></td><td colspan="2">간이 스프링클러설비 또는 자동화재탐지설비 설치 대상</td></tr>
                         </table>
                     </div>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 5단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec5')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec5"><div class="mini-q-title">Q1. 아파트 50층 이상 대상물의 등급은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec5-1', this, '특급')">1급</button><button class="font-btn" onclick="checkMiniChoice('sec5-1', this, '특급')">특급</button></div><div id="res-sec5-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec5"><div class="mini-q-title">Q2. 연면적 1.5만m² 이상 일반 건축물의 등급은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec5-2', this, '1급')">2급</button><button class="font-btn" onclick="checkMiniChoice('sec5-2', this, '1급')">1급</button></div><div id="res-sec5-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec5"><div class="mini-q-title">Q3. 스프링클러설비가 설치된 최소 대상 등급은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec5-3', this, '2급')">3급</button><button class="font-btn" onclick="checkMiniChoice('sec5-3', this, '2급')">2급</button></div><div id="res-sec5-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-5" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(5)"></textarea></div>
                 </div>
 
@@ -1081,12 +1053,6 @@
                         <li><b>업무 대행 가능</b>: 피난·방화시설 관리 및 소방시설의 유지·관리만 가능</li>
                         <li>선임일로부터 3개월 내 강습교육 이수 필수</li>
                     </ul>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 6단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec6')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec6"><div class="mini-q-title">Q1. 관리업자에게 대행시킬 수 있는 업무는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec6-1', this, '소방시설 유지·관리')">소방계획서 작성</button><button class="font-btn" onclick="checkMiniChoice('sec6-1', this, '소방시설 유지·관리')">소방시설 유지·관리</button></div><div id="res-sec6-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec6"><div class="mini-q-title">Q2. 업무 대행 시 선임된 관리자의 강습교육 이수 기한은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec6-2', this, '3개월 이내')">1개월 이내</button><button class="font-btn" onclick="checkMiniChoice('sec6-2', this, '3개월 이내')">3개월 이내</button></div><div id="res-sec6-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec6"><div class="mini-q-title">Q3. 다음 중 대행 업무에 포함되지 않는 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec6-3', this, '화재 통보 및 피난 유도')">피난·방화시설 관리</button><button class="font-btn" onclick="checkMiniChoice('sec6-3', this, '화재 통보 및 피난 유도')">화재 통보 및 피난 유도</button></div><div id="res-sec6-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-6" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(6)"></textarea></div>
                 </div>
 
@@ -1099,12 +1065,6 @@
                         <li>2급: 위험물기능장·산업기사·기능사, 공무원 3년</li>
                         <li><b>특·1급은 타 안전관리자와 겸직 절대 불가</b></li>
                     </ul>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 7단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec7')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec7"><div class="mini-q-title">Q1. 타 안전관리자와 겸직이 절대 불가능한 등급은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec7-1', this, '특급 및 1급')">2급 및 3급</button><button class="font-btn" onclick="checkMiniChoice('sec7-1', this, '특급 및 1급')">특급 및 1급</button></div><div id="res-sec7-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec7"><div class="mini-q-title">Q2. 위험물산업기사 자격 소지자의 선임 가능 등급은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec7-2', this, '2급')">1급</button><button class="font-btn" onclick="checkMiniChoice('sec7-2', this, '2급')">2급</button></div><div id="res-sec7-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec7"><div class="mini-q-title">Q3. 소방공무원 경력으로 2급 선임이 가능한 최소 근무 연수는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec7-3', this, '3년 이상')">1년 이상</button><button class="font-btn" onclick="checkMiniChoice('sec7-3', this, '3년 이상')">3년 이상</button></div><div id="res-sec7-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-7" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(7)"></textarea></div>
                 </div>
 
@@ -1117,12 +1077,6 @@
                         <li>선임연기 신청: 2/3급 대상물만 가능 (특/1급 불가)</li>
                         <li>연기 기간 중 소방안전관리 업무: <span class="red">관계인</span>이 담당</li>
                     </ul>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 8단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec8')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec8"><div class="mini-q-title">Q1. 소방안전관리자 선임 기한은 사유 발생일로부터 며칠 이내인가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec8-1', this, '30일 이내')">14일 이내</button><button class="font-btn" onclick="checkMiniChoice('sec8-1', this, '30일 이내')">30일 이내</button></div><div id="res-sec8-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec8"><div class="mini-q-title">Q2. 선임 신고 기한은 선임일로부터 며칠 이내인가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec8-2', this, '14일 이내')">30일 이내</button><button class="font-btn" onclick="checkMiniChoice('sec8-2', this, '14일 이내')">14일 이내</button></div><div id="res-sec8-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec8"><div class="mini-q-title">Q3. 선임연기 신청이 가능한 대상물 등급은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec8-3', this, '2급 및 3급')">특급 및 1급</button><button class="font-btn" onclick="checkMiniChoice('sec8-3', this, '2급 및 3급')">2급 및 3급</button></div><div id="res-sec8-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-8" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(8)"></textarea></div>
                 </div>
 
@@ -1133,12 +1087,6 @@
                         <li>포함 항목: 대상물 명칭, 선임일자/연락처, 근무 위치(수신기 위치), 등급</li>
                         <li><span class="red">자격증 종류(자격 등급)는 미표기 항목</span></li>
                     </ul>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 9단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec9')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec9"><div class="mini-q-title">Q1. 현황표에 반드시 표기해야 하는 항목이 아닌 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec9-1', this, '자격증 종류')">근무 위치</button><button class="font-btn" onclick="checkMiniChoice('sec9-1', this, '자격증 종류')">자격증 종류</button></div><div id="res-sec9-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec9"><div class="mini-q-title">Q2. 현황표 근무 위치의 기준이 되는 설비는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec9-2', this, '화재수신기')">소방펌프</button><button class="font-btn" onclick="checkMiniChoice('sec9-2', this, '화재수신기')">화재수신기</button></div><div id="res-sec9-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec9"><div class="mini-q-title">Q3. 현황표 기재 항목에 포함되는 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec9-3', this, '대상물 명칭 및 등급')">소지자 최종 학력</button><button class="font-btn" onclick="checkMiniChoice('sec9-3', this, '대상물 명칭 및 등급')">대상물 명칭 및 등급</button></div><div id="res-sec9-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                    </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-9" class="page-memo-textarea" placeholder="이 페이지에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(9)"></textarea></div>
                 </div>
 
@@ -1157,12 +1105,6 @@
                                 <li style="margin-bottom: 0;"><span class="mint">건설현장 공사 계약서 (사본)</span></li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 10단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec10')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec10"><div class="mini-q-title">Q1. 건설현장 소방안전관리자 선임 신고 의무자는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec10-1', this, '공사시공자')">소방서장</button><button class="font-btn" onclick="checkMiniChoice('sec10-1', this, '공사시공자')">공사시공자</button></div><div id="res-sec10-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec10"><div class="mini-q-title">Q2. 선임 신고 기한은 선임일로부터 며칠 이내인가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec10-2', this, '14일 이내')">30일 이내</button><button class="font-btn" onclick="checkMiniChoice('sec10-2', this, '14일 이내')">14일 이내</button></div><div id="res-sec10-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec10"><div class="mini-q-title">Q3. 신고 시 첨부 서류 4종에 포함되지 않는 것은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec10-3', this, '건축물 대장')">공사 계약서 사본</button><button class="font-btn" onclick="checkMiniChoice('sec10-3', this, '건축물 대장')">건축물 대장</button></div><div id="res-sec10-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
                     </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-10" class="page-memo-textarea" placeholder="10단원에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(10)"></textarea></div>
                 </div>
@@ -1185,12 +1127,6 @@
                             <b>📌 불시 소방훈련 및 교육 대상 특정소방대상물:</b><br>
                             &lt;<span class="mint"><b>의료시설, 노유자시설, 교육연구시설</b></span>&gt;
                         </div>
-                    </div>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 11단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec11')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec11"><div class="mini-q-title">Q1. 특급·1급 결과 제출 기한은 훈련일로부터 며칠 이내인가?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec11-1', this, '30일 이내')">14일 이내</button><button class="font-btn" onclick="checkMiniChoice('sec11-1', this, '30일 이내')">30일 이내</button></div><div id="res-sec11-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec11"><div class="mini-q-title">Q2. 훈련 결과기록부 자체 보관 연수는?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec11-2', this, '2년간')">1년간</button><button class="font-btn" onclick="checkMiniChoice('sec11-2', this, '2년간')">2년간</button></div><div id="res-sec11-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec11"><div class="mini-q-title">Q3. 불시 소방훈련 사전 통지 기한은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec11-3', this, '10일 전까지')">5일 전까지</button><button class="font-btn" onclick="checkMiniChoice('sec11-3', this, '10일 전까지')">10일 전까지</button></div><div id="res-sec11-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
                     </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-11" class="page-memo-textarea" placeholder="11단원에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(11)"></textarea></div>
                 </div>	
@@ -1250,64 +1186,6 @@
                             <b>💡 종합점검 대상 필수 암기 공식:</b><br>
                             <span class="red">스프링</span> | <span class="red">물·분무 5천</span> | <span class="red">다중이 2천</span> | <span class="red">제연터널</span> | <span class="red">공공 천 (옥내/자탐)</span>
                         </div>
-
-                        <div style="font-size: 0.95em; font-weight: bold; margin: 18px 0 6px 0; color: var(--text-color);">
-                            ⏱️ 점검 횟수 및 시기
-                        </div>
-                        <div class="table-wrapper">
-                            <table class="table">
-                                <thead><tr><th style="width: 22%; text-align: center;">구분</th><th style="width: 44%; text-align: center;">점검 횟수 및 기준 시기</th></tr></thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: center; font-weight: bold; background-color: var(--box-bg);">작동점검</td>
-                                        <td>
-                                            <b>원칙: <span class="red">연 1회 이상</span> 실시</b>
-                                            <ul style="margin: 6px 0 0 0; padding-left: 18px;">
-                                                <li><b>작동점검만 받는 대상:</b> 사용승인일이 속하는 달의 말일까지</li>
-                                                <li><b>종합점검도 받는 대상:</b> 종합점검 받은 달부터 <span class="highlight">6개월이 되는 달</span>에 작동점검 실시</li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; font-weight: bold; background-color: var(--box-bg);">종합점검</td>
-                                        <td>
-                                            <ul style="margin: 0; padding-left: 18px;">
-                                                <li><b>신설 대상물(최초점검):</b> 건축물 사용승인일로부터 <span class="red">60일 이내</span></li>
-                                                <li><b>기존 대상물:</b> 사용승인일이 속하는 달에 <span class="red">연 1회 이상</span> <span class="blue_nb">(단, 특급은 반기 1회)</span></li>
-                                                <li><b>학교:</b> 사용승인일이 1~6월인 경우 6월 30일까지 실시 가능</li>
-                                                <li><b>다중이용업소 변경:</b> 사용승인일 이후 대상 편입 시 그 다음 해부터 실시</li>
-                                                <li><b>동일 대지 내 2개 이상:</b> 사용승인일이 가장 빠른 연도의 건축물 기준</li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="info-card">
-                            <b style="color: #2563eb;">📝 실전 적용 계산 예시</b>
-                            <ul style="margin: 6px 0 0 0; padding-left: 18px;">
-                                <li style="margin-bottom: 6px;"><b>Q1. 작동점검만 받는 건물 (사용승인일 4월 25일, 기준일 26년 9월 5일):</b><br>➔ <span class="highlight">다음 점검은 2027년 4월 말일까지</span></li>
-                                <li><b>Q2. 종합과 작동 모두 받는 건물 (사용승인일 4월 25일):</b><br>➔ <span class="highlight">종합점검은 2027년 4월, 작동점검은 6개월 뒤인 2027년 10월</span></li>
-                            </ul>
-                        </div>
-
-                        <div class="info-card" style="border-top: 3px solid #10b981;">
-                            <b style="color: #059669;">📦 3) 자체점검 결과의 조치 절차 (공휴일·주말 제외)</b>
-                            <ul style="margin: 8px 0 0 0; padding-left: 18px;">
-                                <li style="margin-bottom: 6px;"><b>(1) 관리업자:</b> 점검 완료일로부터 <span class="highlight">10일 이내</span> 점검표를 첨부하여 실시결과보고서를 관계인에게 제출</li>
-                                <li style="margin-bottom: 6px;"><b>(2) 관계인:</b> 점검 완료일로부터 <span class="highlight">15일 이내</span> 보고서와 이행계획서를 본또서장에게 보고 (<span class="highlight">2년간 자체보관</span>)</li>
-                                <li style="margin-bottom: 6px;"><b>(3) 이행 완료 기간 (본또서장 통보):</b><br>• 수리 또는 정비: <span class="red">보고일로부터 10일 이내</span><br>• 철거 또는 교체: <span class="red">보고일로부터 20일 이내</span></li>
-                                <li style="margin-bottom: 6px;"><b>(4) 이행계획 완료 보고:</b> 관계인은 이행을 마친 날부터 <span class="highlight">10일 이내</span> 본또서장에게 완료 보고</li>
-                                <li><b>(5) 결과 기록표 게시:</b> 보고 후 <span class="highlight">10일 이내</span> 출입자가 쉽게 보는 장소에 게시 (<span class="highlight">다음 점검 전까지 게시 유지</span>)</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="quiz-section">
-                        <div class="quiz-sec-header"><span class="quiz-sec-title">📝 12단원 핵심 기출 3선</span><button class="font-btn" onclick="resetSectionQuiz('sec12')" style="font-size:0.75em; padding:3px 7px;">🔄 리셋</button></div>
-                        <div class="mini-q-item" data-sec="sec12"><div class="mini-q-title">Q1. 신설 건축물 최초 종합점검 실시 기한은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec12-1', this, '사용승인일로부터 60일 이내')">30일 이내</button><button class="font-btn" onclick="checkMiniChoice('sec12-1', this, '사용승인일로부터 60일 이내')">사용승인일로부터 60일 이내</button></div><div id="res-sec12-1" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec12"><div class="mini-q-title">Q2. 자체점검 결과보고서 관계인 보고 기한은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec12-2', this, '점검 완료일로부터 15일 이내')">10일 이내</button><button class="font-btn" onclick="checkMiniChoice('sec12-2', this, '점검 완료일로부터 15일 이내')">점검 완료일로부터 15일 이내</button></div><div id="res-sec12-2" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
-                        <div class="mini-q-item" data-sec="sec12"><div class="mini-q-title">Q3. 종합점검 대상 면적 중 공공기관 기준은?</div><div class="mini-opt-grid"><button class="font-btn" onclick="checkMiniChoice('sec12-3', this, '연면적 1천m² 이상')">연면적 5천m² 이상</button><button class="font-btn" onclick="checkMiniChoice('sec12-3', this, '연면적 1천m² 이상')">연면적 1천m² 이상</button></div><div id="res-sec12-3" style="display:none; font-size:0.85em; font-weight:bold; margin-top:4px;"></div></div>
                     </div>
                     <div class="page-memo-section"><div class="page-memo-title"><span>📝 페이지별 각주 (나만의 메모)</span></div><textarea id="memo-input-12" class="page-memo-textarea" placeholder="12단원에 추가로 기억할 내용을 적어보세요..." oninput="savePageMemo(12)"></textarea></div>
                 </div>
@@ -1334,7 +1212,7 @@
         <div id="tab-ch1-1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V4.3.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V4.4.0</span>
             </div>
 
             <div id="ch1-1-main-menu">
@@ -1422,7 +1300,7 @@
         <div id="tab-ch3" class="tab-content">
             <h1>소방안전관리자 2급 - <br>모의고사</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V4.3.0</span>
+                <span>만든이: 꾸누</span> | <span>버전: V4.4.0</span>
             </div>
 
             <div id="ch3-page-menu">
