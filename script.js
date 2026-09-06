@@ -230,25 +230,62 @@ var currentSubPage = 0;
             localStorage.setItem("user_memo_page_b2_" + pageNum, memoText);
         }
 
-        function exportUserData() {
+        async function exportUserData() {
             var backupData = { 
                 bookmarks: bookmarks, 
                 completes: completes, 
                 wrongNotes: wrongNotes,
-                memos: {} 
+                memos: {},
+                bookmarksB2: bookmarksB2,
+                completesB2: completesB2,
+                memosB2: {}
             };
             for (var i = 1; i <= totalSubPages; i++) {
                 var memo = localStorage.getItem("user_memo_page_" + i);
                 if (memo) backupData.memos[i] = memo;
             }
-            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+            for (var j = 1; j <= totalSubPagesB2; j++) {
+                var memoB2 = localStorage.getItem("user_memo_page_b2_" + j);
+                if (memoB2) backupData.memosB2[j] = memoB2;
+            }
+
+            // 파일명에 백업 시각(YYMMDDHHmm)을 붙여서 매번 새 이름으로 저장되게 함 (예전처럼 -1, -2 안 쌓임)
+            var now = new Date();
+            var pad = function(n) { return String(n).padStart(2, '0'); };
+            var timestamp = String(now.getFullYear()).slice(2) + pad(now.getMonth() + 1) + pad(now.getDate()) + pad(now.getHours()) + pad(now.getMinutes());
+            var filename = "소방2급_학습데이터_백업_" + timestamp + ".json";
+            var jsonStr = JSON.stringify(backupData, null, 2);
+
+            // 크롬/엣지 등 최신 브라우저: 저장 위치를 직접 고를 수 있는 "다른 이름으로 저장" 창을 띄움
+            // (기기별로 마지막에 저장한 폴더를 브라우저가 자체적으로 기억해줌)
+            if (window.showSaveFilePicker) {
+                try {
+                    var handle = await window.showSaveFilePicker({
+                        suggestedName: filename,
+                        types: [{ description: 'JSON 백업 파일', accept: { 'application/json': ['.json'] } }]
+                    });
+                    var writable = await handle.createWritable();
+                    await writable.write(jsonStr);
+                    await writable.close();
+                    alert("💾 백업 파일이 저장되었습니다! (소방관계법령 + 건축관계법령 전체 포함)");
+                } catch (err) {
+                    if (err && err.name === 'AbortError') {
+                        return; // 사용자가 저장을 취소한 경우 - 알림 없이 조용히 종료
+                    }
+                    alert("❌ 백업 저장 중 오류가 발생했습니다.");
+                }
+                return;
+            }
+
+            // 저장 위치 선택 기능을 지원하지 않는 브라우저(사파리 등)를 위한 예전 방식
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonStr);
             var downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "소방2급_학습데이터_백업.json");
+            downloadAnchor.setAttribute("download", filename);
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
-            alert("💾 메모와 학습 진도, 오답노트가 안전하게 백업 파일로 다운로드되었습니다!");
+            alert("💾 메모와 학습 진도, 오답노트가 안전하게 백업 파일로 다운로드되었습니다! (소방관계법령 + 건축관계법령 전체 포함)");
         }
 
         function importUserData(event) {
@@ -266,6 +303,13 @@ var currentSubPage = 0;
                             localStorage.setItem("user_memo_page_" + key, data.memos[key]);
                         }
                     }
+                    if (data.bookmarksB2) localStorage.setItem('user_bookmarks_b2', JSON.stringify(data.bookmarksB2));
+                    if (data.completesB2) localStorage.setItem('user_completes_b2', JSON.stringify(data.completesB2));
+                    if (data.memosB2) {
+                        for (var keyB2 in data.memosB2) {
+                            localStorage.setItem("user_memo_page_b2_" + keyB2, data.memosB2[keyB2]);
+                        }
+                    }
                     alert("📂 백업 데이터를 성공적으로 복원했습니다! 페이지를 새로고침합니다.");
                     location.reload();
                 } catch(err) {
@@ -276,9 +320,10 @@ var currentSubPage = 0;
         }
 
         function updateProgress() {
-            var doneCount = completes.length;
-            var percent = Math.round((doneCount / totalSubPages) * 100);
-            document.getElementById('progress-text').innerText = doneCount + " / " + totalSubPages + " (" + percent + "%)";
+            var totalUnits = totalSubPages + totalSubPagesB2; // 소방관계법령 22 + 건축관계법령 7 = 29
+            var doneCount = completes.length + completesB2.length;
+            var percent = Math.round((doneCount / totalUnits) * 100);
+            document.getElementById('progress-text').innerText = doneCount + " / " + totalUnits + " (" + percent + "%)";
             document.getElementById('progress-fill').style.width = percent + "%";
 
             for (var i = 1; i <= totalSubPages; i++) {
@@ -426,6 +471,7 @@ var currentSubPage = 0;
             }
             localStorage.setItem('user_completes_b2', JSON.stringify(completesB2));
             updateProgressB2();
+            updateProgress(); // 표지의 통합 진도율(소방+건축)도 같이 갱신
         }
 
         function updateProgressB2() {
@@ -1062,6 +1108,62 @@ var currentSubPage = 0;
             });
         }
 
+        // 오답노트 항목 하나에서 어느 단원(파트+단원 번호)의 문제인지 추정해서 뽑아냄
+        function extractUnitFromWrongNote(key, note) {
+            var m = note.title.match(/\[(\d+)단원\]/); // 모의고사류: 제목에 "[13단원]"처럼 박혀있음
+            if (m) return { part: '1', unit: parseInt(m[1], 10) };
+            var m2 = key.match(/^secb2-(\d+)-/); // Part1-2(건축관계법령) 단원 퀴즈
+            if (m2) return { part: 'b2', unit: parseInt(m2[1], 10) };
+            var m3 = key.match(/^sec(\d+)-/); // Part1-1(소방관계법령) 단원 퀴즈
+            if (m3) return { part: '1', unit: parseInt(m3[1], 10) };
+            return null; // 복습예제 등 단원을 특정하기 애매한 경우
+        }
+
+        // 오답이 가장 많이 쌓인 단원 TOP 5를 계산해서 보여줌 (복습 우선순위 파악용)
+        function renderWeakUnitSummary() {
+            var summaryEl = document.getElementById("wrong-unit-summary");
+            if (!summaryEl) return;
+
+            var counts = {}; // key: "1-13" 또는 "b2-3" 형태, value: {part, unit, count}
+            Object.keys(wrongNotes).forEach(function(k) {
+                var info = extractUnitFromWrongNote(k, wrongNotes[k]);
+                if (!info) return;
+                var mapKey = info.part + "-" + info.unit;
+                if (!counts[mapKey]) counts[mapKey] = { part: info.part, unit: info.unit, count: 0 };
+                counts[mapKey].count++;
+            });
+
+            var list = Object.keys(counts).map(function(k) { return counts[k]; });
+            list.sort(function(a, b) { return b.count - a.count; });
+            list = list.slice(0, 5);
+
+            if (list.length === 0) { summaryEl.innerHTML = ""; return; }
+
+            var html = '<div class="box" style="margin-top:6px; padding: 12px 14px;">';
+            html += '<div style="font-weight:800; font-size:0.92em; margin-bottom:8px; color:var(--text-color);">🎯 오답이 많이 쌓인 단원 TOP ' + list.length + ' (복습 우선순위)</div>';
+            list.forEach(function(item, idx) {
+                var partLabel = (item.part === 'b2') ? '건축법령' : '소방법령';
+                html += '<div style="display:flex; justify-content:space-between; align-items:center; padding:7px 0; ' + (idx < list.length - 1 ? 'border-bottom:1px dashed var(--border-color);' : '') + '">';
+                html += '  <span style="font-size:0.88em; cursor:pointer; color:var(--primary); font-weight:700;" onclick="jumpToWeakUnit(&#39;' + item.part + '&#39;, ' + item.unit + ')">' + (idx + 1) + '. [' + partLabel + '] ' + item.unit + '단원</span>';
+                html += '  <span class="badge red" style="font-size:0.78em; padding:2px 8px; border-radius:6px; background:#fee2e2; color:#dc2626; font-weight:800;">' + item.count + '회 오답</span>';
+                html += '</div>';
+            });
+            html += '</div>';
+            summaryEl.innerHTML = html;
+        }
+
+        // 취약 단원 요약에서 단원명을 누르면 바로 그 단원 이론 페이지로 이동
+        function jumpToWeakUnit(part, unit) {
+            openTab(null, 'tab-ch1');
+            if (part === 'b2') {
+                showCh1Part('part1-2');
+                showSubPageB2(unit);
+            } else {
+                showCh1Part('part1-1');
+                showSubPage(unit);
+            }
+        }
+
         function renderWrongNotes() {
             var container = document.getElementById("wrong-notes-list");
             var countBadge = document.getElementById("wrong-count-badge");
@@ -1070,6 +1172,8 @@ var currentSubPage = 0;
             if (countBadge) {
                 countBadge.innerText = keys.length + "개";
             }
+
+            renderWeakUnitSummary();
 
             if (!container) return;
 
