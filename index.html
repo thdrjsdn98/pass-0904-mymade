@@ -89,15 +89,21 @@
 
         <!-- 탭 메뉴 -->
         <div class="tab-menu-wrapper">
-            <div class="tab-menu" id="main-tab-menu">
-                <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-numbers')">📐 숫자·기한 총정리</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">I. 복습예제</button>
-                <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!');">II. 설비 및 구조</button>
-                <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!');">III. 복합개념</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
-                <button class="tab-btn" onclick="openTab(event, 'tab-wrong'); renderWrongNotes();">📕 오답노트 <span id="wrong-count-badge" style="color:#ef4444; font-weight:800; font-size:0.85em;">0개</span></button>
+            <div class="tab-dropdown" id="tab-dropdown-container">
+                <button class="tab-dropdown-toggle" onclick="toggleTabDropdown()">
+                    <span id="tab-dropdown-label">표지</span>
+                    <span id="tab-dropdown-arrow">▼</span>
+                </button>
+                <div class="tab-dropdown-list" id="tab-dropdown-list">
+                    <button class="tab-btn active" onclick="openTab(event, 'tab-cover')">표지</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-ch1')">I. 이론과 개념</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-numbers')">📐 숫자·기한 총정리</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-ch1-1')">I. 복습예제</button>
+                    <button class="tab-btn" onclick="alert('II. 설비 및 구조의 이해는 준비 중입니다!'); closeTabDropdown();">II. 설비 및 구조</button>
+                    <button class="tab-btn" onclick="alert('III. 이론과 개념 설명 II: 복합개념 정리는 준비 중입니다!'); closeTabDropdown();">III. 복합개념</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-ch3')">모의고사</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab-wrong'); renderWrongNotes();">📕 오답노트 <span id="wrong-count-badge" style="color:#ef4444; font-weight:800; font-size:0.85em;">0개</span></button>
+                </div>
             </div>
         </div>
 

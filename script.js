@@ -643,6 +643,39 @@
             input.focus();
         }
 
+        // 드롭다운 버튼을 눌렀을 때 목록을 열고 닫음
+        var tabDropdownLabels = {          // 탭 id별로 드롭다운 버튼에 표시할 짧은 이름
+            'tab-cover': '표지',
+            'tab-ch1': 'I. 이론과 개념',
+            'tab-numbers': '📐 숫자·기한 총정리',
+            'tab-ch1-1': 'I. 복습예제',
+            'tab-ch3': '모의고사',
+            'tab-wrong': '📕 오답노트'
+        };
+
+        function toggleTabDropdown() {
+            var list = document.getElementById('tab-dropdown-list');
+            var arrow = document.getElementById('tab-dropdown-arrow');
+            var isOpen = list.classList.toggle('open');
+            arrow.innerText = isOpen ? '▲' : '▼';
+        }
+
+        // 드롭다운 목록을 강제로 닫음 (탭 선택 후, 또는 바깥을 클릭했을 때 호출)
+        function closeTabDropdown() {
+            var list = document.getElementById('tab-dropdown-list');
+            var arrow = document.getElementById('tab-dropdown-arrow');
+            list.classList.remove('open');
+            arrow.innerText = '▼';
+        }
+
+        // 드롭다운이 열려있는 상태에서, 메뉴 바깥(다른 곳)을 클릭하면 자동으로 닫히게 함
+        document.addEventListener('click', function(e) {
+            var container = document.getElementById('tab-dropdown-container');
+            if (container && !container.contains(e.target)) {
+                closeTabDropdown();
+            }
+        });
+
         function openTab(evt, tabName) {
             var tabcontent = document.getElementsByClassName("tab-content");
             for (var i = 0; i < tabcontent.length; i++) {
@@ -656,6 +689,13 @@
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
             if (evt && evt.currentTarget) { evt.currentTarget.classList.add("active"); }
+
+            // 드롭다운 버튼의 표시 글자를 선택한 탭 이름으로 바꾸고, 목록은 닫음
+            var labelEl = document.getElementById('tab-dropdown-label');
+            if (labelEl && tabDropdownLabels[tabName]) {
+                labelEl.innerText = tabDropdownLabels[tabName];
+            }
+            closeTabDropdown();
 
             if (tabName === 'tab-ch1') {
                 showCh1MainMenu();

@@ -362,35 +362,58 @@
             z-index: 100;
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 16px;
+            padding: 8px 0 12px 0;
         }
-        .tab-menu {
+        .tab-dropdown {
+            position: relative;
+        }
+        .tab-dropdown-toggle {
+            width: 100%;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 6px;
-            padding: 6px 0 10px 0;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 800;
+            font-size: 0.9em;
+            cursor: pointer;
+            min-height: 44px;
         }
-        .tab-menu::-webkit-scrollbar { display: none; }
+        .tab-dropdown-list {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            z-index: 200;
+            overflow: hidden;
+        }
+        .tab-dropdown-list.open { display: flex; }
         .tab-btn {
             background-color: transparent;
             color: var(--text-sub);
-            border: 1px solid transparent;
-            padding: 8px 12px;
-            border-radius: var(--radius-sm);
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 13px 16px;
             font-weight: 700;
-            font-size: 0.82em;
+            font-size: 0.88em;
             cursor: pointer;
-            white-space: nowrap;
-            min-height: 38px;
+            text-align: left;
+            width: 100%;
             transition: all 0.15s ease;
         }
+        .tab-dropdown-list .tab-btn:last-child { border-bottom: none; }
         .tab-btn.active {
             background-color: var(--primary-light);
             color: var(--primary);
-            border-color: rgba(37, 99, 235, 0.2);
         }
 
         .tab-content { display: none; }
