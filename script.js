@@ -214,6 +214,11 @@
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
         }
 
+        function savePageMemoB2(pageNum) {
+            var memoText = document.getElementById("memo-input-b2-" + pageNum).value;
+            localStorage.setItem("user_memo_page_b2_" + pageNum, memoText);
+        }
+
         function exportUserData() {
             var backupData = { 
                 bookmarks: bookmarks, 
@@ -328,6 +333,12 @@
             if (partName === 'part1-1') {
                 document.getElementById("ch1-main-menu").style.display = "none";
                 document.getElementById("ch1-part1-1-container").style.display = "block";
+                showSubMenu(); // 들어갈 때마다 항상 단원 목록 화면부터 보여줌
+            }
+            if (partName === 'part1-2') {
+                document.getElementById("ch1-main-menu").style.display = "none";
+                document.getElementById("ch1-part1-2-container").style.display = "block";
+                showSubMenuB2(); // 들어갈 때마다 항상 단원 목록 화면부터 보여줌
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -344,8 +355,110 @@
             document.getElementById("sub-page-menu").style.display = "block";
             document.getElementById("page-nav-bar").style.display = "none";
             document.getElementById("ch1-part1-1-container").style.display = "none";
+            document.getElementById("ch1-part1-2-container").style.display = "none";
             document.getElementById("ch1-main-menu").style.display = "block";
             window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // ============================================================
+        // 🏗 Part1-2. 건축관계법령 (7개 단원) - 소방관계법령(Part1-1)과는
+        // 별도의 진도/북마크/메모를 쓰는 독립된 파트라서 변수명 뒤에 B2를 붙임
+        // ============================================================
+        var currentSubPageB2 = 0;
+        var totalSubPagesB2 = 7;
+        var completesB2 = JSON.parse(localStorage.getItem('user_completes_b2') || '[]');
+        var bookmarksB2 = JSON.parse(localStorage.getItem('user_bookmarks_b2') || '[]');
+
+        function showSubPageB2(pageNum) {
+            currentSubPageB2 = pageNum;
+            document.getElementById("sub-page-menu-b2").style.display = "none";
+            for (var i = 1; i <= totalSubPagesB2; i++) {
+                var page = document.getElementById("sub-page-b2-" + i);
+                if (page) page.style.display = "none";
+            }
+            var targetPage = document.getElementById("sub-page-b2-" + pageNum);
+            if (targetPage) targetPage.style.display = "block";
+
+            document.getElementById("page-nav-bar-b2").style.display = "flex";
+            updateNavButtonsB2();
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function showSubMenuB2() {
+            currentSubPageB2 = 0;
+            for (var i = 1; i <= totalSubPagesB2; i++) {
+                var page = document.getElementById("sub-page-b2-" + i);
+                if (page) page.style.display = "none";
+            }
+            var cards = document.querySelectorAll("#main-menu-grid-b2 .sub-nav-card");
+            cards.forEach(function(card) { card.style.display = "flex"; });
+
+            document.getElementById("sub-page-menu-b2").style.display = "block";
+            document.getElementById("page-nav-bar-b2").style.display = "none";
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function prevSubPageB2() { if (currentSubPageB2 > 1) showSubPageB2(currentSubPageB2 - 1); }
+        function nextSubPageB2() { if (currentSubPageB2 < totalSubPagesB2) showSubPageB2(currentSubPageB2 + 1); }
+
+        function updateNavButtonsB2() {
+            document.getElementById("btn-prev-b2").disabled = (currentSubPageB2 <= 1);
+            document.getElementById("btn-next-b2").disabled = (currentSubPageB2 >= totalSubPagesB2);
+        }
+
+        function toggleCompleteB2(pageNum) {
+            var chk = document.getElementById("check-page-b2-" + pageNum);
+            if (chk.checked) {
+                if (!completesB2.includes(pageNum)) completesB2.push(pageNum);
+            } else {
+                var idx = completesB2.indexOf(pageNum);
+                if (idx > -1) completesB2.splice(idx, 1);
+            }
+            localStorage.setItem('user_completes_b2', JSON.stringify(completesB2));
+            updateProgressB2();
+        }
+
+        function updateProgressB2() {
+            for (var i = 1; i <= totalSubPagesB2; i++) {
+                var doneBadge = document.getElementById("card-done-b2-" + i);
+                if (doneBadge) doneBadge.style.display = completesB2.includes(i) ? "inline-block" : "none";
+            }
+        }
+
+        function toggleBookmarkB2(pageNum) {
+            var index = bookmarksB2.indexOf(pageNum);
+            if (index > -1) bookmarksB2.splice(index, 1);
+            else bookmarksB2.push(pageNum);
+            localStorage.setItem('user_bookmarks_b2', JSON.stringify(bookmarksB2));
+            updateBookmarkUIB2();
+        }
+
+        function updateBookmarkUIB2() {
+            for (var i = 1; i <= totalSubPagesB2; i++) {
+                var btn = document.getElementById("star-btn-b2-" + i);
+                var cardStar = document.getElementById("card-star-b2-" + i);
+                var isBookmarked = bookmarksB2.includes(i);
+                if (btn) {
+                    btn.innerText = isBookmarked ? "★" : "☆";
+                    btn.classList.toggle('active', isBookmarked);
+                }
+                if (cardStar) {
+                    cardStar.innerText = isBookmarked ? " ★" : "";
+                    cardStar.style.color = "#f59e0b";
+                }
+            }
+        }
+
+        function filterBookmarksB2() {
+            if (bookmarksB2.length === 0) {
+                alert("등록된 북마크가 없습니다.");
+                return;
+            }
+            var cards = document.querySelectorAll("#main-menu-grid-b2 .sub-nav-card");
+            cards.forEach(function(card, idx) {
+                var pageNum = idx + 1;
+                card.style.display = bookmarksB2.includes(pageNum) ? "flex" : "none";
+            });
         }
 
         function showCh11Part(partName) {
@@ -660,6 +773,21 @@
             updateBookmarkUI();
             updateTimerUI();
             updateProgress();
+
+            // Part1-2 (건축관계법령) 저장된 상태 복원
+            completesB2.forEach(function(pageNum) {
+                var chk = document.getElementById("check-page-b2-" + pageNum);
+                if (chk) chk.checked = true;
+            });
+            for (var j = 1; j <= totalSubPagesB2; j++) {
+                var savedMemoB2 = localStorage.getItem("user_memo_page_b2_" + j);
+                if (savedMemoB2) {
+                    var memoInputB2 = document.getElementById("memo-input-b2-" + j);
+                    if (memoInputB2) memoInputB2.value = savedMemoB2;
+                }
+            }
+            updateBookmarkUIB2();
+            updateProgressB2();
         }
 
         function handleSearch() {
