@@ -6,8 +6,7 @@
         var memorizeTimerSec = parseInt(localStorage.getItem('user_timer_sec') || '3', 10);
         
         var quizAnswerState = {}; 
-        var isFilterWrongMode1 = false;
-        var isFilterWrongMode2 = false;
+        var filterWrongModes = {};
         var wasDarkModeBeforeMemo = false;
         var isChosungMode = false;
         var originalElementsData = [];
@@ -366,6 +365,8 @@
             document.getElementById("ch3-page-menu").style.display = "none";
             document.getElementById("ch3-sub-page-1").style.display = "none";
             document.getElementById("ch3-sub-page-2").style.display = "none";
+            document.getElementById("ch3-sub-page-3").style.display = "none";
+            document.getElementById("ch3-sub-page-4").style.display = "none";
             
             var testPage = document.getElementById("ch3-sub-page-" + pageNum);
             if (testPage) testPage.style.display = "block";
@@ -375,6 +376,8 @@
         function showCh3Menu() {
             document.getElementById("ch3-sub-page-1").style.display = "none";
             document.getElementById("ch3-sub-page-2").style.display = "none";
+            document.getElementById("ch3-sub-page-3").style.display = "none";
+            document.getElementById("ch3-sub-page-4").style.display = "none";
             document.getElementById("ch3-page-menu").style.display = "block";
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -498,6 +501,54 @@
 
             if (qId.startsWith('ch3-1-')) updateQuizScore(1, 10);
             if (qId.startsWith('ch3-2-')) updateQuizScore(2, 20);
+            if (qId.startsWith('ch3-3-')) updateQuizScore(3, 40);
+            if (qId.startsWith('ch3-4-')) updateQuizScore(4, 60);
+        }
+
+        // 모의고사 단답형(주관식) 문제 채점 함수 - correctList: 정답으로 인정할 문자열들의 배열
+        function checkAnswerByInput(qId, inputEl, correctList) {
+            var box = inputEl.closest('.quiz-box');
+            var resultEl = document.getElementById("q-result-" + qId);
+            var explEl = document.getElementById("q-expl-" + qId);
+            var isDark = document.body.classList.contains('dark-mode');
+
+            var userVal = inputEl.value.trim();
+            var isCorrect = correctList.some(function(c) { return userVal === c.trim(); });
+            quizAnswerState[qId] = isCorrect;
+
+            if (resultEl) resultEl.style.display = "block";
+            if (explEl) explEl.style.display = "block";
+
+            var qTitleEl = box ? box.querySelector('.quiz-q-title') : null;
+            var qTitle = qTitleEl ? qTitleEl.innerText.trim() : "문제";
+            var qExpl = explEl ? explEl.innerText.replace("💡 해설:", "").trim() : "";
+            var correctDisplay = correctList[0];
+
+            inputEl.style.borderColor = isCorrect ? (isDark ? "#4ade80" : "#16a34a") : (isDark ? "#f87171" : "#dc2626");
+
+            if (isCorrect) {
+                if (resultEl) resultEl.innerHTML = "<span style='color: " + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 🎉</span>";
+                if (wrongNotes[qId]) {
+                    delete wrongNotes[qId];
+                    localStorage.setItem('user_wrong_notes', JSON.stringify(wrongNotes));
+                    renderWrongNotes();
+                }
+            } else {
+                if (resultEl) resultEl.innerHTML = "<span style='color: " + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + correctDisplay + ")</span>";
+                wrongNotes[qId] = {
+                    id: qId,
+                    title: qTitle,
+                    correct: correctDisplay,
+                    wrongChoice: userVal || "(미입력)",
+                    expl: qExpl,
+                    type: "모의고사 03회차"
+                };
+                localStorage.setItem('user_wrong_notes', JSON.stringify(wrongNotes));
+                renderWrongNotes();
+            }
+
+            if (qId.startsWith('ch3-3-')) updateQuizScore(3, 40);
+            if (qId.startsWith('ch3-4-')) updateQuizScore(4, 60);
         }
 
         function updateQuizScore(subPageNum, totalQ) {
@@ -530,6 +581,8 @@
             if (box) {
                 var btns = box.querySelectorAll('.opt-btn');
                 btns.forEach(function(b) { b.style.backgroundColor = ""; b.style.color = ""; b.style.borderColor = ""; });
+                var inputs = box.querySelectorAll('input[type="text"]');
+                inputs.forEach(function(inp) { inp.value = ""; inp.style.borderColor = ""; });
             }
             delete quizAnswerState[qId];
         }
@@ -540,10 +593,8 @@
 
         function toggleWrongOnly(subPageNum, totalQ) {
             var btn = document.getElementById('btn-filter-wrong-' + subPageNum);
-            var isCurrentMode = (subPageNum === 1) ? isFilterWrongMode1 : isFilterWrongMode2;
-            isCurrentMode = !isCurrentMode;
-            if (subPageNum === 1) isFilterWrongMode1 = isCurrentMode;
-            else isFilterWrongMode2 = isCurrentMode;
+            var isCurrentMode = !filterWrongModes[subPageNum];
+            filterWrongModes[subPageNum] = isCurrentMode;
 
             for (var i = 1; i <= totalQ; i++) {
                 var box = document.getElementById('box-ch3-' + subPageNum + '-' + i);
@@ -579,6 +630,13 @@
             if (localStorage.getItem('user_dark_mode') === 'true') {
                 document.body.classList.add('dark-mode');
                 document.getElementById('darkmode-toggle-btn').innerText = "☀️ 주간";
+            }
+            // 상단 "학습 도구" 패널: 이전에 펼쳐둔 적이 있으면 그 상태를 기억하고, 처음 방문이면 기본값(닫힘)을 유지
+            if (localStorage.getItem('user_top_panel_collapsed') === 'false') {
+                var panelContent = document.getElementById('collapsible-control-content');
+                var panelBtnText = document.getElementById('panel-toggle-btn-text');
+                if (panelContent) panelContent.classList.remove('collapsed');
+                if (panelBtnText) panelBtnText.innerText = "▲ 메뉴 접기";
             }
             completes.forEach(function(pageNum) {
                 var chk = document.getElementById("check-page-" + pageNum);
