@@ -902,3 +902,38 @@
                 renderWrongNotes();
             }
         }
+
+        // ============================================================
+        // 🚪 뒤로가기 버튼으로 앱 종료할 때 확인 팝업 띄우기
+        // ============================================================
+        var exitTrapArmed = false;
+
+        function armExitTrap() {
+            history.pushState({ exitTrap: true }, '');
+            exitTrapArmed = true;
+        }
+
+        window.addEventListener('popstate', function() {
+            if (exitTrapArmed) {
+                exitTrapArmed = false;
+                var overlay = document.getElementById('exit-confirm-overlay');
+                if (overlay) overlay.style.display = 'flex';
+            }
+        });
+
+        function cancelExitApp() {
+            var overlay = document.getElementById('exit-confirm-overlay');
+            if (overlay) overlay.style.display = 'none';
+            armExitTrap(); // 다시 뒤로가기 함정을 걸어서 계속 공부하게 함
+        }
+
+        function confirmExitApp() {
+            var overlay = document.getElementById('exit-confirm-overlay');
+            if (overlay) overlay.style.display = 'none';
+            // 앱 종료 시도 (환경에 따라 바로 안 닫힐 수 있음 - 그럴 땐 뒤로가기 한 번 더 누르면 종료됨)
+            window.close();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            armExitTrap();
+        });

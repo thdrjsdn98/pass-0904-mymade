@@ -820,3 +820,37 @@
         .wrong-note-card:hover {
             box-shadow: var(--shadow-md);
         }
+
+        /* 뒤로가기 종료 확인 팝업 */
+        .exit-confirm-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .exit-confirm-box {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 26px 22px;
+            max-width: 320px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        .exit-confirm-title {
+            font-size: 1.05em;
+            font-weight: 800;
+            color: var(--text-color);
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+        }
+        .exit-confirm-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
