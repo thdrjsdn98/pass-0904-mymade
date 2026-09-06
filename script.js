@@ -772,7 +772,7 @@
             keys.forEach(function(k) {
                 var item = wrongNotes[k];
                 html += '<div class="box wrong-note-card" style="border-left: 4px solid #ef4444; position: relative; margin-bottom: 14px;">';
-                html += '  <button class="font-btn" onclick="removeWrongNote('' + k + '')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px; background-color: #10b981; color: #ffffff;">완전 정복 (삭제)</button>';
+                html += '  <button class="font-btn" onclick="removeWrongNote(\'' + k + '\')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px; background-color: #10b981; color: #ffffff;">완전 정복 (삭제)</button>';
                 html += '  <span class="badge blue" style="display:inline-block; font-size: 0.78em; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px;">' + item.type + '</span>';
                 html += '  <p style="font-weight: 700; font-size: 1.02em; margin: 4px 0 10px 0; padding-right: 95px; color: var(--text-color); line-height: 1.5;">' + item.title + '</p>';
                 html += '  <div style="font-size: 0.9em; margin-bottom: 6px;">❌ <b>내가 고른 답:</b> <span style="color:#dc2626; text-decoration:line-through; font-weight:600;">' + item.wrongChoice + '</span></div>';
