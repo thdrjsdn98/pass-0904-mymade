@@ -790,6 +790,28 @@
             updateProgressB2();
         }
 
+        // 검색어가 포함된 가장 작은 단위(span, li, td 등)를 찾아서, 그 위치로 스크롤하고 잠깐 노란색으로 반짝여줌
+        function highlightSearchMatch(pageEl, query) {
+            var tieredSelectors = ['span', 'li', 'td', 'p', '.note', '.highlight-box', 'h2'];
+            var target = null;
+            for (var t = 0; t < tieredSelectors.length && !target; t++) {
+                var candidates = pageEl.querySelectorAll(tieredSelectors[t]);
+                for (var i = 0; i < candidates.length; i++) {
+                    if (candidates[i].textContent.toLowerCase().includes(query)) {
+                        target = candidates[i];
+                        break;
+                    }
+                }
+            }
+            if (target) {
+                setTimeout(function() {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.classList.add('search-match-flash');
+                    setTimeout(function() { target.classList.remove('search-match-flash'); }, 1600);
+                }, 150);
+            }
+        }
+
         function handleSearch() {
             var input = document.getElementById("search-input");
             var clearBtn = document.getElementById("search-clear-btn");
@@ -805,7 +827,15 @@
                 var pageEl = document.getElementById("sub-page-" + i);
                 if (pageEl && pageEl.innerText.toLowerCase().includes(query)) {
                     var title = pageEl.querySelector("h2").innerText;
-                    matches.push({ pageNum: i, title: title });
+                    matches.push({ pageNum: i, title: title, part: 'part1-1' });
+                }
+            }
+            // Part1-2 (건축관계법령) 단원도 함께 검색
+            for (var j = 1; j <= totalSubPagesB2; j++) {
+                var pageElB2 = document.getElementById("sub-page-b2-" + j);
+                if (pageElB2 && pageElB2.innerText.toLowerCase().includes(query)) {
+                    var titleB2 = pageElB2.querySelector("h2").innerText;
+                    matches.push({ pageNum: j, title: titleB2, part: 'part1-2' });
                 }
             }
 
@@ -813,10 +843,19 @@
                 matches.forEach(function(m) {
                     var div = document.createElement("div");
                     div.className = "search-result-item";
-                    div.innerHTML = "<b>[" + m.pageNum + "페이지]</b> " + m.title;
+                    var partLabel = (m.part === 'part1-2') ? "[건축법령 " + m.pageNum + "페이지]" : "[" + m.pageNum + "페이지]";
+                    div.innerHTML = "<b>" + partLabel + "</b> " + m.title;
                     div.onclick = function() {
-                        showCh1Part('part1-1');
-                        showSubPage(m.pageNum);
+                        showCh1Part(m.part);
+                        var targetPageEl;
+                        if (m.part === 'part1-2') {
+                            showSubPageB2(m.pageNum);
+                            targetPageEl = document.getElementById("sub-page-b2-" + m.pageNum);
+                        } else {
+                            showSubPage(m.pageNum);
+                            targetPageEl = document.getElementById("sub-page-" + m.pageNum);
+                        }
+                        highlightSearchMatch(targetPageEl, query);
                         resultsContainer.style.display = "none";
                         input.value = "";
                         clearBtn.style.display = "none";
@@ -968,7 +1007,10 @@
             var yDiff = touchstartY - touchendY;
 
             if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
-                if (currentSubPage > 0) {
+                if (currentSubPageB2 > 0) {
+                    if (xDiff > 0) nextSubPageB2();
+                    else prevSubPageB2();
+                } else if (currentSubPage > 0) {
                     if (xDiff > 0) nextSubPage();
                     else prevSubPage();
                 }
