@@ -11,6 +11,7 @@
         var wasDarkModeBeforeMemo = false;
         var isChosungMode = false;
         var originalElementsData = [];
+        var wrongNotes = JSON.parse(localStorage.getItem('user_wrong_notes') || '{}');
 
         var bibleQuotes100 = [
             { text: "시작은 미약하였으나 네 나중은 심히 창대하리라.", ref: "욥기 8:7" },
@@ -38,6 +39,7 @@
             calculateDDay();
             renderHourlyBibleQuote();
             setupMiniEnterKeys();
+            renderWrongNotes();
         });
 
         function toggleTopPanel() {
@@ -213,7 +215,12 @@
         }
 
         function exportUserData() {
-            var backupData = { bookmarks: bookmarks, completes: completes, memos: {} };
+            var backupData = { 
+                bookmarks: bookmarks, 
+                completes: completes, 
+                wrongNotes: wrongNotes,
+                memos: {} 
+            };
             for (var i = 1; i <= totalSubPages; i++) {
                 var memo = localStorage.getItem("user_memo_page_" + i);
                 if (memo) backupData.memos[i] = memo;
@@ -225,7 +232,7 @@
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
-            alert("💾 메모와 학습 진도가 안전하게 백업 파일로 다운로드되었습니다!");
+            alert("💾 메모와 학습 진도, 오답노트가 안전하게 백업 파일로 다운로드되었습니다!");
         }
 
         function importUserData(event) {
@@ -237,6 +244,7 @@
                     var data = JSON.parse(e.target.result);
                     if (data.bookmarks) localStorage.setItem('user_bookmarks', JSON.stringify(data.bookmarks));
                     if (data.completes) localStorage.setItem('user_completes', JSON.stringify(data.completes));
+                    if (data.wrongNotes) localStorage.setItem('user_wrong_notes', JSON.stringify(data.wrongNotes));
                     if (data.memos) {
                         for (var key in data.memos) {
                             localStorage.setItem("user_memo_page_" + key, data.memos[key]);
@@ -385,14 +393,34 @@
             var userVal = clickedBtn.innerText.trim();
             resEl.style.display = "block";
 
+            var qTitleEl = item.querySelector('.mini-q-title');
+            var qTitle = qTitleEl ? qTitleEl.innerText.trim() : "단원 퀴즈";
+
             if (userVal === correctVal.trim()) {
                 resEl.innerHTML = "<span style='color:" + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 🎉</span>";
                 clickedBtn.style.backgroundColor = isDark ? "#064e3b" : "#dcfce7";
                 clickedBtn.style.color = isDark ? "#86efac" : "#166534";
+                
+                if (wrongNotes[qKey]) {
+                    delete wrongNotes[qKey];
+                    localStorage.setItem('user_wrong_notes', JSON.stringify(wrongNotes));
+                    renderWrongNotes();
+                }
             } else {
                 resEl.innerHTML = "<span style='color:" + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + correctVal + ")</span>";
                 clickedBtn.style.backgroundColor = isDark ? "#7f1d1d" : "#fee2e2";
                 clickedBtn.style.color = isDark ? "#fca5a5" : "#991b1b";
+
+                wrongNotes[qKey] = {
+                    id: qKey,
+                    title: qTitle,
+                    correct: correctVal.trim(),
+                    wrongChoice: userVal,
+                    expl: "단원별 핵심 기출 확인 문제입니다.",
+                    type: "단원별 3선 퀴즈"
+                };
+                localStorage.setItem('user_wrong_notes', JSON.stringify(wrongNotes));
+                renderWrongNotes();
             }
         }
 
@@ -432,14 +460,40 @@
             if (resultEl) resultEl.style.display = "block";
             if (explEl) explEl.style.display = "block";
 
+            var qTitleEl = box.querySelector('.quiz-q-title');
+            var qTitle = qTitleEl ? qTitleEl.innerText.trim() : "문제";
+            var qExpl = explEl ? explEl.innerText.replace("💡 해설:", "").trim() : "";
+
             if (isCorrect) {
                 if (resultEl) resultEl.innerHTML = "<span style='color: " + (isDark ? "#4ade80" : "#16a34a") + ";'>정답입니다! 🎉</span>";
                 clickedBtn.style.backgroundColor = isDark ? "#064e3b" : "#dcfce7";
                 clickedBtn.style.color = isDark ? "#86efac" : "#166534";
+
+                if (wrongNotes[qId]) {
+                    delete wrongNotes[qId];
+                    localStorage.setItem('user_wrong_notes', JSON.stringify(wrongNotes));
+                    renderWrongNotes();
+                }
             } else {
                 if (resultEl) resultEl.innerHTML = "<span style='color: " + (isDark ? "#f87171" : "#dc2626") + ";'>오답입니다! (정답: " + correctText + ")</span>";
                 clickedBtn.style.backgroundColor = isDark ? "#7f1d1d" : "#fee2e2";
                 clickedBtn.style.color = isDark ? "#fca5a5" : "#991b1b";
+
+                var itemType = "모의고사";
+                if (qId.startsWith("ch11-")) itemType = "I. 복습예제";
+                else if (qId.startsWith("ch3-1-")) itemType = "모의고사 01회차";
+                else if (qId.startsWith("ch3-2-")) itemType = "모의고사 02회차";
+
+                wrongNotes[qId] = {
+                    id: qId,
+                    title: qTitle,
+                    correct: correctText.trim(),
+                    wrongChoice: selectedText,
+                    expl: qExpl,
+                    type: itemType
+                };
+                localStorage.setItem('user_wrong_notes', JSON.stringify(wrongNotes));
+                renderWrongNotes();
             }
 
             if (qId.startsWith('ch3-1-')) updateQuizScore(1, 10);
@@ -609,6 +663,9 @@
             if (tabName === 'tab-ch3') {
                 showCh3Menu();
             }
+            if (tabName === 'tab-wrong') {
+                renderWrongNotes();
+            }
         }		
 
         function showSubPage(pageNum) {
@@ -690,4 +747,60 @@
                     if (e.key === 'Enter') { var btn = inp.nextElementSibling; if (btn) btn.click(); }
                 });
             });
+        }
+
+        // ==========================================
+        // 📕 나만의 자동 오답노트 관리 함수
+        // ==========================================
+        function renderWrongNotes() {
+            var container = document.getElementById("wrong-notes-list");
+            var countBadge = document.getElementById("wrong-count-badge");
+            var keys = Object.keys(wrongNotes);
+            
+            if (countBadge) {
+                countBadge.innerText = keys.length + "개";
+            }
+
+            if (!container) return;
+
+            if (keys.length === 0) {
+                container.innerHTML = '<div class="box" style="text-align:center; color:var(--text-sub); padding:40px 10px;">🎉 현재 오답노트에 등록된 문제가 없습니다!<br>문제를 풀다 틀리면 이곳에 자동으로 누적 정리됩니다.</div>';
+                return;
+            }
+
+            var html = "";
+            keys.forEach(function(k) {
+                var item = wrongNotes[k];
+                html += '<div class="box wrong-note-card" style="border-left: 4px solid #ef4444; position: relative; margin-bottom: 14px;">';
+                html += '  <button class="font-btn" onclick="removeWrongNote('' + k + '')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px; background-color: #10b981; color: #ffffff;">완전 정복 (삭제)</button>';
+                html += '  <span class="badge blue" style="display:inline-block; font-size: 0.78em; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px;">' + item.type + '</span>';
+                html += '  <p style="font-weight: 700; font-size: 1.02em; margin: 4px 0 10px 0; padding-right: 95px; color: var(--text-color); line-height: 1.5;">' + item.title + '</p>';
+                html += '  <div style="font-size: 0.9em; margin-bottom: 6px;">❌ <b>내가 고른 답:</b> <span style="color:#dc2626; text-decoration:line-through; font-weight:600;">' + item.wrongChoice + '</span></div>';
+                html += '  <div style="font-size: 0.9em; margin-bottom: 8px;">✅ <b>정답:</b> <span style="color:#16a34a; font-weight:700;">' + item.correct + '</span></div>';
+                if (item.expl) {
+                    html += '  <div class="note" style="margin: 8px 0 0 0; padding: 9px 12px; font-size: 0.88em; line-height: 1.5;">💡 <b>해설:</b> ' + item.expl + '</div>';
+                }
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function removeWrongNote(key) {
+            delete wrongNotes[key];
+            localStorage.setItem('user_wrong_notes', JSON.stringify(wrongNotes));
+            renderWrongNotes();
+        }
+
+        function clearAllWrongNotes() {
+            var keys = Object.keys(wrongNotes);
+            if (keys.length === 0) {
+                alert("비울 오답노트 내역이 없습니다.");
+                return;
+            }
+            if (confirm("오답노트에 저장된 모든 문제를 삭제하시겠습니까?")) {
+                wrongNotes = {};
+                localStorage.setItem('user_wrong_notes', JSON.stringify(wrongNotes));
+                renderWrongNotes();
+            }
         }
