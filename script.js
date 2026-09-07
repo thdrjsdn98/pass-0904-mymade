@@ -496,7 +496,9 @@ var currentSubPage = 0;
             var cards = document.querySelectorAll("#main-menu-grid .sub-nav-card");
             cards.forEach(function(card) { card.style.display = "flex"; });
 
-            document.getElementById("sub-page-menu").style.display = "block";
+            subMenu11 = document.getElementById("sub-page-menu");
+            if (subMenu11) subMenu11.style.display = "block";
+
             document.getElementById("page-nav-bar").style.display = "none";
             document.getElementById("ch1-part1-1-container").style.display = "none";
             document.getElementById("ch1-part1-2-container").style.display = "none";
