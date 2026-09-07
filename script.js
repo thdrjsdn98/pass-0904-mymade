@@ -431,6 +431,9 @@ var currentSubPage = 0;
                 if (partName === 'part1-2') restorePart1_2State();
                 if (partName === 'part2-1') restorePart2_1State();
 
+                // 🌟 나중에 불러온 파트의 핵심 단어에도 터치 타이머 리스너 연결
+                setupMemorizeClickEvents();
+
                 return true;
             } catch (err) {
                 container.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#dc2626;">⚠️ 콘텐츠를 불러오지 못했습니다.<br>인터넷 연결을 확인하고 다시 시도해주세요.</div>';
