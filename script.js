@@ -399,28 +399,90 @@ var currentSubPage = 0;
             });
         }
 
-        function showCh1Part(partName) {
+        // ============================================================
+        // 📦 파트별 콘텐츠 지연 로딩 (Lazy Loading)
+        // 각 파트(Part1-1, Part1-2, Part2-1)의 실제 내용은 index.html이 아니라
+        // parts/ 폴더의 별도 파일에 있고, 처음 클릭할 때만 가져와서 채워넣음.
+        // 한 번 가져온 파트는 loadedParts에 기록해두고 다시 안 가져옴.
+        // ============================================================
+        var loadedParts = {};
+        var partFileMap = {
+            'part1-1': 'parts/part1-1.html',
+            'part1-2': 'parts/part1-2.html',
+            'part2-1': 'parts/part2-1.html'
+        };
+
+        async function loadPartIfNeeded(partName) {
+            if (loadedParts[partName]) return true; // 이미 불러온 파트면 다시 안 가져옴
+
+            var containerId = "ch1-" + partName + "-container";
+            var container = document.getElementById(containerId);
+            container.innerHTML = '<div style="text-align:center; padding:60px 0; color:var(--text-sub);">📦 불러오는 중...</div>';
+
+            try {
+                var resp = await fetch(partFileMap[partName]);
+                if (!resp.ok) throw new Error('응답 실패');
+                var html = await resp.text();
+                container.innerHTML = html;
+                loadedParts[partName] = true;
+
+                // 방금 채워진 콘텐츠에 저장해둔 체크박스·메모·북마크 상태를 다시 입혀줌
+                if (partName === 'part1-1') restorePart1_1State();
+                if (partName === 'part1-2') restorePart1_2State();
+                if (partName === 'part2-1') restorePart2_1State();
+
+                return true;
+            } catch (err) {
+                container.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#dc2626;">⚠️ 콘텐츠를 불러오지 못했습니다.<br>인터넷 연결을 확인하고 다시 시도해주세요.</div>';
+                return false;
+            }
+        }
+
+        async function showCh1Part(partName) {
             document.getElementById("ch1-part1-1-container").style.display = "none";
             document.getElementById("ch1-part1-2-container").style.display = "none";
             document.getElementById("ch1-part2-1-container").style.display = "none";
+            document.getElementById("ch1-main-menu").style.display = "none";
 
-            if (partName === 'part1-1') {
-                document.getElementById("ch1-main-menu").style.display = "none";
-                document.getElementById("ch1-part1-1-container").style.display = "block";
-                showSubMenu();
-            }
-            if (partName === 'part1-2') {
-                document.getElementById("ch1-main-menu").style.display = "none";
-                document.getElementById("ch1-part1-2-container").style.display = "block";
-                showSubMenuB2();
-            }
-            if (partName === 'part2-1') {
-                document.getElementById("ch1-main-menu").style.display = "none";
-                document.getElementById("ch1-part2-1-container").style.display = "block";
-                showSubMenuP21();
-            }
+            var containerId = "ch1-" + partName + "-container";
+            document.getElementById(containerId).style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            var ok = await loadPartIfNeeded(partName);
+            if (!ok) return;
+
+            if (partName === 'part1-1') { showSubMenu(); }
+            if (partName === 'part1-2') { showSubMenuB2(); }
+            if (partName === 'part2-1') { showSubMenuP21(); }
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
+
+        // 검색을 하려면 아직 안 열어본 파트의 내용도 미리 다 가져와 있어야 검색이 됨
+        // (검색을 실제로 시도할 때만 한 번 다 불러오고, 그 다음부턴 캐시되어 바로 검색됨)
+        async function ensureAllPartsLoaded() {
+            var names = Object.keys(partFileMap);
+            for (var i = 0; i < names.length; i++) {
+                if (!loadedParts[names[i]]) {
+                    var container = document.getElementById("ch1-" + names[i] + "-container");
+                    var wasVisible = container.style.display !== "none";
+                    if (!wasVisible) {
+                        // 검색용으로 몰래 불러오되, 화면엔 잠깐도 안 보이게 처리
+                        try {
+                            var resp = await fetch(partFileMap[names[i]]);
+                            var html = await resp.text();
+                            container.innerHTML = html;
+                            loadedParts[names[i]] = true;
+                            if (names[i] === 'part1-1') restorePart1_1State();
+                            if (names[i] === 'part1-2') restorePart1_2State();
+                            if (names[i] === 'part2-1') restorePart2_1State();
+                        } catch (err) { /* 실패해도 검색은 계속 진행 (해당 파트만 검색 안 될 뿐) */ }
+                    } else {
+                        await loadPartIfNeeded(names[i]);
+                    }
+                }
+            }
+        }
+
 
         function showCh1MainMenu() {
             currentSubPage = 0;
@@ -960,7 +1022,27 @@ var currentSubPage = 0;
             updateBookmarkUI();
             updateTimerUI();
             updateProgress();
+        }
 
+        // Part1-1 콘텐츠가 나중에(지연 로딩으로) 화면에 채워진 직후 호출 - 체크박스·메모·북마크 복원
+        function restorePart1_1State() {
+            completes.forEach(function(pageNum) {
+                var chk = document.getElementById("check-page-" + pageNum);
+                if (chk) chk.checked = true;
+            });
+            for (var i = 1; i <= totalSubPages; i++) {
+                var savedMemo = localStorage.getItem("user_memo_page_" + i);
+                if (savedMemo) {
+                    var memoInput = document.getElementById("memo-input-" + i);
+                    if (memoInput) memoInput.value = savedMemo;
+                }
+            }
+            updateBookmarkUI();
+            updateProgress();
+        }
+
+        // Part1-2 콘텐츠가 지연 로딩으로 채워진 직후 호출
+        function restorePart1_2State() {
             completesB2.forEach(function(pageNum) {
                 var chk = document.getElementById("check-page-b2-" + pageNum);
                 if (chk) chk.checked = true;
@@ -974,7 +1056,11 @@ var currentSubPage = 0;
             }
             updateBookmarkUIB2();
             updateProgressB2();
+            updateProgress();
+        }
 
+        // Part2-1 콘텐츠가 지연 로딩으로 채워진 직후 호출
+        function restorePart2_1State() {
             completesP21.forEach(function(pageNum) {
                 var chkP21 = document.getElementById("check-page-p21-" + pageNum);
                 if (chkP21) chkP21.checked = true;
@@ -988,6 +1074,7 @@ var currentSubPage = 0;
             }
             updateBookmarkUIP21();
             updateProgressP21();
+            updateProgress();
         }
 
         function highlightSearchMatch(pageEl, query) {
@@ -1018,7 +1105,7 @@ var currentSubPage = 0;
             return (clone.innerText || clone.textContent || "").toLowerCase();
         }
 
-        function handleSearch() {
+        async function handleSearch() {
             var input = document.getElementById("search-input");
             var clearBtn = document.getElementById("search-clear-btn");
             var query = input.value.trim().toLowerCase();
@@ -1038,6 +1125,14 @@ var currentSubPage = 0;
                 return;
             }
             lastSearchQuery = query;
+
+            // 아직 안 열어본 파트가 있으면 검색을 위해 미리 다 불러옴 (최초 검색 시 한 번만 살짝 지연될 수 있음)
+            resultsContainer.innerHTML = '<div class="search-result-item" style="color:var(--text-sub);">🔍 검색 중...</div>';
+            resultsContainer.style.display = "block";
+            await ensureAllPartsLoaded();
+
+            // 그 사이 검색어가 또 바뀌었으면(사용자가 계속 타이핑 중) 이 결과는 버림
+            if (input.value.trim().toLowerCase() !== query) return;
 
             resultsContainer.innerHTML = "";
 
@@ -1071,9 +1166,9 @@ var currentSubPage = 0;
                     var partLabel = (m.part === 'part1-2') ? "[건축법령 " + m.pageNum + "페이지]" : (m.part === 'part2-1') ? "[소방훈련·계획 " + m.pageNum + "페이지]" : "[" + m.pageNum + "페이지]";
                     div.innerHTML = "<b>" + partLabel + "</b> " + m.title;
 
-                    var selectResult = function() {
+                    var selectResult = async function() {
                         openTab(null, 'tab-ch1');
-                        showCh1Part(m.part);
+                        await showCh1Part(m.part);
                         var targetPageEl;
                         if (m.part === 'part1-2') {
                             showSubPageB2(m.pageNum);
@@ -1310,16 +1405,16 @@ var currentSubPage = 0;
         }
 
         // 취약 단원 요약에서 단원명을 누르면 바로 그 단원 이론 페이지로 이동
-        function jumpToWeakUnit(part, unit) {
+        async function jumpToWeakUnit(part, unit) {
             openTab(null, 'tab-ch1');
             if (part === 'b2') {
-                showCh1Part('part1-2');
+                await showCh1Part('part1-2');
                 showSubPageB2(unit);
             } else if (part === 'p21') {
-                showCh1Part('part2-1');
+                await showCh1Part('part2-1');
                 showSubPageP21(unit);
             } else {
-                showCh1Part('part1-1');
+                await showCh1Part('part1-1');
                 showSubPage(unit);
             }
         }
