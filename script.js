@@ -238,7 +238,10 @@ var currentSubPage = 0;
                 memos: {},
                 bookmarksB2: bookmarksB2,
                 completesB2: completesB2,
-                memosB2: {}
+                memosB2: {},
+                bookmarksP21: bookmarksP21,
+                completesP21: completesP21,
+                memosP21: {}
             };
             for (var i = 1; i <= totalSubPages; i++) {
                 var memo = localStorage.getItem("user_memo_page_" + i);
@@ -247,6 +250,10 @@ var currentSubPage = 0;
             for (var j = 1; j <= totalSubPagesB2; j++) {
                 var memoB2 = localStorage.getItem("user_memo_page_b2_" + j);
                 if (memoB2) backupData.memosB2[j] = memoB2;
+            }
+            for (var k = 1; k <= totalSubPagesP21; k++) {
+                var memoP21 = localStorage.getItem("user_memo_page_p21_" + k);
+                if (memoP21) backupData.memosP21[k] = memoP21;
             }
 
             // 파일명에 백업 시각(YYMMDDHHmm)을 붙여서 매번 새 이름으로 저장되게 함 (예전처럼 -1, -2 안 쌓임)
@@ -267,7 +274,7 @@ var currentSubPage = 0;
                     var writable = await handle.createWritable();
                     await writable.write(jsonStr);
                     await writable.close();
-                    alert("💾 백업 파일이 저장되었습니다! (소방관계법령 + 건축관계법령 전체 포함)");
+                    alert("💾 백업 파일이 저장되었습니다! (소방관계법령 + 건축관계법령 + 소방훈련·계획 전체 포함)");
                 } catch (err) {
                     if (err && err.name === 'AbortError') {
                         return; // 사용자가 저장을 취소한 경우 - 알림 없이 조용히 종료
@@ -285,7 +292,7 @@ var currentSubPage = 0;
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
-            alert("💾 메모와 학습 진도, 오답노트가 안전하게 백업 파일로 다운로드되었습니다! (소방관계법령 + 건축관계법령 전체 포함)");
+            alert("💾 메모와 학습 진도, 오답노트가 안전하게 백업 파일로 다운로드되었습니다! (소방관계법령 + 건축관계법령 + 소방훈련·계획 전체 포함)");
         }
 
         function importUserData(event) {
@@ -310,6 +317,13 @@ var currentSubPage = 0;
                             localStorage.setItem("user_memo_page_b2_" + keyB2, data.memosB2[keyB2]);
                         }
                     }
+                    if (data.bookmarksP21) localStorage.setItem('user_bookmarks_p21', JSON.stringify(data.bookmarksP21));
+                    if (data.completesP21) localStorage.setItem('user_completes_p21', JSON.stringify(data.completesP21));
+                    if (data.memosP21) {
+                        for (var keyP21 in data.memosP21) {
+                            localStorage.setItem("user_memo_page_p21_" + keyP21, data.memosP21[keyP21]);
+                        }
+                    }
                     alert("📂 백업 데이터를 성공적으로 복원했습니다! 페이지를 새로고침합니다.");
                     location.reload();
                 } catch(err) {
@@ -320,8 +334,8 @@ var currentSubPage = 0;
         }
 
         function updateProgress() {
-            var totalUnits = totalSubPages + totalSubPagesB2; // 소방관계법령 22 + 건축관계법령 7 = 29
-            var doneCount = completes.length + completesB2.length;
+            var totalUnits = totalSubPages + totalSubPagesB2 + totalSubPagesP21; // 소방 22 + 건축 7 + 소방훈련.계획 11 = 40
+            var doneCount = completes.length + completesB2.length + completesP21.length;
             var percent = Math.round((doneCount / totalUnits) * 100);
             document.getElementById('progress-text').innerText = doneCount + " / " + totalUnits + " (" + percent + "%)";
             document.getElementById('progress-fill').style.width = percent + "%";
@@ -388,6 +402,7 @@ var currentSubPage = 0;
         function showCh1Part(partName) {
             document.getElementById("ch1-part1-1-container").style.display = "none";
             document.getElementById("ch1-part1-2-container").style.display = "none";
+            document.getElementById("ch1-part2-1-container").style.display = "none";
 
             if (partName === 'part1-1') {
                 document.getElementById("ch1-main-menu").style.display = "none";
@@ -398,6 +413,11 @@ var currentSubPage = 0;
                 document.getElementById("ch1-main-menu").style.display = "none";
                 document.getElementById("ch1-part1-2-container").style.display = "block";
                 showSubMenuB2();
+            }
+            if (partName === 'part2-1') {
+                document.getElementById("ch1-main-menu").style.display = "none";
+                document.getElementById("ch1-part2-1-container").style.display = "block";
+                showSubMenuP21();
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -415,6 +435,7 @@ var currentSubPage = 0;
             document.getElementById("page-nav-bar").style.display = "none";
             document.getElementById("ch1-part1-1-container").style.display = "none";
             document.getElementById("ch1-part1-2-container").style.display = "none";
+            document.getElementById("ch1-part2-1-container").style.display = "none";
             document.getElementById("ch1-main-menu").style.display = "block";
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -515,6 +536,113 @@ var currentSubPage = 0;
                 var pageNum = idx + 1;
                 card.style.display = bookmarksB2.includes(pageNum) ? "flex" : "none";
             });
+        }
+
+        // ============================================================
+        // 🚒 Part2-1. 소방안전교육 및 훈련 / 소방계획의 수립 (11개 단원)
+        // Part1-1, Part1-2와는 별도의 독립된 진도/북마크/메모를 씀 (접미사 P21)
+        // ============================================================
+        var currentSubPageP21 = 0;
+        var totalSubPagesP21 = 11;
+        var completesP21 = JSON.parse(localStorage.getItem('user_completes_p21') || '[]');
+        var bookmarksP21 = JSON.parse(localStorage.getItem('user_bookmarks_p21') || '[]');
+
+        function showSubPageP21(pageNum) {
+            currentSubPageP21 = pageNum;
+            document.getElementById("sub-page-menu-p21").style.display = "none";
+            for (var i = 1; i <= totalSubPagesP21; i++) {
+                var page = document.getElementById("sub-page-p21-" + i);
+                if (page) page.style.display = "none";
+            }
+            var targetPage = document.getElementById("sub-page-p21-" + pageNum);
+            if (targetPage) targetPage.style.display = "block";
+
+            document.getElementById("page-nav-bar-p21").style.display = "flex";
+            updateNavButtonsP21();
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function showSubMenuP21() {
+            currentSubPageP21 = 0;
+            for (var i = 1; i <= totalSubPagesP21; i++) {
+                var page = document.getElementById("sub-page-p21-" + i);
+                if (page) page.style.display = "none";
+            }
+            var cards = document.querySelectorAll("#main-menu-grid-p21 .sub-nav-card");
+            cards.forEach(function(card) { card.style.display = "flex"; });
+
+            document.getElementById("sub-page-menu-p21").style.display = "block";
+            document.getElementById("page-nav-bar-p21").style.display = "none";
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function prevSubPageP21() { if (currentSubPageP21 > 1) showSubPageP21(currentSubPageP21 - 1); }
+        function nextSubPageP21() { if (currentSubPageP21 < totalSubPagesP21) showSubPageP21(currentSubPageP21 + 1); }
+
+        function updateNavButtonsP21() {
+            document.getElementById("btn-prev-p21").disabled = (currentSubPageP21 <= 1);
+            document.getElementById("btn-next-p21").disabled = (currentSubPageP21 >= totalSubPagesP21);
+        }
+
+        function toggleCompleteP21(pageNum) {
+            var chk = document.getElementById("check-page-p21-" + pageNum);
+            if (chk.checked) {
+                if (!completesP21.includes(pageNum)) completesP21.push(pageNum);
+            } else {
+                var idx = completesP21.indexOf(pageNum);
+                if (idx > -1) completesP21.splice(idx, 1);
+            }
+            localStorage.setItem('user_completes_p21', JSON.stringify(completesP21));
+            updateProgressP21();
+            updateProgress(); // 표지의 통합 진도율도 같이 갱신
+        }
+
+        function updateProgressP21() {
+            for (var i = 1; i <= totalSubPagesP21; i++) {
+                var doneBadge = document.getElementById("card-done-p21-" + i);
+                if (doneBadge) doneBadge.style.display = completesP21.includes(i) ? "inline-block" : "none";
+            }
+        }
+
+        function toggleBookmarkP21(pageNum) {
+            var index = bookmarksP21.indexOf(pageNum);
+            if (index > -1) bookmarksP21.splice(index, 1);
+            else bookmarksP21.push(pageNum);
+            localStorage.setItem('user_bookmarks_p21', JSON.stringify(bookmarksP21));
+            updateBookmarkUIP21();
+        }
+
+        function updateBookmarkUIP21() {
+            for (var i = 1; i <= totalSubPagesP21; i++) {
+                var btn = document.getElementById("star-btn-p21-" + i);
+                var cardStar = document.getElementById("card-star-p21-" + i);
+                var isBookmarked = bookmarksP21.includes(i);
+                if (btn) {
+                    btn.innerText = isBookmarked ? "★" : "☆";
+                    btn.classList.toggle('active', isBookmarked);
+                }
+                if (cardStar) {
+                    cardStar.innerText = isBookmarked ? " ★" : "";
+                    cardStar.style.color = "#f59e0b";
+                }
+            }
+        }
+
+        function filterBookmarksP21() {
+            if (bookmarksP21.length === 0) {
+                alert("등록된 북마크가 없습니다.");
+                return;
+            }
+            var cards = document.querySelectorAll("#main-menu-grid-p21 .sub-nav-card");
+            cards.forEach(function(card, idx) {
+                var pageNum = idx + 1;
+                card.style.display = bookmarksP21.includes(pageNum) ? "flex" : "none";
+            });
+        }
+
+        function savePageMemoP21(pageNum) {
+            var memoText = document.getElementById("memo-input-p21-" + pageNum).value;
+            localStorage.setItem("user_memo_page_p21_" + pageNum, memoText);
         }
 
         function showCh11Part(partName) {
@@ -846,6 +974,20 @@ var currentSubPage = 0;
             }
             updateBookmarkUIB2();
             updateProgressB2();
+
+            completesP21.forEach(function(pageNum) {
+                var chkP21 = document.getElementById("check-page-p21-" + pageNum);
+                if (chkP21) chkP21.checked = true;
+            });
+            for (var k = 1; k <= totalSubPagesP21; k++) {
+                var savedMemoP21 = localStorage.getItem("user_memo_page_p21_" + k);
+                if (savedMemoP21) {
+                    var memoInputP21 = document.getElementById("memo-input-p21-" + k);
+                    if (memoInputP21) memoInputP21.value = savedMemoP21;
+                }
+            }
+            updateBookmarkUIP21();
+            updateProgressP21();
         }
 
         function highlightSearchMatch(pageEl, query) {
@@ -914,12 +1056,19 @@ var currentSubPage = 0;
                     matches.push({ pageNum: j, title: titleB2, part: 'part1-2' });
                 }
             }
+            for (var k = 1; k <= totalSubPagesP21; k++) {
+                var pageElP21 = document.getElementById("sub-page-p21-" + k);
+                if (pageElP21 && getSearchableBodyText(pageElP21).includes(query)) {
+                    var titleP21 = pageElP21.querySelector("h2").innerText;
+                    matches.push({ pageNum: k, title: titleP21, part: 'part2-1' });
+                }
+            }
 
             if (matches.length > 0) {
                 matches.forEach(function(m) {
                     var div = document.createElement("div");
                     div.className = "search-result-item";
-                    var partLabel = (m.part === 'part1-2') ? "[건축법령 " + m.pageNum + "페이지]" : "[" + m.pageNum + "페이지]";
+                    var partLabel = (m.part === 'part1-2') ? "[건축법령 " + m.pageNum + "페이지]" : (m.part === 'part2-1') ? "[소방훈련·계획 " + m.pageNum + "페이지]" : "[" + m.pageNum + "페이지]";
                     div.innerHTML = "<b>" + partLabel + "</b> " + m.title;
 
                     var selectResult = function() {
@@ -929,6 +1078,9 @@ var currentSubPage = 0;
                         if (m.part === 'part1-2') {
                             showSubPageB2(m.pageNum);
                             targetPageEl = document.getElementById("sub-page-b2-" + m.pageNum);
+                        } else if (m.part === 'part2-1') {
+                            showSubPageP21(m.pageNum);
+                            targetPageEl = document.getElementById("sub-page-p21-" + m.pageNum);
                         } else {
                             showSubPage(m.pageNum);
                             targetPageEl = document.getElementById("sub-page-" + m.pageNum);
@@ -1090,7 +1242,10 @@ var currentSubPage = 0;
             var yDiff = touchstartY - touchendY;
 
             if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
-                if (currentSubPageB2 > 0) {
+                if (currentSubPageP21 > 0) {
+                    if (xDiff > 0) nextSubPageP21();
+                    else prevSubPageP21();
+                } else if (currentSubPageB2 > 0) {
                     if (xDiff > 0) nextSubPageB2();
                     else prevSubPageB2();
                 } else if (currentSubPage > 0) {
@@ -1114,6 +1269,8 @@ var currentSubPage = 0;
             if (m) return { part: '1', unit: parseInt(m[1], 10) };
             var m2 = key.match(/^secb2-(\d+)-/); // Part1-2(건축관계법령) 단원 퀴즈
             if (m2) return { part: 'b2', unit: parseInt(m2[1], 10) };
+            var m4 = key.match(/^secp21-(\d+)-/); // Part2-1(소방훈련·소방계획) 단원 퀴즈
+            if (m4) return { part: 'p21', unit: parseInt(m4[1], 10) };
             var m3 = key.match(/^sec(\d+)-/); // Part1-1(소방관계법령) 단원 퀴즈
             if (m3) return { part: '1', unit: parseInt(m3[1], 10) };
             return null; // 복습예제 등 단원을 특정하기 애매한 경우
@@ -1142,7 +1299,7 @@ var currentSubPage = 0;
             var html = '<div class="box" style="margin-top:6px; padding: 12px 14px;">';
             html += '<div style="font-weight:800; font-size:0.92em; margin-bottom:8px; color:var(--text-color);">🎯 오답이 많이 쌓인 단원 TOP ' + list.length + ' (복습 우선순위)</div>';
             list.forEach(function(item, idx) {
-                var partLabel = (item.part === 'b2') ? '건축법령' : '소방법령';
+                var partLabel = (item.part === 'b2') ? '건축법령' : (item.part === 'p21') ? '소방훈련·계획' : '소방법령';
                 html += '<div style="display:flex; justify-content:space-between; align-items:center; padding:7px 0; ' + (idx < list.length - 1 ? 'border-bottom:1px dashed var(--border-color);' : '') + '">';
                 html += '  <span style="font-size:0.88em; cursor:pointer; color:var(--primary); font-weight:700;" onclick="jumpToWeakUnit(&#39;' + item.part + '&#39;, ' + item.unit + ')">' + (idx + 1) + '. [' + partLabel + '] ' + item.unit + '단원</span>';
                 html += '  <span class="badge red" style="font-size:0.78em; padding:2px 8px; border-radius:6px; background:#fee2e2; color:#dc2626; font-weight:800;">' + item.count + '회 오답</span>';
@@ -1158,6 +1315,9 @@ var currentSubPage = 0;
             if (part === 'b2') {
                 showCh1Part('part1-2');
                 showSubPageB2(unit);
+            } else if (part === 'p21') {
+                showCh1Part('part2-1');
+                showSubPageP21(unit);
             } else {
                 showCh1Part('part1-1');
                 showSubPage(unit);
