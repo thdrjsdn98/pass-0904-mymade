@@ -1567,46 +1567,6 @@ var currentSubPage = 0;
 
         function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-        var touchstartX = 0, touchendX = 0, touchstartY = 0, touchendY = 0;
-
-        document.addEventListener('touchstart', function(event) {
-            if (event.target.closest('.search-results-list') || event.target.closest('.search-box-container')) {
-                return;
-            }
-            touchstartX = event.changedTouches[0].screenX;
-            touchstartY = event.changedTouches[0].screenY;
-        }, false);
-
-        document.addEventListener('touchend', function(event) {
-            if (event.target.closest('.table-wrapper') || 
-                event.target.closest('.search-box-container') || 
-                event.target.closest('.search-results-list') || 
-                event.target.closest('.page-memo-textarea')) {
-                return;
-            }
-            touchendX = event.changedTouches[0].screenX;
-            touchendY = event.changedTouches[0].screenY;
-            handleSwipe();
-        }, false);
-
-        function handleSwipe() {
-            var xDiff = touchstartX - touchendX;
-            var yDiff = touchstartY - touchendY;
-
-            if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
-                if (currentSubPageP21 > 0) {
-                    if (xDiff > 0) nextSubPageP21();
-                    else prevSubPageP21();
-                } else if (currentSubPageB2 > 0) {
-                    if (xDiff > 0) nextSubPageB2();
-                    else prevSubPageB2();
-                } else if (currentSubPage > 0) {
-                    if (xDiff > 0) nextSubPage();
-                    else prevSubPage();
-                }
-            }
-        }
-
         function setupMiniEnterKeys() {
             document.querySelectorAll('.mini-text-input').forEach(function(inp) {
                 inp.addEventListener('keyup', function(e) {
