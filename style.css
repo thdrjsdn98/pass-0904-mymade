@@ -659,6 +659,56 @@
             font-family: inherit;
         }
         .page-memo-textarea:focus { border-color: var(--primary); }
+        /* 🖊️ 펜(S펜/스타일러스) 전용 필기 표시 */
+        .page-memo-textarea {
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='18' font-size='18'>%E2%9C%8F%EF%B8%8F</text></svg>") 0 20, text;
+        }
+        /* 🖊️ 단원 본문 펜 필기 오버레이 */
+        .unit-body-wrap {
+            position: relative;
+        }
+        .unit-pen-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none; /* 캔버스 자체는 클릭/터치를 가로채지 않음 (손가락은 그대로 본문 클릭 가능) */
+            touch-action: pan-y;   /* 손가락 스크롤은 계속 정상 동작 */
+            z-index: 5;
+        }
+        .unit-pen-toolbar {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            z-index: 6;
+            display: flex;
+            gap: 6px;
+        }
+        .unit-pen-mode-btn,
+        .unit-pen-clear-btn {
+            font-size: 0.72em;
+            padding: 3px 9px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-sub);
+            opacity: 0.75;
+            cursor: pointer;
+        }
+        .unit-pen-mode-btn.erasing {
+            background-color: #fef3c7;
+            border-color: #f59e0b;
+            color: #92400e;
+            opacity: 1;
+        }
+        .unit-pen-mode-btn:hover,
+        .unit-pen-clear-btn:hover { opacity: 1; }
+        .page-memo-title span::after {
+            content: " (✏️ 펜으로만 필기 가능)";
+            font-size: 0.85em;
+            font-weight: 400;
+            color: var(--text-sub);
+            opacity: 0.7;
+        }
 
         .page-nav-bar {
             position: fixed;

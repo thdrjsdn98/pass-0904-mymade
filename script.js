@@ -35,6 +35,8 @@ var currentSubPage = 0;
         document.addEventListener("DOMContentLoaded", function() {
             loadSavedStates();
             setupMemorizeClickEvents();
+            setupPenOnlyMemoInputs();
+            setupPenAnnotationOverlays();
             updateProgress();
             calculateDDay();
             renderHourlyBibleQuote();
@@ -220,6 +222,241 @@ var currentSubPage = 0;
             });
         }
 
+        // ============================================================
+        // 🖊️ 메모창 "펜 전용 필기" 기능
+        // 갤럭시 S펜, 레노버 액티브펜 등 스타일러스(pointerType === 'pen')로만
+        // 메모창에 포커스/입력이 가능하도록 하고, 손가락 터치나 마우스 클릭으로는
+        // 포커스 자체가 되지 않도록 막는다. (물리 키보드 Tab 이동도 함께 차단됨)
+        // ============================================================
+        var lastMemoPointerType = null;
+        var appToastEl = null;
+        var appToastTimer = null;
+
+        function showAppToast(msg, duration) {
+            if (!appToastEl) {
+                appToastEl = document.createElement('div');
+                appToastEl.id = 'app-toast';
+                appToastEl.style.cssText =
+                    'position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(10px);' +
+                    'background:rgba(30,30,30,0.92);color:#fff;padding:10px 18px;border-radius:20px;' +
+                    'font-size:13px;z-index:99999;pointer-events:none;opacity:0;max-width:85vw;text-align:center;' +
+                    'transition:opacity 0.2s, transform 0.2s;';
+                document.body.appendChild(appToastEl);
+            }
+            appToastEl.innerText = msg;
+            appToastEl.style.opacity = '1';
+            appToastEl.style.transform = 'translateX(-50%) translateY(0)';
+            clearTimeout(appToastTimer);
+            appToastTimer = setTimeout(function() {
+                appToastEl.style.opacity = '0';
+                appToastEl.style.transform = 'translateX(-50%) translateY(10px)';
+            }, duration || 1400);
+        }
+
+        function showPenOnlyToast() {
+            showAppToast('✏️ 이 메모는 펜(S펜 등)으로만 필기할 수 있어요');
+        }
+
+        function isMemoTextarea(el) {
+            return !!(el && el.classList && el.classList.contains('page-memo-textarea'));
+        }
+
+        function setupPenOnlyMemoInputs() {
+            if (setupPenOnlyMemoInputs._bound) return; // 전역 위임 리스너는 한 번만 등록
+            setupPenOnlyMemoInputs._bound = true;
+
+            // 포인터 종류를 먼저 감지 (펜/손가락/마우스)
+            document.addEventListener('pointerdown', function(e) {
+                if (!isMemoTextarea(e.target)) return;
+                lastMemoPointerType = e.pointerType;
+                if (e.pointerType !== 'pen') {
+                    e.preventDefault();
+                    if (document.activeElement === e.target) {
+                        e.target.blur();
+                    }
+                    showPenOnlyToast();
+                }
+            }, true);
+
+            // 혹시 터치/마우스/키보드 탭 등으로 포커스가 걸리면 즉시 해제
+            document.addEventListener('focusin', function(e) {
+                if (!isMemoTextarea(e.target)) return;
+                if (lastMemoPointerType !== 'pen') {
+                    e.target.blur();
+                    showPenOnlyToast();
+                }
+            }, true);
+
+            // 터치 기기 호환성을 위한 이중 안전장치
+            document.addEventListener('touchstart', function(e) {
+                if (isMemoTextarea(e.target)) {
+                    e.preventDefault();
+                }
+            }, { passive: false, capture: true });
+        }
+
+        // ============================================================
+        // 🖊️ 단원 본문(설명 내용) 위에 펜으로 직접 필기하는 기능
+        // - 각 단원 본문(sub-page-header ~ quiz-section 사이 영역)만 대상으로 함
+        //   (문제 풀이 화면, 종합모의고사(ch3) 화면, 메모창은 대상 아님)
+        // - 펜(pointerType === 'pen')만 그림을 그릴 수 있고,
+        //   손가락 터치/마우스는 항상 그대로 스크롤·버튼 클릭 등 기존 동작을 함
+        // - 항상 켜져있는 상태로 동작 (별도 on/off 버튼 없음)
+        // ============================================================
+        var PEN_INK_COLOR = '#2b6cb0';
+
+        function attachPenDrawing(wrap, canvas, pageId, getEraserMode) {
+            var ctx = canvas.getContext('2d');
+            var drawing = false;
+            var strokeIsEraser = false;
+            var saveTimer = null;
+
+            function getPos(e) {
+                var rect = canvas.getBoundingClientRect();
+                return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+            }
+
+            function scheduleSave() {
+                clearTimeout(saveTimer);
+                saveTimer = setTimeout(function() {
+                    try {
+                        localStorage.setItem('user_pen_body_' + pageId, canvas.toDataURL('image/png'));
+                    } catch (err) {
+                        // 저장 공간이 가득 찬 경우 등 - 사용자가 알 수 있도록 안내
+                        showAppToast('⚠️ 저장 공간이 부족해 필기가 저장되지 않았어요. 다른 페이지의 필기를 지워보세요.', 2500);
+                    }
+                }, 400);
+            }
+
+            wrap.addEventListener('pointerdown', function(e) {
+                if (e.pointerType !== 'pen') return; // 손가락/마우스는 무시 -> 기존 클릭/스크롤 동작 유지
+                if (e.target && e.target.closest && (e.target.closest('.unit-pen-clear-btn') || e.target.closest('.unit-pen-mode-btn'))) return;
+                e.preventDefault();
+                drawing = true;
+                // 펜의 물리적 지우개 버튼(있는 경우) 또는 화면의 "지우개 모드" 토글 중 하나라도 해당되면 지우개로 동작
+                strokeIsEraser = getEraserMode() || (e.buttons & 32) === 32 || e.button === 5;
+                try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+                var pos = getPos(e);
+                ctx.globalCompositeOperation = strokeIsEraser ? 'destination-out' : 'source-over';
+                ctx.lineWidth = strokeIsEraser ? 24 : (1.2 + (e.pressure || 0.5) * 2.5);
+                ctx.strokeStyle = PEN_INK_COLOR;
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }, true);
+
+            wrap.addEventListener('pointermove', function(e) {
+                if (!drawing || e.pointerType !== 'pen') return;
+                e.preventDefault();
+                var pos = getPos(e);
+                if (!strokeIsEraser) {
+                    ctx.lineWidth = 1.2 + (e.pressure || 0.5) * 2.5;
+                }
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            });
+
+            function endStroke(e) {
+                if (!drawing || e.pointerType !== 'pen') return;
+                drawing = false;
+                ctx.globalCompositeOperation = 'source-over';
+                try { wrap.releasePointerCapture(e.pointerId); } catch (err) {}
+                scheduleSave();
+            }
+            wrap.addEventListener('pointerup', endStroke);
+            wrap.addEventListener('pointercancel', endStroke);
+        }
+
+        function createPenCanvasForPage(page) {
+            var header = page.querySelector('.sub-page-header');
+            var quizSection = page.querySelector('.quiz-section');
+            if (!header || !quizSection) return; // 본문 구조가 아니면(예: 종합모의고사) 건드리지 않음
+
+            var wrap = document.createElement('div');
+            wrap.className = 'unit-body-wrap';
+
+            var node = header.nextSibling;
+            var toMove = [];
+            while (node && node !== quizSection) {
+                toMove.push(node);
+                node = node.nextSibling;
+            }
+            toMove.forEach(function(n) { wrap.appendChild(n); });
+            page.insertBefore(wrap, quizSection);
+
+            var canvas = document.createElement('canvas');
+            canvas.className = 'unit-pen-canvas';
+            wrap.appendChild(canvas);
+
+            var toolbar = document.createElement('div');
+            toolbar.className = 'unit-pen-toolbar';
+
+            var isEraserMode = false;
+            var modeBtn = document.createElement('button');
+            modeBtn.type = 'button';
+            modeBtn.className = 'unit-pen-mode-btn';
+            modeBtn.innerText = '✏️ 펜';
+            modeBtn.addEventListener('click', function() {
+                isEraserMode = !isEraserMode;
+                modeBtn.innerText = isEraserMode ? '🧹 지우개' : '✏️ 펜';
+                modeBtn.classList.toggle('erasing', isEraserMode);
+            });
+
+            var clearBtn = document.createElement('button');
+            clearBtn.type = 'button';
+            clearBtn.className = 'unit-pen-clear-btn';
+            clearBtn.innerText = '🗑️ 전체 지우기';
+            clearBtn.addEventListener('click', function() {
+                if (!confirm('이 페이지의 펜 필기를 모두 지울까요?')) return;
+                var ctx2 = canvas.getContext('2d');
+                ctx2.clearRect(0, 0, canvas.width, canvas.height);
+                localStorage.removeItem('user_pen_body_' + page.id);
+            });
+
+            toolbar.appendChild(modeBtn);
+            toolbar.appendChild(clearBtn);
+            wrap.appendChild(toolbar);
+
+            function resizeCanvas() {
+                var dpr = Math.min(window.devicePixelRatio || 1, 2); // 저장 용량 절약을 위해 최대 2배로 제한
+                var w = wrap.clientWidth;
+                var h = wrap.scrollHeight;
+                if (!w || !h) return;
+                var hasContent = canvas.width && canvas.height;
+                var snapshot = hasContent ? canvas.toDataURL() : localStorage.getItem('user_pen_body_' + page.id);
+                canvas.width = Math.round(w * dpr);
+                canvas.height = Math.round(h * dpr);
+                canvas.style.width = w + 'px';
+                canvas.style.height = h + 'px';
+                var ctx = canvas.getContext('2d');
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.strokeStyle = PEN_INK_COLOR;
+                if (snapshot) {
+                    var img = new Image();
+                    img.onload = function() { ctx.drawImage(img, 0, 0, w, h); };
+                    img.src = snapshot;
+                }
+            }
+
+            if (window.ResizeObserver) {
+                new ResizeObserver(resizeCanvas).observe(wrap);
+            } else {
+                window.addEventListener('resize', resizeCanvas);
+            }
+            resizeCanvas();
+
+            attachPenDrawing(wrap, canvas, page.id, function() { return isEraserMode; });
+        }
+
+        function setupPenAnnotationOverlays() {
+            var pages = document.querySelectorAll('.sub-page:not([data-pen-ready])');
+            pages.forEach(function(page) {
+                page.setAttribute('data-pen-ready', '1');
+                createPenCanvasForPage(page);
+            });
+        }
+
         function savePageMemo(pageNum) {
             var memoText = document.getElementById("memo-input-" + pageNum).value;
             localStorage.setItem("user_memo_page_" + pageNum, memoText);
@@ -254,6 +491,14 @@ var currentSubPage = 0;
             for (var k = 1; k <= totalSubPagesP21; k++) {
                 var memoP21 = localStorage.getItem("user_memo_page_p21_" + k);
                 if (memoP21) backupData.memosP21[k] = memoP21;
+            }
+            // 단원 본문에 펜으로 필기한 내용도 함께 백업
+            backupData.penDrawings = {};
+            for (var pi = 0; pi < localStorage.length; pi++) {
+                var lsKey = localStorage.key(pi);
+                if (lsKey && lsKey.indexOf('user_pen_body_') === 0) {
+                    backupData.penDrawings[lsKey.substring('user_pen_body_'.length)] = localStorage.getItem(lsKey);
+                }
             }
 
             // 파일명에 백업 시각(YYMMDDHHmm)을 붙여서 매번 새 이름으로 저장되게 함 (예전처럼 -1, -2 안 쌓임)
@@ -322,6 +567,11 @@ var currentSubPage = 0;
                     if (data.memosP21) {
                         for (var keyP21 in data.memosP21) {
                             localStorage.setItem("user_memo_page_p21_" + keyP21, data.memosP21[keyP21]);
+                        }
+                    }
+                    if (data.penDrawings) {
+                        for (var penKey in data.penDrawings) {
+                            localStorage.setItem("user_pen_body_" + penKey, data.penDrawings[penKey]);
                         }
                     }
                     alert("📂 백업 데이터를 성공적으로 복원했습니다! 페이지를 새로고침합니다.");
@@ -433,6 +683,8 @@ var currentSubPage = 0;
 
                 // 🌟 나중에 불러온 파트의 핵심 단어에도 터치 타이머 리스너 연결
                 setupMemorizeClickEvents();
+                setupPenOnlyMemoInputs();
+                setupPenAnnotationOverlays();
 
                 return true;
             } catch (err) {
