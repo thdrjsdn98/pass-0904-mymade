@@ -429,6 +429,7 @@ var currentSubPage = 0;
             var guardActive = false;
             var lockedWindowX = 0, lockedWindowY = 0;
             var lockedEls = []; // [{ el, top, left }]
+            var releaseTimer = null;
 
             function isScrollable(el) {
                 if (!el || el.nodeType !== 1) return false;
@@ -438,12 +439,9 @@ var currentSubPage = 0;
                 return canY || canX;
             }
 
-            function startGuard(e) {
-                guardActive = true;
-                lockedWindowX = window.scrollX;
-                lockedWindowY = window.scrollY;
+            function collectScrollables(target) {
                 lockedEls = [];
-                var node = e.target;
+                var node = target;
                 while (node && node !== document.documentElement) {
                     if (isScrollable(node)) {
                         lockedEls.push({ el: node, top: node.scrollTop, left: node.scrollLeft });
@@ -452,21 +450,40 @@ var currentSubPage = 0;
                 }
             }
 
-            function stopGuard() {
+            function startGuard(e) {
+                clearTimeout(releaseTimer);
+                guardActive = true;
+                lockedWindowX = window.scrollX;
+                lockedWindowY = window.scrollY;
+                collectScrollables(e.target);
+            }
+
+            function stopGuardNow() {
                 guardActive = false;
                 lockedEls = [];
                 clearTimeout(guardWatchdog);
+                clearTimeout(releaseTimer);
+            }
+
+            // pointercancel은 "브라우저가 이제부터 이 펜 입력을 스크롤(제스처)로
+            // 넘겨받는다"는 신호로 뜨는 경우가 많다는 걸 로그로 확인함. 하필 이
+            // 시점이 진짜로 스크롤이 새기 시작하는 순간이라, 여기서 가드를 바로
+            // 꺼버리면 정작 필요할 때 보호가 풀려버리는 것이었음. 그래서 cancel이
+            // 뜨면 즉시 끄지 않고 짧게 유예를 두고, 그 사이에 새는 스크롤도 계속
+            // 되돌리다가 실제로 조용해지면 그때 해제한다.
+            function scheduleRelease(delay) {
+                clearTimeout(releaseTimer);
+                releaseTimer = setTimeout(stopGuardNow, delay);
             }
 
             var guardWatchdog = null;
             function armWatchdog() {
-                // 혹시라도 pointerup/cancel을 못 받는 경우를 대비한 안전 장치.
-                // 손가락 스크롤이 영영 막히는 사고를 막기 위해 일정 시간 후 무조건 해제.
+                // 혹시라도 pointerup/cancel을 못 받는 경우를 대비한 최종 안전 장치.
                 clearTimeout(guardWatchdog);
                 guardWatchdog = setTimeout(function() {
                     if (guardActive) {
                         if (penDebugLogFn) penDebugLogFn('⏱️ 워치독: 스크롤 가드 강제 해제');
-                        stopGuard();
+                        stopGuardNow();
                     }
                 }, 4000);
             }
@@ -492,20 +509,38 @@ var currentSubPage = 0;
                 }
             }, true);
 
-            // 호버(근접) 트리거는 일부러 사용하지 않음: 펜을 뗀 뒤에도 호버가
-            // 살짝 남아있으면 해제가 안 되고 손가락 스크롤까지 막혀버리는
-            // 부작용이 있었음. pointerdown(실제로 닿는 순간)만 기준으로 삼음.
             document.addEventListener('pointerdown', function(e) {
                 if (e.pointerType === 'pen') { startGuard(e); armWatchdog(); }
             }, true);
             document.addEventListener('pointermove', function(e) {
-                if (e.pointerType === 'pen' && guardActive) armWatchdog();
+                if (e.pointerType === 'pen') {
+                    if (!guardActive) { startGuard(e); } // cancel 이후 같은 스트로크가 이어지면 다시 잡음
+                    else {
+                        // 펜이 처음 닿은 지점 말고 다른 표/스크롤 영역 위로 지나가도
+                        // 그 요소를 실시간으로 감시 대상에 추가함
+                        var node = e.target;
+                        while (node && node !== document.documentElement) {
+                            if (isScrollable(node) && !lockedEls.some(function(o) { return o.el === node; })) {
+                                lockedEls.push({ el: node, top: node.scrollTop, left: node.scrollLeft });
+                            }
+                            node = node.parentElement;
+                        }
+                    }
+                    armWatchdog();
+                }
             }, true);
             document.addEventListener('pointerup', function(e) {
-                if (e.pointerType === 'pen') stopGuard();
+                if (e.pointerType === 'pen') scheduleRelease(200); // 깔끔한 종료: 짧게만 유예
             }, true);
             document.addEventListener('pointercancel', function(e) {
-                if (e.pointerType === 'pen') stopGuard();
+                if (e.pointerType === 'pen') {
+                    if (penDebugLogFn) penDebugLogFn('⚠️ pointercancel 발생 - 가드 유지하며 유예 해제');
+                    scheduleRelease(700); // 네이티브 스크롤로 넘어가는 구간을 계속 방어
+                }
+            }, true);
+            // 진짜 손가락 터치가 끝나는 시점도 릴리즈 신호로 활용 (고스트 터치 대응)
+            document.addEventListener('touchend', function() {
+                if (guardActive) scheduleRelease(150);
             }, true);
         }
 
@@ -514,26 +549,27 @@ var currentSubPage = 0;
             disablePenScrollGlobally._bound = true;
 
             var penLocked = false;
-            var unlockWatchdog = null;
+            var unlockTimer = null;
 
             function lockScroll() {
-                clearTimeout(unlockWatchdog);
-                unlockWatchdog = setTimeout(unlockScroll, 4000); // 안전장치: 4초 후 자동 해제
+                clearTimeout(unlockTimer);
                 if (penLocked) return;
                 penLocked = true;
                 document.documentElement.style.touchAction = 'none';
                 document.body.style.touchAction = 'none';
             }
-            function unlockScroll() {
-                clearTimeout(unlockWatchdog);
+            function unlockScrollNow() {
+                clearTimeout(unlockTimer);
                 if (!penLocked) return;
                 penLocked = false;
                 document.documentElement.style.touchAction = '';
                 document.body.style.touchAction = '';
             }
+            function scheduleUnlock(delay) {
+                clearTimeout(unlockTimer);
+                unlockTimer = setTimeout(unlockScrollNow, delay);
+            }
 
-            // 호버(근접) 트리거는 사용하지 않음 (펜을 뗀 뒤 잠금이 안 풀리는 문제 방지).
-            // 실제로 화면에 닿는 pointerdown 시점부터만 잠금.
             document.addEventListener('pointerdown', function(e) {
                 if (e.pointerType === 'pen') lockScroll();
             }, true);
@@ -545,10 +581,22 @@ var currentSubPage = 0;
             }, { capture: true, passive: false });
 
             document.addEventListener('pointerup', function(e) {
-                if (e.pointerType === 'pen') unlockScroll();
+                if (e.pointerType === 'pen') scheduleUnlock(200);
             }, true);
             document.addEventListener('pointercancel', function(e) {
-                if (e.pointerType === 'pen') unlockScroll();
+                // pointercancel 직후 네이티브 스크롤로 넘어가는 구간이 있어서
+                // 바로 풀지 않고 짧게 유예를 둔 뒤 해제 (스크롤 가드와 동일한 이유)
+                if (e.pointerType === 'pen') scheduleUnlock(700);
+            }, true);
+            document.addEventListener('touchend', function() {
+                if (penLocked) scheduleUnlock(150);
+            }, true);
+            // 최종 안전장치: 어떤 이유로든 계속 잠겨있으면 4초 뒤 무조건 해제
+            document.addEventListener('pointerdown', function(e) {
+                if (e.pointerType === 'pen') {
+                    clearTimeout(disablePenScrollGlobally._watchdog);
+                    disablePenScrollGlobally._watchdog = setTimeout(unlockScrollNow, 4000);
+                }
             }, true);
 
             // 사파리 등 일부 브라우저의 스타일러스 호환 처리
