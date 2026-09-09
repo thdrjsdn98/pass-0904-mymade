@@ -37,6 +37,7 @@ var currentSubPage = 0;
             disablePenScrollGlobally();
             setupPenScrollGuard();
             setupPenDebugPanel();
+            enhanceSubNavCards();
             updateProgress();
             calculateDDay();
             renderHourlyBibleQuote();
@@ -1048,6 +1049,7 @@ var currentSubPage = 0;
                 setupMemorizeClickEvents();
                 setupPenOnlyMemoInputs();
                 setupPenAnnotationOverlays();
+                enhanceSubNavCards();
 
                 return true;
             } catch (err) {
@@ -2281,3 +2283,24 @@ var currentSubPage = 0;
                 });
             }
         }
+
+/* ============================================================
+   🔢 단원 목록 카드 - 번호 뱃지 + 아이콘 자동 삽입
+   ============================================================ */
+function enhanceSubNavCards() {
+    document.querySelectorAll('.sub-nav-card').forEach(function(card) {
+        if (card.getAttribute('data-enhanced') === '1') return;
+        var span = card.querySelector('span');
+        if (!span) return;
+        var text = span.textContent || '';
+        var m = text.match(/^\s*(\d+)\.\s*(.*)$/);
+        if (!m) return;
+        card.setAttribute('data-enhanced', '1');
+        var num = m[1];
+        var title = m[2];
+        span.innerHTML =
+            '<span class="sub-nav-num-badge">' + num + '</span>' +
+            '<span class="sub-nav-icon">📘</span>' +
+            '<span class="sub-nav-title-text">' + title + '</span>';
+    });
+}

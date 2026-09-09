@@ -1049,3 +1049,53 @@
             flex-direction: column;
             gap: 8px;
         }
+
+/* 🔢 단원 목록 카드 - 번호 뱃지 + 아이콘 */
+.sub-nav-card > span:first-child {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+.sub-nav-num-badge {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #ffffff;
+    font-size: 0.75em;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sub-nav-icon {
+    flex-shrink: 0;
+    font-size: 1.1em;
+    line-height: 1;
+}
+.sub-nav-title-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 🎨 표 스타일 다듬기: 대비 강화 + 여백 개선 + 줄무늬 */
+.table th {
+    padding: 12px 14px !important;
+    letter-spacing: 0.01em;
+}
+.table td {
+    padding: 11px 14px !important;
+}
+.table tbody tr:nth-child(even) td,
+.table tr:nth-child(even) td {
+    background-color: var(--box-bg);
+}
+@media (max-width: 650px) {
+    .table tr:nth-child(even) {
+        background: var(--box-bg) !important;
+    }
+}
