@@ -266,46 +266,57 @@ var currentSubPage = 0;
         // 🖊️ 펜으로는 화면(표, 본문, 목록 등 어디서든) 스크롤이 절대 되지 않도록 전역 차단
         // 손가락 스크롤에는 영향 없음. 표(가로 스크롤 테이블) 포함 모든 영역 대상.
         //
-        // (중요) 단순히 pointermove에서 preventDefault()만 호출하면 브라우저가
-        // touch-action 값에 따라 그 이벤트를 이미 "취소 불가능(non-cancelable)"으로
-        // 처리해버려 무시되는 경우가 많다. 그래서 펜이 눌리는 순간 문서 전체의
-        // touch-action을 'none'으로 바꿔서 스크롤/패닝 자체가 시작되지 못하게 막고,
-        // 펜을 떼면 즉시 원래대로 되돌린다.
+        // (중요) 펜이 화면에 "닿는 순간"에 막으려 하면 브라우저(특히 크롬 계열)가
+        // 그 전에 이미 스크롤 여부를 컴포지터 단에서 결정해버려 preventDefault가
+        // 씹히는 경우가 많다. 그래서 S펜/액티브펜처럼 화면에 닿기 전에 "호버(근접)"를
+        // 감지할 수 있는 펜은 그 호버 단계(pointerover/hover pointermove)에서부터
+        // 미리 문서 전체의 touch-action을 'none'으로 잠가서, 실제로 펜이 닿기 전에
+        // 이미 스크롤이 차단된 상태로 만들어 놓는다. (호버를 지원하지 않는 펜은
+        // pointerdown 시점에 바로 잠가 최대한 빨리 대응한다.)
         // ============================================================
         function disablePenScrollGlobally() {
             if (disablePenScrollGlobally._bound) return;
             disablePenScrollGlobally._bound = true;
 
-            var activePenId = null;
+            var penLocked = false;
 
             function lockScroll() {
+                if (penLocked) return;
+                penLocked = true;
                 document.documentElement.style.touchAction = 'none';
                 document.body.style.touchAction = 'none';
             }
             function unlockScroll() {
+                if (!penLocked) return;
+                penLocked = false;
                 document.documentElement.style.touchAction = '';
                 document.body.style.touchAction = '';
             }
 
-            document.addEventListener('pointerdown', function(e) {
-                if (e.pointerType !== 'pen') return;
-                activePenId = e.pointerId;
-                lockScroll();
+            // 펜이 화면에 다가오기만 해도(호버) 미리 스크롤을 잠금
+            document.addEventListener('pointerover', function(e) {
+                if (e.pointerType === 'pen') lockScroll();
             }, true);
-
+            document.addEventListener('pointerdown', function(e) {
+                if (e.pointerType === 'pen') lockScroll();
+            }, true);
             document.addEventListener('pointermove', function(e) {
-                if (e.pointerType === 'pen') e.preventDefault();
+                if (e.pointerType === 'pen') {
+                    lockScroll();
+                    e.preventDefault();
+                }
             }, { capture: true, passive: false });
 
-            function releaseIfPen(e) {
-                if (e.pointerType !== 'pen') return;
-                if (activePenId !== null && e.pointerId !== activePenId) return;
-                activePenId = null;
-                unlockScroll();
-            }
-            document.addEventListener('pointerup', releaseIfPen, true);
-            document.addEventListener('pointercancel', releaseIfPen, true);
-            document.addEventListener('pointerleave', releaseIfPen, true);
+            // 펜이 화면(문서 영역)을 완전히 벗어나거나 떼었을 때만 다시 풀어줌
+            document.addEventListener('pointerup', function(e) {
+                if (e.pointerType === 'pen') unlockScroll();
+            }, true);
+            document.addEventListener('pointercancel', function(e) {
+                if (e.pointerType === 'pen') unlockScroll();
+            }, true);
+            document.addEventListener('pointerleave', function(e) {
+                if (e.pointerType === 'pen') unlockScroll();
+            }, true);
 
             // 사파리 등 일부 브라우저의 스타일러스 호환 처리
             document.addEventListener('touchmove', function(e) {
