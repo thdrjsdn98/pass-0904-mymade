@@ -286,6 +286,9 @@ var currentSubPage = 0;
             if (setupPenDebugPanel._bound) return;
             setupPenDebugPanel._bound = true;
 
+            var LOG_KEY = 'user_pen_debug_log';
+            var MAX_LINES = 300;
+
             var toggleBtn = document.createElement('button');
             toggleBtn.innerText = '🐛';
             toggleBtn.style.cssText =
@@ -295,10 +298,27 @@ var currentSubPage = 0;
 
             var panel = document.createElement('div');
             panel.style.cssText =
-                'position:fixed;left:8px;right:8px;bottom:52px;z-index:100000;max-height:40vh;' +
-                'overflow-y:auto;background:rgba(0,0,0,0.85);color:#0f0;font-size:11px;' +
-                'font-family:monospace;padding:8px;border-radius:8px;display:none;white-space:pre-wrap;';
+                'position:fixed;left:8px;right:8px;bottom:52px;z-index:100000;max-height:45vh;' +
+                'background:rgba(0,0,0,0.9);border-radius:8px;display:none;';
             document.body.appendChild(panel);
+
+            var toolbar = document.createElement('div');
+            toolbar.style.cssText = 'display:flex;gap:6px;padding:6px 8px;border-bottom:1px solid #333;';
+            var copyBtn = document.createElement('button');
+            copyBtn.innerText = '📋 복사';
+            copyBtn.style.cssText = 'font-size:11px;padding:4px 10px;border-radius:10px;border:1px solid #666;background:#222;color:#fff;';
+            var clearBtn = document.createElement('button');
+            clearBtn.innerText = '🗑️ 로그 지우기';
+            clearBtn.style.cssText = copyBtn.style.cssText;
+            toolbar.appendChild(copyBtn);
+            toolbar.appendChild(clearBtn);
+            panel.appendChild(toolbar);
+
+            var logBox = document.createElement('div');
+            logBox.style.cssText =
+                'max-height:calc(45vh - 40px);overflow-y:auto;color:#0f0;font-size:11px;' +
+                'font-family:monospace;padding:8px;white-space:pre-wrap;';
+            panel.appendChild(logBox);
 
             var visible = false;
             toggleBtn.addEventListener('click', function() {
@@ -306,15 +326,48 @@ var currentSubPage = 0;
                 panel.style.display = visible ? 'block' : 'none';
             });
 
+            // 앱을 껐다 켜도 이전 로그가 이어지도록 localStorage에서 불러옴
             var lines = [];
+            try {
+                var savedLog = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
+                if (Array.isArray(savedLog)) lines = savedLog;
+            } catch (err) { lines = []; }
+
+            function render() {
+                logBox.innerText = lines.join('\n');
+                logBox.scrollTop = logBox.scrollHeight;
+            }
+            function persistLog() {
+                try { localStorage.setItem(LOG_KEY, JSON.stringify(lines)); } catch (err) { /* 무시 */ }
+            }
             function log(msg) {
                 var t = new Date().toISOString().substr(11, 12);
                 lines.push(t + '  ' + msg);
-                if (lines.length > 40) lines.shift();
-                panel.innerText = lines.join('\n');
-                panel.scrollTop = panel.scrollHeight;
+                if (lines.length > MAX_LINES) lines.shift();
+                render();
+                persistLog();
             }
+            render();
             penDebugLogFn = log;
+
+            copyBtn.addEventListener('click', function() {
+                var text = lines.join('\n');
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function() {
+                        showAppToast('📋 로그를 복사했어요. 붙여넣기 해서 보내주세요.');
+                    }).catch(function() {
+                        showAppToast('⚠️ 복사에 실패했어요. 로그를 길게 눌러 직접 선택해주세요.');
+                    });
+                } else {
+                    showAppToast('⚠️ 이 브라우저는 자동 복사를 지원하지 않아요. 로그를 길게 눌러 직접 선택해주세요.');
+                }
+            });
+
+            clearBtn.addEventListener('click', function() {
+                lines = [];
+                render();
+                persistLog();
+            });
 
             ['pointerover', 'pointerenter', 'pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'pointerleave', 'pointerout']
                 .forEach(function(evt) {
@@ -336,7 +389,7 @@ var currentSubPage = 0;
                 log('touchmove  touchType=' + (t ? t.touchType : '?'));
             }, { capture: true, passive: true });
 
-            log('디버그 패널 시작됨. 펜을 화면에 대고 움직여보세요.');
+            log('--- 디버그 패널 시작됨 (앱 재실행) ---');
         }
 
         // ============================================================
