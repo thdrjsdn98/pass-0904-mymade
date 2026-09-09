@@ -310,8 +310,12 @@ var currentSubPage = 0;
             var clearBtn = document.createElement('button');
             clearBtn.innerText = '🗑️ 로그 지우기';
             clearBtn.style.cssText = copyBtn.style.cssText;
+            var downloadBtn = document.createElement('button');
+            downloadBtn.innerText = '⬇️ 다운로드';
+            downloadBtn.style.cssText = copyBtn.style.cssText;
             toolbar.appendChild(copyBtn);
             toolbar.appendChild(clearBtn);
+            toolbar.appendChild(downloadBtn);
             panel.appendChild(toolbar);
 
             var logBox = document.createElement('div');
@@ -367,6 +371,25 @@ var currentSubPage = 0;
                 lines = [];
                 render();
                 persistLog();
+            });
+
+            downloadBtn.addEventListener('click', function() {
+                try {
+                    var text = lines.join('\n');
+                    var blob = new Blob([text], { type: 'text/plain' });
+                    var url = URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    var ts = new Date().toISOString().replace(/[:.]/g, '-');
+                    a.href = url;
+                    a.download = 'pen-debug-log-' + ts + '.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    setTimeout(function() { URL.revokeObjectURL(url); }, 2000);
+                    showAppToast('⬇️ 로그 파일을 다운로드했어요.');
+                } catch (err) {
+                    showAppToast('⚠️ 다운로드에 실패했어요. 복사 버튼을 이용해주세요.');
+                }
             });
 
             ['pointerover', 'pointerenter', 'pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'pointerleave', 'pointerout']
