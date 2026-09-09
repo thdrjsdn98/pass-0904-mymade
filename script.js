@@ -11,7 +11,7 @@ var currentSubPage = 0;
         var isChosungMode = false;
         var originalElementsData = [];
         var wrongNotes = JSON.parse(localStorage.getItem('user_wrong_notes') || '{}');
-        var lastSearchQuery = ""; // 검색어 변경 여부 추적용
+        var lastSearchQuery = "";
 
         var bibleQuotes100 = [
             { text: "시작은 미약하였으나 네 나중은 심히 창대하리라.", ref: "욥기 8:7" },
@@ -47,7 +47,6 @@ var currentSubPage = 0;
             renderWrongNotes();
             checkDailyNotify();
 
-            // 스크롤바 클릭 시 input 포커스 튐 및 리셋 방지
             var searchResults = document.getElementById("search-results");
             if (searchResults) {
                 searchResults.addEventListener('mousedown', function(e) {
@@ -225,16 +224,10 @@ var currentSubPage = 0;
             });
         }
 
-        // ============================================================
-        // 🖊️ 메모창 "펜 전용 필기" 기능
-        // 갤럭시 S펜, 레노버 액티브펜 등 스타일러스(pointerType === 'pen')로만
-        // 메모창에 포커스/입력이 가능하도록 하고, 손가락 터치나 마우스 클릭으로는
-        // 포커스 자체가 되지 않도록 막는다. (물리 키보드 Tab 이동도 함께 차단됨)
-        // ============================================================
         var lastMemoPointerType = null;
         var appToastEl = null;
         var appToastTimer = null;
-        var penDebugLogFn = null; // 🐛 디버그 패널이 켜져 있으면 여기에 로그 함수가 연결됨
+        var penDebugLogFn = null;
 
         function showAppToast(msg, duration) {
             if (!appToastEl) {
@@ -265,23 +258,6 @@ var currentSubPage = 0;
             return !!(el && el.classList && el.classList.contains('page-memo-textarea'));
         }
 
-        // ============================================================
-        // 🖊️ 펜으로는 화면(표, 본문, 목록 등 어디서든) 스크롤이 절대 되지 않도록 전역 차단
-        // 손가락 스크롤에는 영향 없음. 표(가로 스크롤 테이블) 포함 모든 영역 대상.
-        //
-        // (중요) 펜이 화면에 "닿는 순간"에 막으려 하면 브라우저(특히 크롬 계열)가
-        // 그 전에 이미 스크롤 여부를 컴포지터 단에서 결정해버려 preventDefault가
-        // 씹히는 경우가 많다. 그래서 S펜/액티브펜처럼 화면에 닿기 전에 "호버(근접)"를
-        // 감지할 수 있는 펜은 그 호버 단계(pointerover/hover pointermove)에서부터
-        // 미리 문서 전체의 touch-action을 'none'으로 잠가서, 실제로 펜이 닿기 전에
-        // 이미 스크롤이 차단된 상태로 만들어 놓는다. (호버를 지원하지 않는 펜은
-        // pointerdown 시점에 바로 잠가 최대한 빨리 대응한다.)
-        // ============================================================
-        // ============================================================
-        // 🐛 임시 디버그 패널: 펜 터치 시 실제로 어떤 포인터 이벤트가
-        // 어떤 순서로 찍히는지 화면에서 바로 확인하기 위한 도구.
-        // 문제 원인 파악 후에는 이 함수와 호출부만 지우면 됨.
-        // ============================================================
         function setupPenDebugPanel() {
             if (setupPenDebugPanel._bound) return;
             setupPenDebugPanel._bound = true;
@@ -330,7 +306,6 @@ var currentSubPage = 0;
                 panel.style.display = visible ? 'block' : 'none';
             });
 
-            // 앱을 껐다 켜도 이전 로그가 이어지도록 localStorage에서 불러옴
             var lines = [];
             try {
                 var savedLog = JSON.parse(localStorage.getItem(LOG_KEY) || '[]');
@@ -342,7 +317,7 @@ var currentSubPage = 0;
                 logBox.scrollTop = logBox.scrollHeight;
             }
             function persistLog() {
-                try { localStorage.setItem(LOG_KEY, JSON.stringify(lines)); } catch (err) { /* 무시 */ }
+                try { localStorage.setItem(LOG_KEY, JSON.stringify(lines)); } catch (err) {}
             }
             function log(msg) {
                 var t = new Date().toISOString().substr(11, 12);
@@ -395,7 +370,6 @@ var currentSubPage = 0;
             ['pointerover', 'pointerenter', 'pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'pointerleave', 'pointerout']
                 .forEach(function(evt) {
                     document.addEventListener(evt, function(e) {
-                        // pointermove는 너무 많이 찍히니 대략 100ms에 한 번만 기록
                         if (evt === 'pointermove') {
                             var now = Date.now();
                             if (log._lastMove && now - log._lastMove < 100) return;
@@ -415,20 +389,13 @@ var currentSubPage = 0;
             log('--- 디버그 패널 시작됨 (앱 재실행) ---');
         }
 
-        // ============================================================
-        // 🖊️ 펜으로 인한 스크롤 "즉시 되돌리기" 가드
-        // touch-action 잠금은 타이밍상 첫 움직임에서 아주 살짝 새는 경우가
-        // 있어서, 그 대신 실제로 스크롤이 발생하면 그 즉시 원래 있던
-        // 위치(창 스크롤 + 표 등 내부 스크롤 컨테이너 모두)로 강제로
-        // 되돌려서 사실상 스크롤이 전혀 안 된 것처럼 보이게 만든다.
-        // ============================================================
         function setupPenScrollGuard() {
             if (setupPenScrollGuard._bound) return;
             setupPenScrollGuard._bound = true;
 
             var guardActive = false;
             var lockedWindowX = 0, lockedWindowY = 0;
-            var lockedEls = []; // [{ el, top, left }]
+            var lockedEls = [];
             var releaseTimer = null;
 
             function isScrollable(el) {
@@ -465,12 +432,6 @@ var currentSubPage = 0;
                 clearTimeout(releaseTimer);
             }
 
-            // pointercancel은 "브라우저가 이제부터 이 펜 입력을 스크롤(제스처)로
-            // 넘겨받는다"는 신호로 뜨는 경우가 많다는 걸 로그로 확인함. 하필 이
-            // 시점이 진짜로 스크롤이 새기 시작하는 순간이라, 여기서 가드를 바로
-            // 꺼버리면 정작 필요할 때 보호가 풀려버리는 것이었음. 그래서 cancel이
-            // 뜨면 즉시 끄지 않고 짧게 유예를 두고, 그 사이에 새는 스크롤도 계속
-            // 되돌리다가 실제로 조용해지면 그때 해제한다.
             function scheduleRelease(delay) {
                 clearTimeout(releaseTimer);
                 releaseTimer = setTimeout(stopGuardNow, delay);
@@ -478,7 +439,6 @@ var currentSubPage = 0;
 
             var guardWatchdog = null;
             function armWatchdog() {
-                // 혹시라도 pointerup/cancel을 못 받는 경우를 대비한 최종 안전 장치.
                 clearTimeout(guardWatchdog);
                 guardWatchdog = setTimeout(function() {
                     if (guardActive) {
@@ -488,7 +448,6 @@ var currentSubPage = 0;
                 }, 4000);
             }
 
-            // 캡처 단계라서 창 스크롤이든, 표처럼 내부에서 스크롤되는 요소든 다 잡힘
             document.addEventListener('scroll', function(e) {
                 if (!guardActive) return;
                 var target = e.target;
@@ -514,10 +473,8 @@ var currentSubPage = 0;
             }, true);
             document.addEventListener('pointermove', function(e) {
                 if (e.pointerType === 'pen') {
-                    if (!guardActive) { startGuard(e); } // cancel 이후 같은 스트로크가 이어지면 다시 잡음
+                    if (!guardActive) { startGuard(e); }
                     else {
-                        // 펜이 처음 닿은 지점 말고 다른 표/스크롤 영역 위로 지나가도
-                        // 그 요소를 실시간으로 감시 대상에 추가함
                         var node = e.target;
                         while (node && node !== document.documentElement) {
                             if (isScrollable(node) && !lockedEls.some(function(o) { return o.el === node; })) {
@@ -530,15 +487,14 @@ var currentSubPage = 0;
                 }
             }, true);
             document.addEventListener('pointerup', function(e) {
-                if (e.pointerType === 'pen') scheduleRelease(200); // 깔끔한 종료: 짧게만 유예
+                if (e.pointerType === 'pen') scheduleRelease(200);
             }, true);
             document.addEventListener('pointercancel', function(e) {
                 if (e.pointerType === 'pen') {
                     if (penDebugLogFn) penDebugLogFn('⚠️ pointercancel 발생 - 가드 유지하며 유예 해제');
-                    scheduleRelease(700); // 네이티브 스크롤로 넘어가는 구간을 계속 방어
+                    scheduleRelease(700);
                 }
             }, true);
-            // 진짜 손가락 터치가 끝나는 시점도 릴리즈 신호로 활용 (고스트 터치 대응)
             document.addEventListener('touchend', function() {
                 if (guardActive) scheduleRelease(150);
             }, true);
@@ -584,14 +540,11 @@ var currentSubPage = 0;
                 if (e.pointerType === 'pen') scheduleUnlock(200);
             }, true);
             document.addEventListener('pointercancel', function(e) {
-                // pointercancel 직후 네이티브 스크롤로 넘어가는 구간이 있어서
-                // 바로 풀지 않고 짧게 유예를 둔 뒤 해제 (스크롤 가드와 동일한 이유)
                 if (e.pointerType === 'pen') scheduleUnlock(700);
             }, true);
             document.addEventListener('touchend', function() {
                 if (penLocked) scheduleUnlock(150);
             }, true);
-            // 최종 안전장치: 어떤 이유로든 계속 잠겨있으면 4초 뒤 무조건 해제
             document.addEventListener('pointerdown', function(e) {
                 if (e.pointerType === 'pen') {
                     clearTimeout(disablePenScrollGlobally._watchdog);
@@ -599,7 +552,6 @@ var currentSubPage = 0;
                 }
             }, true);
 
-            // 사파리 등 일부 브라우저의 스타일러스 호환 처리
             document.addEventListener('touchmove', function(e) {
                 var t = e.touches && e.touches[0];
                 if (t && t.touchType === 'stylus') {
@@ -609,10 +561,9 @@ var currentSubPage = 0;
         }
 
         function setupPenOnlyMemoInputs() {
-            if (setupPenOnlyMemoInputs._bound) return; // 전역 위임 리스너는 한 번만 등록
+            if (setupPenOnlyMemoInputs._bound) return;
             setupPenOnlyMemoInputs._bound = true;
 
-            // 포인터 종류를 먼저 감지 (펜/손가락/마우스)
             document.addEventListener('pointerdown', function(e) {
                 if (!isMemoTextarea(e.target)) return;
                 lastMemoPointerType = e.pointerType;
@@ -625,7 +576,6 @@ var currentSubPage = 0;
                 }
             }, true);
 
-            // 혹시 터치/마우스/키보드 탭 등으로 포커스가 걸리면 즉시 해제
             document.addEventListener('focusin', function(e) {
                 if (!isMemoTextarea(e.target)) return;
                 if (lastMemoPointerType !== 'pen') {
@@ -634,7 +584,6 @@ var currentSubPage = 0;
                 }
             }, true);
 
-            // 터치 기기 호환성을 위한 이중 안전장치
             document.addEventListener('touchstart', function(e) {
                 if (isMemoTextarea(e.target)) {
                     e.preventDefault();
@@ -643,19 +592,14 @@ var currentSubPage = 0;
         }
 
         // ============================================================
-        // 🖊️ 단원 본문(설명 내용) 위에 펜으로 직접 필기하는 기능
-        // - 각 단원 본문(sub-page-header ~ quiz-section 사이 영역)만 대상으로 함
-        //   (문제 풀이 화면, 종합모의고사(ch3) 화면, 메모창은 대상 아님)
-        // - 펜(pointerType === 'pen')만 그림을 그릴 수 있고,
-        //   손가락 터치/마우스는 항상 그대로 스크롤·버튼 클릭 등 기존 동작을 함
-        // - 항상 켜져있는 상태로 동작 (별도 on/off 버튼 없음)
+        // 🖊️ 단원 본문 위에 S펜으로 직접 필기하는 기능
         // ============================================================
         var PEN_INK_COLOR = '#2b6cb0';
 
         function createPenCanvasForPage(page) {
             var header = page.querySelector('.sub-page-header');
             var quizSection = page.querySelector('.quiz-section');
-            if (!header || !quizSection) return; // 본문 구조가 아니면(예: 종합모의고사) 건드리지 않음
+            if (!header || !quizSection) return;
 
             var wrap = document.createElement('div');
             wrap.className = 'unit-body-wrap';
@@ -674,10 +618,6 @@ var currentSubPage = 0;
             wrap.appendChild(canvas);
             var ctx = canvas.getContext('2d');
 
-            // ---- 필기 데이터: 이미지(PNG)가 아니라 "선 좌표"만 저장 ----
-            // 이미지로 저장하면 페이지가 길수록 용량이 커져서 저장 공간이 금방
-            // 부족해지고, 그러면 조용히 저장 실패하는 문제가 있었음.
-            // 좌표(벡터)로 저장하면 용량이 훨씬 작고 저장 실패 위험도 크게 줄어듦.
             var strokes = loadStrokes();
 
             function loadStrokes() {
@@ -769,7 +709,6 @@ var currentSubPage = 0;
             }
             resizeCanvas();
 
-            // ---- 실제 필기 입력 처리 ----
             var currentStroke = null;
 
             function getPos(e) {
@@ -777,10 +716,17 @@ var currentSubPage = 0;
                 return [e.clientX - rect.left, e.clientY - rect.top];
             }
 
+            // 🌟 펜 필기 시작: 표 내부에서 터치되어도 표 스크롤 제스처로 넘어가지 않도록 방어
             wrap.addEventListener('pointerdown', function(e) {
-                if (e.pointerType !== 'pen') return; // 손가락/마우스는 무시 -> 기존 클릭/스크롤 동작 유지
+                if (e.pointerType !== 'pen') return;
                 if (e.target && e.target.closest && (e.target.closest('.unit-pen-clear-btn') || e.target.closest('.unit-pen-mode-btn'))) return;
+                
                 e.preventDefault();
+                e.stopPropagation();
+
+                // 필기 진행 중 표 스크롤 잠금 활성화
+                wrap.classList.add('pen-drawing-active');
+
                 var strokeIsEraser = isEraserMode || (e.buttons & 32) === 32 || e.button === 5;
                 var lineWidth = strokeIsEraser ? 24 : (1.2 + (e.pressure || 0.5) * 2.5);
                 currentStroke = { pts: [getPos(e)], erase: strokeIsEraser, w: lineWidth };
@@ -794,6 +740,7 @@ var currentSubPage = 0;
             wrap.addEventListener('pointermove', function(e) {
                 if (!currentStroke || e.pointerType !== 'pen') return;
                 e.preventDefault();
+                e.stopPropagation();
                 var pos = getPos(e);
                 if (!currentStroke.erase) {
                     ctx.lineWidth = 1.2 + (e.pressure || 0.5) * 2.5;
@@ -801,20 +748,21 @@ var currentSubPage = 0;
                 currentStroke.pts.push(pos);
                 ctx.lineTo(pos[0], pos[1]);
                 ctx.stroke();
-            });
+            }, { capture: true, passive: false });
 
             function endStroke(e) {
                 if (!currentStroke || e.pointerType !== 'pen') return;
+                wrap.classList.remove('pen-drawing-active');
                 ctx.globalCompositeOperation = 'source-over';
                 try { wrap.releasePointerCapture(e.pointerId); } catch (err) {}
                 if (currentStroke.pts.length >= 2) {
                     strokes.push(currentStroke);
-                    persistStrokes(); // 디바운스 없이 즉시 저장 (앱을 바로 꺼도 유실 안 되도록)
+                    persistStrokes();
                 }
                 currentStroke = null;
             }
-            wrap.addEventListener('pointerup', endStroke);
-            wrap.addEventListener('pointercancel', endStroke);
+            wrap.addEventListener('pointerup', endStroke, true);
+            wrap.addEventListener('pointercancel', endStroke, true);
         }
 
         function setupPenAnnotationOverlays() {
@@ -860,7 +808,6 @@ var currentSubPage = 0;
                 var memoP21 = localStorage.getItem("user_memo_page_p21_" + k);
                 if (memoP21) backupData.memosP21[k] = memoP21;
             }
-            // 단원 본문에 펜으로 필기한 내용도 함께 백업
             backupData.penDrawings = {};
             for (var pi = 0; pi < localStorage.length; pi++) {
                 var lsKey = localStorage.key(pi);
@@ -869,15 +816,12 @@ var currentSubPage = 0;
                 }
             }
 
-            // 파일명에 백업 시각(YYMMDDHHmm)을 붙여서 매번 새 이름으로 저장되게 함 (예전처럼 -1, -2 안 쌓임)
             var now = new Date();
             var pad = function(n) { return String(n).padStart(2, '0'); };
             var timestamp = String(now.getFullYear()).slice(2) + pad(now.getMonth() + 1) + pad(now.getDate()) + pad(now.getHours()) + pad(now.getMinutes());
             var filename = "소방2급_학습데이터_백업_" + timestamp + ".json";
             var jsonStr = JSON.stringify(backupData, null, 2);
 
-            // 크롬/엣지 등 최신 브라우저: 저장 위치를 직접 고를 수 있는 "다른 이름으로 저장" 창을 띄움
-            // (기기별로 마지막에 저장한 폴더를 브라우저가 자체적으로 기억해줌)
             if (window.showSaveFilePicker) {
                 try {
                     var handle = await window.showSaveFilePicker({
@@ -890,14 +834,13 @@ var currentSubPage = 0;
                     alert("💾 백업 파일이 저장되었습니다! (소방관계법령 + 건축관계법령 + 소방훈련·계획 전체 포함)");
                 } catch (err) {
                     if (err && err.name === 'AbortError') {
-                        return; // 사용자가 저장을 취소한 경우 - 알림 없이 조용히 종료
+                        return;
                     }
                     alert("❌ 백업 저장 중 오류가 발생했습니다.");
                 }
                 return;
             }
 
-            // 저장 위치 선택 기능을 지원하지 않는 브라우저(사파리 등)를 위한 예전 방식
             var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonStr);
             var downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
@@ -952,7 +895,7 @@ var currentSubPage = 0;
         }
 
         function updateProgress() {
-            var totalUnits = totalSubPages + totalSubPagesB2 + totalSubPagesP21; // 소방 22 + 건축 7 + 소방훈련.계획 11 = 40
+            var totalUnits = totalSubPages + totalSubPagesB2 + totalSubPagesP21;
             var doneCount = completes.length + completesB2.length + completesP21.length;
             var percent = Math.round((doneCount / totalUnits) * 100);
             document.getElementById('progress-text').innerText = doneCount + " / " + totalUnits + " (" + percent + "%)";
@@ -1017,12 +960,6 @@ var currentSubPage = 0;
             });
         }
 
-        // ============================================================
-        // 📦 파트별 콘텐츠 지연 로딩 (Lazy Loading)
-        // 각 파트(Part1-1, Part1-2, Part2-1)의 실제 내용은 index.html이 아니라
-        // parts/ 폴더의 별도 파일에 있고, 처음 클릭할 때만 가져와서 채워넣음.
-        // 한 번 가져온 파트는 loadedParts에 기록해두고 다시 안 가져옴.
-        // ============================================================
         var loadedParts = {};
         var partFileMap = {
             'part1-1': 'parts/part1-1.html',
@@ -1031,7 +968,7 @@ var currentSubPage = 0;
         };
 
         async function loadPartIfNeeded(partName) {
-            if (loadedParts[partName]) return true; // 이미 불러온 파트면 다시 안 가져옴
+            if (loadedParts[partName]) return true;
 
             var containerId = "ch1-" + partName + "-container";
             var container = document.getElementById(containerId);
@@ -1044,12 +981,10 @@ var currentSubPage = 0;
                 container.innerHTML = html;
                 loadedParts[partName] = true;
 
-                // 방금 채워진 콘텐츠에 저장해둔 체크박스·메모·북마크 상태를 다시 입혀줌
                 if (partName === 'part1-1') restorePart1_1State();
                 if (partName === 'part1-2') restorePart1_2State();
                 if (partName === 'part2-1') restorePart2_1State();
 
-                // 🌟 나중에 불러온 파트의 핵심 단어에도 터치 타이머 리스너 연결
                 setupMemorizeClickEvents();
                 setupPenOnlyMemoInputs();
                 setupPenAnnotationOverlays();
@@ -1080,8 +1015,6 @@ var currentSubPage = 0;
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
-        // 검색을 하려면 아직 안 열어본 파트의 내용도 미리 다 가져와 있어야 검색이 됨
-        // (검색을 실제로 시도할 때만 한 번 다 불러오고, 그 다음부턴 캐시되어 바로 검색됨)
         async function ensureAllPartsLoaded() {
             var names = Object.keys(partFileMap);
             for (var i = 0; i < names.length; i++) {
@@ -1089,7 +1022,6 @@ var currentSubPage = 0;
                     var container = document.getElementById("ch1-" + names[i] + "-container");
                     var wasVisible = container.style.display !== "none";
                     if (!wasVisible) {
-                        // 검색용으로 몰래 불러오되, 화면엔 잠깐도 안 보이게 처리
                         try {
                             var resp = await fetch(partFileMap[names[i]]);
                             var html = await resp.text();
@@ -1098,14 +1030,13 @@ var currentSubPage = 0;
                             if (names[i] === 'part1-1') restorePart1_1State();
                             if (names[i] === 'part1-2') restorePart1_2State();
                             if (names[i] === 'part2-1') restorePart2_1State();
-                        } catch (err) { /* 실패해도 검색은 계속 진행 (해당 파트만 검색 안 될 뿐) */ }
+                        } catch (err) {}
                     } else {
                         await loadPartIfNeeded(names[i]);
                     }
                 }
             }
         }
-
 
         function showCh1MainMenu() {
             currentSubPage = 0;
@@ -1116,7 +1047,7 @@ var currentSubPage = 0;
             var cards = document.querySelectorAll("#main-menu-grid .sub-nav-card");
             cards.forEach(function(card) { card.style.display = "flex"; });
 
-            subMenu11 = document.getElementById("sub-page-menu");
+            var subMenu11 = document.getElementById("sub-page-menu");
             if (subMenu11) subMenu11.style.display = "block";
 
             document.getElementById("page-nav-bar").style.display = "none";
@@ -1179,7 +1110,7 @@ var currentSubPage = 0;
             }
             localStorage.setItem('user_completes_b2', JSON.stringify(completesB2));
             updateProgressB2();
-            updateProgress(); // 표지의 통합 진도율(소방+건축)도 같이 갱신
+            updateProgress();
         }
 
         function updateProgressB2() {
@@ -1225,10 +1156,6 @@ var currentSubPage = 0;
             });
         }
 
-        // ============================================================
-        // 🚒 Part2-1. 소방안전교육 및 훈련 / 소방계획의 수립 (11개 단원)
-        // Part1-1, Part1-2와는 별도의 독립된 진도/북마크/메모를 씀 (접미사 P21)
-        // ============================================================
         var currentSubPageP21 = 0;
         var totalSubPagesP21 = 11;
         var completesP21 = JSON.parse(localStorage.getItem('user_completes_p21') || '[]');
@@ -1281,7 +1208,7 @@ var currentSubPage = 0;
             }
             localStorage.setItem('user_completes_p21', JSON.stringify(completesP21));
             updateProgressP21();
-            updateProgress(); // 표지의 통합 진도율도 같이 갱신
+            updateProgress();
         }
 
         function updateProgressP21() {
@@ -1649,7 +1576,6 @@ var currentSubPage = 0;
             updateProgress();
         }
 
-        // Part1-1 콘텐츠가 나중에(지연 로딩으로) 화면에 채워진 직후 호출 - 체크박스·메모·북마크 복원
         function restorePart1_1State() {
             completes.forEach(function(pageNum) {
                 var chk = document.getElementById("check-page-" + pageNum);
@@ -1666,7 +1592,6 @@ var currentSubPage = 0;
             updateProgress();
         }
 
-        // Part1-2 콘텐츠가 지연 로딩으로 채워진 직후 호출
         function restorePart1_2State() {
             completesB2.forEach(function(pageNum) {
                 var chk = document.getElementById("check-page-b2-" + pageNum);
@@ -1684,7 +1609,6 @@ var currentSubPage = 0;
             updateProgress();
         }
 
-        // Part2-1 콘텐츠가 지연 로딩으로 채워진 직후 호출
         function restorePart2_1State() {
             completesP21.forEach(function(pageNum) {
                 var chkP21 = document.getElementById("check-page-p21-" + pageNum);
@@ -1745,18 +1669,15 @@ var currentSubPage = 0;
                 return; 
             }
 
-            // 검색어가 동일할 때 스크롤바 클릭 등에 의한 불필요한 innerHTML 초기화 방지
             if (query === lastSearchQuery && resultsContainer.children.length > 0) {
                 return;
             }
             lastSearchQuery = query;
 
-            // 아직 안 열어본 파트가 있으면 검색을 위해 미리 다 불러옴 (최초 검색 시 한 번만 살짝 지연될 수 있음)
             resultsContainer.innerHTML = '<div class="search-result-item" style="color:var(--text-sub);">🔍 검색 중...</div>';
             resultsContainer.style.display = "block";
             await ensureAllPartsLoaded();
 
-            // 그 사이 검색어가 또 바뀌었으면(사용자가 계속 타이핑 중) 이 결과는 버림
             if (input.value.trim().toLowerCase() !== query) return;
 
             resultsContainer.innerHTML = "";
@@ -1943,25 +1864,23 @@ var currentSubPage = 0;
             });
         }
 
-        // 오답노트 항목 하나에서 어느 단원(파트+단원 번호)의 문제인지 추정해서 뽑아냄
         function extractUnitFromWrongNote(key, note) {
-            var m = note.title.match(/\[(\d+)단원\]/); // 모의고사류: 제목에 "[13단원]"처럼 박혀있음
+            var m = note.title.match(/\[(\d+)단원\]/);
             if (m) return { part: '1', unit: parseInt(m[1], 10) };
-            var m2 = key.match(/^secb2-(\d+)-/); // Part1-2(건축관계법령) 단원 퀴즈
+            var m2 = key.match(/^secb2-(\d+)-/);
             if (m2) return { part: 'b2', unit: parseInt(m2[1], 10) };
-            var m4 = key.match(/^secp21-(\d+)-/); // Part2-1(소방훈련·소방계획) 단원 퀴즈
+            var m4 = key.match(/^secp21-(\d+)-/);
             if (m4) return { part: 'p21', unit: parseInt(m4[1], 10) };
-            var m3 = key.match(/^sec(\d+)-/); // Part1-1(소방관계법령) 단원 퀴즈
+            var m3 = key.match(/^sec(\d+)-/);
             if (m3) return { part: '1', unit: parseInt(m3[1], 10) };
-            return null; // 복습예제 등 단원을 특정하기 애매한 경우
+            return null;
         }
 
-        // 오답이 가장 많이 쌓인 단원 TOP 5를 계산해서 보여줌 (복습 우선순위 파악용)
         function renderWeakUnitSummary() {
             var summaryEl = document.getElementById("wrong-unit-summary");
             if (!summaryEl) return;
 
-            var counts = {}; // key: "1-13" 또는 "b2-3" 형태, value: {part, unit, count}
+            var counts = {};
             Object.keys(wrongNotes).forEach(function(k) {
                 var info = extractUnitFromWrongNote(k, wrongNotes[k]);
                 if (!info) return;
@@ -1989,7 +1908,6 @@ var currentSubPage = 0;
             summaryEl.innerHTML = html;
         }
 
-        // 취약 단원 요약에서 단원명을 누르면 바로 그 단원 이론 페이지로 이동
         async function jumpToWeakUnit(part, unit) {
             openTab(null, 'tab-ch1');
             if (part === 'b2') {

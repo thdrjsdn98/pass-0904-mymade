@@ -399,7 +399,7 @@
             font-size: 0.9em;
             cursor: pointer;
             min-height: 44px;
-            position: relative; /* 🌟 화살표 위치 기준점 추가 */
+            position: relative;
             text-align: center;
         }
 		#tab-dropdown-label {
@@ -430,7 +430,7 @@
             font-weight: 700;
             font-size: 0.88em;
             cursor: pointer;
-            text-align: center; /* 🌟 드롭다운 목록 글씨를 가운데 정렬로 변경 */
+            text-align: center;
             width: 100%;
             transition: all 0.15s ease;
         }
@@ -440,9 +440,7 @@
             color: var(--primary);
         }
 
-        /* ============================================================
-           📑 탭 메뉴 "일자형" 모드 - 드롭다운 대신 가로로 쭉 나열해서 보여줌
-           ============================================================ */
+        /* 📑 탭 메뉴 일자형 모드 */
         body.flat-tab-menu .tab-dropdown-toggle { display: none; }
         body.flat-tab-menu .tab-dropdown-list {
             display: flex !important;
@@ -659,20 +657,21 @@
             font-family: inherit;
         }
         .page-memo-textarea:focus { border-color: var(--primary); }
-        /* 🖊️ 펜(S펜/스타일러스) 전용 필기 표시 */
         .page-memo-textarea {
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='18' font-size='18'>%E2%9C%8F%EF%B8%8F</text></svg>") 0 20, text;
         }
-        /* 🖊️ 단원 본문 펜 필기 오버레이 */
+
+        /* 🖊️ 단원 본문 펜 필기 오버레이 및 제스처 억제 */
         .unit-body-wrap {
             position: relative;
+            touch-action: pan-y;
         }
         .unit-pen-canvas {
             position: absolute;
             top: 0;
             left: 0;
-            pointer-events: none; /* 캔버스 자체는 클릭/터치를 가로채지 않음 (손가락은 그대로 본문 클릭 가능) */
-            touch-action: pan-y;   /* 손가락 스크롤은 계속 정상 동작 */
+            pointer-events: none;
+            touch-action: none;
             z-index: 5;
         }
         .unit-pen-toolbar {
@@ -881,7 +880,24 @@
         }
 
         .box { background-color: var(--box-bg); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); margin: 16px 0; font-size: 0.96em; }
-        .table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 14px 0; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+        
+        /* 🌟 표 영역 터치 제스처 보완: 손가락 제스처는 가로/세로 이동을 허용하되, S펜 필기 모드에서는 스크롤 충돌을 막음 */
+        .table-wrapper { 
+            width: 100%; 
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; 
+            margin: 14px 0; 
+            border-radius: var(--radius-sm); 
+            border: 1px solid var(--border-color); 
+            touch-action: pan-x pan-y;
+        }
+
+        /* 🌟 펜 드로잉 중 표 스크롤 잠금 클래스 */
+        .unit-body-wrap.pen-drawing-active .table-wrapper {
+            overflow-x: hidden !important;
+            touch-action: none !important;
+        }
+
         .table { width: 100%; min-width: 480px; border-collapse: collapse; background: var(--card-bg); }
         .table th, .table td { border: 1px solid var(--border-color); padding: 11px; text-align: left; font-size: 0.9em; }
         .table th { background-color: var(--box-bg); color: var(--text-color); font-weight: 700; }
