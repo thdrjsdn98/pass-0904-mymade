@@ -379,6 +379,20 @@ var currentSubPage = 0;
             function stopGuard() {
                 guardActive = false;
                 lockedEls = [];
+                clearTimeout(guardWatchdog);
+            }
+
+            var guardWatchdog = null;
+            function armWatchdog() {
+                // 혹시라도 pointerup/cancel을 못 받는 경우를 대비한 안전 장치.
+                // 손가락 스크롤이 영영 막히는 사고를 막기 위해 일정 시간 후 무조건 해제.
+                clearTimeout(guardWatchdog);
+                guardWatchdog = setTimeout(function() {
+                    if (guardActive) {
+                        if (penDebugLogFn) penDebugLogFn('⏱️ 워치독: 스크롤 가드 강제 해제');
+                        stopGuard();
+                    }
+                }, 4000);
             }
 
             // 캡처 단계라서 창 스크롤이든, 표처럼 내부에서 스크롤되는 요소든 다 잡힘
@@ -402,19 +416,19 @@ var currentSubPage = 0;
                 }
             }, true);
 
-            document.addEventListener('pointerover', function(e) {
-                if (e.pointerType === 'pen') startGuard(e);
-            }, true);
+            // 호버(근접) 트리거는 일부러 사용하지 않음: 펜을 뗀 뒤에도 호버가
+            // 살짝 남아있으면 해제가 안 되고 손가락 스크롤까지 막혀버리는
+            // 부작용이 있었음. pointerdown(실제로 닿는 순간)만 기준으로 삼음.
             document.addEventListener('pointerdown', function(e) {
-                if (e.pointerType === 'pen') startGuard(e);
+                if (e.pointerType === 'pen') { startGuard(e); armWatchdog(); }
+            }, true);
+            document.addEventListener('pointermove', function(e) {
+                if (e.pointerType === 'pen' && guardActive) armWatchdog();
             }, true);
             document.addEventListener('pointerup', function(e) {
                 if (e.pointerType === 'pen') stopGuard();
             }, true);
             document.addEventListener('pointercancel', function(e) {
-                if (e.pointerType === 'pen') stopGuard();
-            }, true);
-            document.addEventListener('pointerleave', function(e) {
                 if (e.pointerType === 'pen') stopGuard();
             }, true);
         }
@@ -424,24 +438,26 @@ var currentSubPage = 0;
             disablePenScrollGlobally._bound = true;
 
             var penLocked = false;
+            var unlockWatchdog = null;
 
             function lockScroll() {
+                clearTimeout(unlockWatchdog);
+                unlockWatchdog = setTimeout(unlockScroll, 4000); // 안전장치: 4초 후 자동 해제
                 if (penLocked) return;
                 penLocked = true;
                 document.documentElement.style.touchAction = 'none';
                 document.body.style.touchAction = 'none';
             }
             function unlockScroll() {
+                clearTimeout(unlockWatchdog);
                 if (!penLocked) return;
                 penLocked = false;
                 document.documentElement.style.touchAction = '';
                 document.body.style.touchAction = '';
             }
 
-            // 펜이 화면에 다가오기만 해도(호버) 미리 스크롤을 잠금
-            document.addEventListener('pointerover', function(e) {
-                if (e.pointerType === 'pen') lockScroll();
-            }, true);
+            // 호버(근접) 트리거는 사용하지 않음 (펜을 뗀 뒤 잠금이 안 풀리는 문제 방지).
+            // 실제로 화면에 닿는 pointerdown 시점부터만 잠금.
             document.addEventListener('pointerdown', function(e) {
                 if (e.pointerType === 'pen') lockScroll();
             }, true);
@@ -452,14 +468,10 @@ var currentSubPage = 0;
                 }
             }, { capture: true, passive: false });
 
-            // 펜이 화면(문서 영역)을 완전히 벗어나거나 떼었을 때만 다시 풀어줌
             document.addEventListener('pointerup', function(e) {
                 if (e.pointerType === 'pen') unlockScroll();
             }, true);
             document.addEventListener('pointercancel', function(e) {
-                if (e.pointerType === 'pen') unlockScroll();
-            }, true);
-            document.addEventListener('pointerleave', function(e) {
                 if (e.pointerType === 'pen') unlockScroll();
             }, true);
 
@@ -516,69 +528,6 @@ var currentSubPage = 0;
         // ============================================================
         var PEN_INK_COLOR = '#2b6cb0';
 
-        function attachPenDrawing(wrap, canvas, pageId, getEraserMode) {
-            var ctx = canvas.getContext('2d');
-            var drawing = false;
-            var strokeIsEraser = false;
-            var saveTimer = null;
-
-            function getPos(e) {
-                var rect = canvas.getBoundingClientRect();
-                return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-            }
-
-            function scheduleSave() {
-                clearTimeout(saveTimer);
-                saveTimer = setTimeout(function() {
-                    try {
-                        localStorage.setItem('user_pen_body_' + pageId, canvas.toDataURL('image/png'));
-                    } catch (err) {
-                        // 저장 공간이 가득 찬 경우 등 - 사용자가 알 수 있도록 안내
-                        showAppToast('⚠️ 저장 공간이 부족해 필기가 저장되지 않았어요. 다른 페이지의 필기를 지워보세요.', 2500);
-                    }
-                }, 400);
-            }
-
-            wrap.addEventListener('pointerdown', function(e) {
-                if (e.pointerType !== 'pen') return; // 손가락/마우스는 무시 -> 기존 클릭/스크롤 동작 유지
-                if (e.target && e.target.closest && (e.target.closest('.unit-pen-clear-btn') || e.target.closest('.unit-pen-mode-btn'))) return;
-                e.preventDefault();
-                drawing = true;
-                // 펜의 물리적 지우개 버튼(있는 경우) 또는 화면의 "지우개 모드" 토글 중 하나라도 해당되면 지우개로 동작
-                strokeIsEraser = getEraserMode() || (e.buttons & 32) === 32 || e.button === 5;
-                try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
-                wrap.style.touchAction = 'none'; // 필기/지우개 중에는 펜으로 상하좌우 스크롤/이동 되지 않도록 차단
-                var pos = getPos(e);
-                ctx.globalCompositeOperation = strokeIsEraser ? 'destination-out' : 'source-over';
-                ctx.lineWidth = strokeIsEraser ? 24 : (1.2 + (e.pressure || 0.5) * 2.5);
-                ctx.strokeStyle = PEN_INK_COLOR;
-                ctx.beginPath();
-                ctx.moveTo(pos.x, pos.y);
-            }, true);
-
-            wrap.addEventListener('pointermove', function(e) {
-                if (!drawing || e.pointerType !== 'pen') return;
-                e.preventDefault();
-                var pos = getPos(e);
-                if (!strokeIsEraser) {
-                    ctx.lineWidth = 1.2 + (e.pressure || 0.5) * 2.5;
-                }
-                ctx.lineTo(pos.x, pos.y);
-                ctx.stroke();
-            });
-
-            function endStroke(e) {
-                if (!drawing || e.pointerType !== 'pen') return;
-                drawing = false;
-                ctx.globalCompositeOperation = 'source-over';
-                wrap.style.touchAction = ''; // 필기가 끝나면 다시 정상 스크롤 가능하도록 복구
-                try { wrap.releasePointerCapture(e.pointerId); } catch (err) {}
-                scheduleSave();
-            }
-            wrap.addEventListener('pointerup', endStroke);
-            wrap.addEventListener('pointercancel', endStroke);
-        }
-
         function createPenCanvasForPage(page) {
             var header = page.querySelector('.sub-page-header');
             var quizSection = page.querySelector('.quiz-section');
@@ -599,6 +548,50 @@ var currentSubPage = 0;
             var canvas = document.createElement('canvas');
             canvas.className = 'unit-pen-canvas';
             wrap.appendChild(canvas);
+            var ctx = canvas.getContext('2d');
+
+            // ---- 필기 데이터: 이미지(PNG)가 아니라 "선 좌표"만 저장 ----
+            // 이미지로 저장하면 페이지가 길수록 용량이 커져서 저장 공간이 금방
+            // 부족해지고, 그러면 조용히 저장 실패하는 문제가 있었음.
+            // 좌표(벡터)로 저장하면 용량이 훨씬 작고 저장 실패 위험도 크게 줄어듦.
+            var strokes = loadStrokes();
+
+            function loadStrokes() {
+                try {
+                    var raw = localStorage.getItem('user_pen_body_' + page.id);
+                    if (!raw) return [];
+                    var parsed = JSON.parse(raw);
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch (err) { return []; }
+            }
+
+            function persistStrokes() {
+                try {
+                    if (strokes.length === 0) {
+                        localStorage.removeItem('user_pen_body_' + page.id);
+                    } else {
+                        localStorage.setItem('user_pen_body_' + page.id, JSON.stringify(strokes));
+                    }
+                } catch (err) {
+                    showAppToast('⚠️ 저장 공간이 부족해 필기가 저장되지 않았어요. 다른 페이지의 필기를 지워보세요.', 2500);
+                }
+            }
+
+            function redrawAll() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                strokes.forEach(function(s) {
+                    if (!s.pts || s.pts.length < 2) return;
+                    ctx.globalCompositeOperation = s.erase ? 'destination-out' : 'source-over';
+                    ctx.lineWidth = s.w || 2;
+                    ctx.beginPath();
+                    ctx.moveTo(s.pts[0][0], s.pts[0][1]);
+                    for (var i = 1; i < s.pts.length; i++) {
+                        ctx.lineTo(s.pts[i][0], s.pts[i][1]);
+                    }
+                    ctx.stroke();
+                });
+                ctx.globalCompositeOperation = 'source-over';
+            }
 
             var toolbar = document.createElement('div');
             toolbar.className = 'unit-pen-toolbar';
@@ -620,8 +613,8 @@ var currentSubPage = 0;
             clearBtn.innerText = '🗑️ 전체 지우기';
             clearBtn.addEventListener('click', function() {
                 if (!confirm('이 페이지의 펜 필기를 모두 지울까요?')) return;
-                var ctx2 = canvas.getContext('2d');
-                ctx2.clearRect(0, 0, canvas.width, canvas.height);
+                strokes = [];
+                redrawAll();
                 localStorage.removeItem('user_pen_body_' + page.id);
             });
 
@@ -630,26 +623,19 @@ var currentSubPage = 0;
             wrap.appendChild(toolbar);
 
             function resizeCanvas() {
-                var dpr = Math.min(window.devicePixelRatio || 1, 2); // 저장 용량 절약을 위해 최대 2배로 제한
+                var dpr = Math.min(window.devicePixelRatio || 1, 2);
                 var w = wrap.clientWidth;
                 var h = wrap.scrollHeight;
                 if (!w || !h) return;
-                var hasContent = canvas.width && canvas.height;
-                var snapshot = hasContent ? canvas.toDataURL() : localStorage.getItem('user_pen_body_' + page.id);
                 canvas.width = Math.round(w * dpr);
                 canvas.height = Math.round(h * dpr);
                 canvas.style.width = w + 'px';
                 canvas.style.height = h + 'px';
-                var ctx = canvas.getContext('2d');
                 ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
                 ctx.strokeStyle = PEN_INK_COLOR;
-                if (snapshot) {
-                    var img = new Image();
-                    img.onload = function() { ctx.drawImage(img, 0, 0, w, h); };
-                    img.src = snapshot;
-                }
+                redrawAll();
             }
 
             if (window.ResizeObserver) {
@@ -659,7 +645,52 @@ var currentSubPage = 0;
             }
             resizeCanvas();
 
-            attachPenDrawing(wrap, canvas, page.id, function() { return isEraserMode; });
+            // ---- 실제 필기 입력 처리 ----
+            var currentStroke = null;
+
+            function getPos(e) {
+                var rect = canvas.getBoundingClientRect();
+                return [e.clientX - rect.left, e.clientY - rect.top];
+            }
+
+            wrap.addEventListener('pointerdown', function(e) {
+                if (e.pointerType !== 'pen') return; // 손가락/마우스는 무시 -> 기존 클릭/스크롤 동작 유지
+                if (e.target && e.target.closest && (e.target.closest('.unit-pen-clear-btn') || e.target.closest('.unit-pen-mode-btn'))) return;
+                e.preventDefault();
+                var strokeIsEraser = isEraserMode || (e.buttons & 32) === 32 || e.button === 5;
+                var lineWidth = strokeIsEraser ? 24 : (1.2 + (e.pressure || 0.5) * 2.5);
+                currentStroke = { pts: [getPos(e)], erase: strokeIsEraser, w: lineWidth };
+                try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+                ctx.globalCompositeOperation = strokeIsEraser ? 'destination-out' : 'source-over';
+                ctx.lineWidth = lineWidth;
+                ctx.beginPath();
+                ctx.moveTo(currentStroke.pts[0][0], currentStroke.pts[0][1]);
+            }, true);
+
+            wrap.addEventListener('pointermove', function(e) {
+                if (!currentStroke || e.pointerType !== 'pen') return;
+                e.preventDefault();
+                var pos = getPos(e);
+                if (!currentStroke.erase) {
+                    ctx.lineWidth = 1.2 + (e.pressure || 0.5) * 2.5;
+                }
+                currentStroke.pts.push(pos);
+                ctx.lineTo(pos[0], pos[1]);
+                ctx.stroke();
+            });
+
+            function endStroke(e) {
+                if (!currentStroke || e.pointerType !== 'pen') return;
+                ctx.globalCompositeOperation = 'source-over';
+                try { wrap.releasePointerCapture(e.pointerId); } catch (err) {}
+                if (currentStroke.pts.length >= 2) {
+                    strokes.push(currentStroke);
+                    persistStrokes(); // 디바운스 없이 즉시 저장 (앱을 바로 꺼도 유실 안 되도록)
+                }
+                currentStroke = null;
+            }
+            wrap.addEventListener('pointerup', endStroke);
+            wrap.addEventListener('pointercancel', endStroke);
         }
 
         function setupPenAnnotationOverlays() {
