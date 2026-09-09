@@ -1003,6 +1003,14 @@ var currentSubPage = 0;
             });
         }
 
+        function loadErrorHtml(retryCall) {
+            return '<div style="text-align:center; padding:60px 20px; color:#dc2626;">' +
+                '⚠️ 콘텐츠를 불러오지 못했습니다.<br>인터넷 연결을 확인해주세요.<br>' +
+                '(그래도 안 되면 새로고침 또는 앱 재실행을 해보세요)<br>' +
+                '<button class="font-btn" onclick="' + retryCall + '" style="margin-top:14px; background-color:#dc2626; color:#fff; border:none;">🔄 다시 시도</button>' +
+                '</div>';
+        }
+
         var loadedParts = {};
         var partFileMap = {
             'part1-1': 'parts/part1-1.html',
@@ -1034,7 +1042,7 @@ var currentSubPage = 0;
 
                 return true;
             } catch (err) {
-                container.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#dc2626;">⚠️ 콘텐츠를 불러오지 못했습니다.<br>인터넷 연결을 확인하고 다시 시도해주세요.</div>';
+                container.innerHTML = loadErrorHtml("loadPartIfNeeded('" + partName + "')");
                 return false;
             }
         }
@@ -1322,7 +1330,7 @@ var currentSubPage = 0;
                 loadedCh11Parts[partName] = true;
                 return true;
             } catch (err) {
-                wrap.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#dc2626;">⚠️ 콘텐츠를 불러오지 못했습니다.<br>인터넷 연결을 확인하고 다시 시도해주세요.</div>';
+                wrap.innerHTML = loadErrorHtml("loadCh11PartIfNeeded('" + partName + "')");
                 return false;
             }
         }
@@ -1374,7 +1382,7 @@ var currentSubPage = 0;
 
                 return true;
             } catch (err) {
-                container.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#dc2626;">⚠️ 콘텐츠를 불러오지 못했습니다.<br>인터넷 연결을 확인하고 다시 시도해주세요.</div>';
+                container.innerHTML = loadErrorHtml("loadCh3PartIfNeeded(" + pageNum + ")");
                 return false;
             }
         }
