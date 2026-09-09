@@ -38,6 +38,7 @@ var currentSubPage = 0;
             setupPenOnlyMemoInputs();
             setupPenAnnotationOverlays();
             disablePenScrollGlobally();
+            setupPenDebugPanel();
             updateProgress();
             calculateDDay();
             renderHourlyBibleQuote();
@@ -274,6 +275,67 @@ var currentSubPage = 0;
         // 이미 스크롤이 차단된 상태로 만들어 놓는다. (호버를 지원하지 않는 펜은
         // pointerdown 시점에 바로 잠가 최대한 빨리 대응한다.)
         // ============================================================
+        // ============================================================
+        // 🐛 임시 디버그 패널: 펜 터치 시 실제로 어떤 포인터 이벤트가
+        // 어떤 순서로 찍히는지 화면에서 바로 확인하기 위한 도구.
+        // 문제 원인 파악 후에는 이 함수와 호출부만 지우면 됨.
+        // ============================================================
+        function setupPenDebugPanel() {
+            if (setupPenDebugPanel._bound) return;
+            setupPenDebugPanel._bound = true;
+
+            var toggleBtn = document.createElement('button');
+            toggleBtn.innerText = '🐛';
+            toggleBtn.style.cssText =
+                'position:fixed;left:8px;bottom:8px;z-index:100000;width:36px;height:36px;' +
+                'border-radius:50%;border:1px solid #999;background:#fff;opacity:0.55;font-size:16px;';
+            document.body.appendChild(toggleBtn);
+
+            var panel = document.createElement('div');
+            panel.style.cssText =
+                'position:fixed;left:8px;right:8px;bottom:52px;z-index:100000;max-height:40vh;' +
+                'overflow-y:auto;background:rgba(0,0,0,0.85);color:#0f0;font-size:11px;' +
+                'font-family:monospace;padding:8px;border-radius:8px;display:none;white-space:pre-wrap;';
+            document.body.appendChild(panel);
+
+            var visible = false;
+            toggleBtn.addEventListener('click', function() {
+                visible = !visible;
+                panel.style.display = visible ? 'block' : 'none';
+            });
+
+            var lines = [];
+            function log(msg) {
+                var t = new Date().toISOString().substr(11, 12);
+                lines.push(t + '  ' + msg);
+                if (lines.length > 40) lines.shift();
+                panel.innerText = lines.join('\n');
+                panel.scrollTop = panel.scrollHeight;
+            }
+
+            ['pointerover', 'pointerenter', 'pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'pointerleave', 'pointerout']
+                .forEach(function(evt) {
+                    document.addEventListener(evt, function(e) {
+                        // pointermove는 너무 많이 찍히니 대략 100ms에 한 번만 기록
+                        if (evt === 'pointermove') {
+                            var now = Date.now();
+                            if (log._lastMove && now - log._lastMove < 100) return;
+                            log._lastMove = now;
+                        }
+                        log(evt + '  type=' + e.pointerType + ' buttons=' + e.buttons +
+                            ' x=' + Math.round(e.clientX) + ',' + Math.round(e.clientY) +
+                            ' htmlTA=' + (document.documentElement.style.touchAction || '(기본)'));
+                    }, true);
+                });
+
+            document.addEventListener('touchmove', function(e) {
+                var t = e.touches && e.touches[0];
+                log('touchmove  touchType=' + (t ? t.touchType : '?'));
+            }, { capture: true, passive: true });
+
+            log('디버그 패널 시작됨. 펜을 화면에 대고 움직여보세요.');
+        }
+
         function disablePenScrollGlobally() {
             if (disablePenScrollGlobally._bound) return;
             disablePenScrollGlobally._bound = true;
