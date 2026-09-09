@@ -38,6 +38,7 @@ var currentSubPage = 0;
             setupPenOnlyMemoInputs();
             setupPenAnnotationOverlays();
             disablePenScrollGlobally();
+            setupPenScrollGuard();
             setupPenDebugPanel();
             updateProgress();
             calculateDDay();
@@ -233,6 +234,7 @@ var currentSubPage = 0;
         var lastMemoPointerType = null;
         var appToastEl = null;
         var appToastTimer = null;
+        var penDebugLogFn = null; // 🐛 디버그 패널이 켜져 있으면 여기에 로그 함수가 연결됨
 
         function showAppToast(msg, duration) {
             if (!appToastEl) {
@@ -312,6 +314,7 @@ var currentSubPage = 0;
                 panel.innerText = lines.join('\n');
                 panel.scrollTop = panel.scrollHeight;
             }
+            penDebugLogFn = log;
 
             ['pointerover', 'pointerenter', 'pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'pointerleave', 'pointerout']
                 .forEach(function(evt) {
@@ -334,6 +337,86 @@ var currentSubPage = 0;
             }, { capture: true, passive: true });
 
             log('디버그 패널 시작됨. 펜을 화면에 대고 움직여보세요.');
+        }
+
+        // ============================================================
+        // 🖊️ 펜으로 인한 스크롤 "즉시 되돌리기" 가드
+        // touch-action 잠금은 타이밍상 첫 움직임에서 아주 살짝 새는 경우가
+        // 있어서, 그 대신 실제로 스크롤이 발생하면 그 즉시 원래 있던
+        // 위치(창 스크롤 + 표 등 내부 스크롤 컨테이너 모두)로 강제로
+        // 되돌려서 사실상 스크롤이 전혀 안 된 것처럼 보이게 만든다.
+        // ============================================================
+        function setupPenScrollGuard() {
+            if (setupPenScrollGuard._bound) return;
+            setupPenScrollGuard._bound = true;
+
+            var guardActive = false;
+            var lockedWindowX = 0, lockedWindowY = 0;
+            var lockedEls = []; // [{ el, top, left }]
+
+            function isScrollable(el) {
+                if (!el || el.nodeType !== 1) return false;
+                var style = window.getComputedStyle(el);
+                var canY = (style.overflowY === 'auto' || style.overflowY === 'scroll') && el.scrollHeight > el.clientHeight;
+                var canX = (style.overflowX === 'auto' || style.overflowX === 'scroll') && el.scrollWidth > el.clientWidth;
+                return canY || canX;
+            }
+
+            function startGuard(e) {
+                guardActive = true;
+                lockedWindowX = window.scrollX;
+                lockedWindowY = window.scrollY;
+                lockedEls = [];
+                var node = e.target;
+                while (node && node !== document.documentElement) {
+                    if (isScrollable(node)) {
+                        lockedEls.push({ el: node, top: node.scrollTop, left: node.scrollLeft });
+                    }
+                    node = node.parentElement;
+                }
+            }
+
+            function stopGuard() {
+                guardActive = false;
+                lockedEls = [];
+            }
+
+            // 캡처 단계라서 창 스크롤이든, 표처럼 내부에서 스크롤되는 요소든 다 잡힘
+            document.addEventListener('scroll', function(e) {
+                if (!guardActive) return;
+                var target = e.target;
+                if (target === document) {
+                    if (window.scrollX !== lockedWindowX || window.scrollY !== lockedWindowY) {
+                        if (penDebugLogFn) penDebugLogFn('🔁 창 스크롤 되돌림 (' + Math.round(window.scrollY) + ' -> ' + lockedWindowY + ')');
+                        window.scrollTo(lockedWindowX, lockedWindowY);
+                    }
+                    return;
+                }
+                for (var i = 0; i < lockedEls.length; i++) {
+                    if (lockedEls[i].el === target) {
+                        if (penDebugLogFn) penDebugLogFn('🔁 요소 스크롤 되돌림');
+                        target.scrollTop = lockedEls[i].top;
+                        target.scrollLeft = lockedEls[i].left;
+                        return;
+                    }
+                }
+            }, true);
+
+            document.addEventListener('pointerover', function(e) {
+                if (e.pointerType === 'pen') startGuard(e);
+            }, true);
+            document.addEventListener('pointerdown', function(e) {
+                if (e.pointerType === 'pen') startGuard(e);
+            }, true);
+            document.addEventListener('pointerup', function(e) {
+                if (e.pointerType === 'pen') stopGuard();
+            }, true);
+            document.addEventListener('pointercancel', function(e) {
+                if (e.pointerType === 'pen') stopGuard();
+            }, true);
+            document.addEventListener('pointerleave', function(e) {
+                if (e.pointerType === 'pen') stopGuard();
+            }, true);
         }
 
         function disablePenScrollGlobally() {
