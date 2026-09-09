@@ -1302,16 +1302,22 @@ var currentSubPage = 0;
             localStorage.setItem("user_memo_page_p21_" + pageNum, memoText);
         }
 
+        var ch11PartContainerIds = { 'part1-1': 'ch1-1-part1-1-container', 'part1-2': 'ch1-1-part1-2-container' };
+
         function showCh11Part(partName) {
-            if (partName === 'part1-1') {
-                document.getElementById("ch1-1-main-menu").style.display = "none";
-                document.getElementById("ch1-1-part1-1-container").style.display = "block";
+            document.getElementById("ch1-1-main-menu").style.display = "none";
+            for (var key in ch11PartContainerIds) {
+                var el = document.getElementById(ch11PartContainerIds[key]);
+                if (el) el.style.display = (key === partName) ? "block" : "none";
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         function showCh11MainMenu() {
-            document.getElementById("ch1-1-part1-1-container").style.display = "none";
+            for (var key in ch11PartContainerIds) {
+                var el = document.getElementById(ch11PartContainerIds[key]);
+                if (el) el.style.display = "none";
+            }
             document.getElementById("ch1-1-main-menu").style.display = "block";
             window.scrollTo({ top: 0, behavior: 'instant' });
         }

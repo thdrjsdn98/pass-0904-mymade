@@ -143,7 +143,7 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>목표 시험일: 2026.10.02</p>
-                    <p>버전: V5.8.9 (1-1 복습예제 4문항→10문항 전체 반영)</p>
+                    <p>버전: V5.9.0 (1-1 복습예제에 건축관계법령 5문항 추가)</p>
                 </div>
             </div>
         </div>
@@ -236,13 +236,14 @@
         <div id="tab-ch1-1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V5.8.9</span>
+                <span>만든이: 꾸누</span> | <span>버전: V5.9.0</span>
             </div>
 
             <div id="ch1-1-main-menu">
                 <div style="font-size: 0.9em; font-weight: 700; color: var(--text-sub); margin-bottom: 8px;">📑 복습예제 파트 선택</div>
                 <div class="sub-nav-grid">
                     <div class="sub-nav-card" onclick="showCh11Part('part1-1')"><span>Part1-1. 소방관계법령 (10문항)</span><span>➔</span></div>
+                    <div class="sub-nav-card" onclick="showCh11Part('part1-2')"><span>Part1-2. 건축관계법령 (5문항)</span><span>➔</span></div>
                 </div>
             </div>
 
@@ -408,13 +409,105 @@
                     </div>
                 </div>
             </div>
+
+            <div id="ch1-1-part1-2-container" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 4px; flex-wrap: wrap;">
+                    <button class="font-btn" onclick="showCh11MainMenu()" style="font-size: 0.8em;">◀ 파트 목록으로</button>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="font-btn" onclick="shuffleSection('ch1-1-2-questions-wrap')" style="font-size: 0.8em; background-color: #8b5cf6; color: #fff;">🔀 문제·보기 섞기</button>
+                        <button class="font-btn" onclick="resetAllQuestions('ch112-', 5)" style="font-size: 0.8em; background-color: #ef4444; color: #ffffff;">🔄 전체 초기화</button>
+                    </div>
+                </div>
+
+                <div id="ch1-1-2-questions-wrap">
+                    <div class="box quiz-box" id="box-ch112-1" style="position: relative;" data-qid="ch112-1" data-correct-text="사잇기둥, 옥외계단">
+                        <button class="font-btn" onclick="resetAnswer('ch112-1')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q1. 다음 중 건축물의 주요구조부에 해당하지 아니하는 것을 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-1', this, '사잇기둥, 옥외계단')" style="text-align: left; padding: 10px;">사잇기둥, 옥외계단</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-1', this, '사잇기둥, 옥외계단')" style="text-align: left; padding: 10px;">내력벽, 지붕틀</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-1', this, '사잇기둥, 옥외계단')" style="text-align: left; padding: 10px;">기둥, 바닥</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-1', this, '사잇기둥, 옥외계단')" style="text-align: left; padding: 10px;">주계단, 보</button>
+                        </div>
+                        <div id="q-result-ch112-1" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch112-1" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 주요구조부란 건축물의 안전에 결정적인 역할을 담당하는 주요 골격부분으로 <b>내력벽, 기둥, 바닥, 보, 지붕틀, 주계단</b>을 말합니다. 그 외 <b>사잇기둥이나 차양, 옥외계단</b> 등은 주요구조부에서 제외됩니다.
+                        </div>
+                    </div>
+
+                    <div class="box quiz-box" id="box-ch112-2" style="position: relative;" data-qid="ch112-2" data-correct-text="A : 3개 / B : 개축">
+                        <button class="font-btn" onclick="resetAnswer('ch112-2')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q2. 기존 건축물의 전부 또는 일부(내력벽·기둥·보·지붕틀 중 [A]개 이상이 포함되는 경우를 말함)를 철거하고 그 대지 안에 종전과 동일한 규모의 범위 안에서 건축물을 다시 축조하는 것을 [B]라고 한다. [A]와 [B]에 들어갈 말로 옳은 것을 각각 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-2', this, 'A : 3개 / B : 개축')" style="text-align: left; padding: 10px;">A : 2개 / B : 재축</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-2', this, 'A : 3개 / B : 개축')" style="text-align: left; padding: 10px;">A : 3개 / B : 대수선</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-2', this, 'A : 3개 / B : 개축')" style="text-align: left; padding: 10px;">A : 2개 / B : 리모델링</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-2', this, 'A : 3개 / B : 개축')" style="text-align: left; padding: 10px;">A : 3개 / B : 개축</button>
+                        </div>
+                        <div id="q-result-ch112-2" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch112-2" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 내력벽·기둥·보·지붕틀 중 <b>3개 이상</b>이 포함되도록 철거하고 종전과 동일한 규모로 다시 축조하는 것을 <b>'개축'</b>이라고 합니다.<br><br>
+                            <b>비교</b><br>
+                            (1) 재축: 건축물이 천재지변이나 기타 재해에 의해 멸실된 경우에 그 대지 안에 일정 요건을 갖추어 다시 축조하는 것<br>
+                            (2) 대수선: 건축물의 기둥, 보, 내력벽, 주계단 등의 구조나 외부 형태를 수선·변경하거나 증설하는 것으로서 대통령령으로 정하는 것<br>
+                            (3) 리모델링: 건축물의 노후화를 억제하거나 기능 향상을 위해 대수선하거나, 건축물의 일부를 증축 또는 개축하는 것
+                        </div>
+                    </div>
+
+                    <div class="box quiz-box" id="box-ch112-3" style="position: relative;" data-qid="ch112-3" data-correct-text="기둥을 2개 이상 수선 또는 변경하는 경우">
+                        <button class="font-btn" onclick="resetAnswer('ch112-3')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q3. 다음 중 대수선에 해당하는 사례로 보기 어려운 것을 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-3', this, '기둥을 2개 이상 수선 또는 변경하는 경우')" style="text-align: left; padding: 10px;">기둥을 2개 이상 수선 또는 변경하는 경우</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-3', this, '기둥을 2개 이상 수선 또는 변경하는 경우')" style="text-align: left; padding: 10px;">피난계단을 수선 또는 변경하는 경우</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-3', this, '기둥을 2개 이상 수선 또는 변경하는 경우')" style="text-align: left; padding: 10px;">내력벽의 벽면적을 30㎡ 이상 수선 또는 변경하는 경우</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-3', this, '기둥을 2개 이상 수선 또는 변경하는 경우')" style="text-align: left; padding: 10px;">건축물의 외벽에 사용하는 마감재료를 증설 또는 해체하는 경우</button>
+                        </div>
+                        <div id="q-result-ch112-3" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch112-3" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 대수선에 해당하는 사례는 기둥을 증설·해체하거나 <b>'3개 이상'</b> 수선 또는 변경하는 것입니다. <b>2개 이상</b>으로 서술한 ①의 사례는 대수선으로 보기 어렵습니다.
+                        </div>
+                    </div>
+
+                    <div class="box quiz-box" id="box-ch112-4" style="position: relative;" data-qid="ch112-4" data-correct-text="용적률 : 72%, 건폐율 : 30%">
+                        <button class="font-btn" onclick="resetAnswer('ch112-4')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q4. 대지면적이 5,000m²이고, 연면적이 3,600m², 건축면적이 1,500m²인 건축물이 있을 때 용적률과 건폐율을 구하시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-4', this, '용적률 : 72%, 건폐율 : 30%')" style="text-align: left; padding: 10px;">용적률 : 30%, 건폐율 : 72%</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-4', this, '용적률 : 72%, 건폐율 : 30%')" style="text-align: left; padding: 10px;">용적률 : 72%, 건폐율 : 30%</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-4', this, '용적률 : 72%, 건폐율 : 30%')" style="text-align: left; padding: 10px;">용적률 : 240%, 건폐율 : 41%</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-4', this, '용적률 : 72%, 건폐율 : 30%')" style="text-align: left; padding: 10px;">용적률 : 41%, 건폐율 : 240%</button>
+                        </div>
+                        <div id="q-result-ch112-4" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch112-4" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 용적률 = 대지면적에 대한 연면적의 비율 = (3,600 ÷ 5,000)×100 = <b>72%</b><br>
+                            건폐율 = 대지면적에 대한 건축면적의 비율 = (1,500 ÷ 5,000)×100 = <b>30%</b>
+                        </div>
+                    </div>
+
+                    <div class="box quiz-box" id="box-ch112-5" style="position: relative;" data-qid="ch112-5" data-correct-text="옥상부분의 수평투영면적의 합계가 해당 건축물의 건축면적의 1/8 이상인 경우 그 부분의 높이가 12m를 넘는 부분만 높이에 산입한다.">
+                        <button class="font-btn" onclick="resetAnswer('ch112-5')" style="position: absolute; top: 12px; right: 12px; font-size: 0.75em; padding: 4px 8px;">🔄 초기화</button>
+                        <p class="quiz-q-title" style="font-weight: bold; font-size: 1.05em; margin-top:0; color: var(--text-color); padding-right: 60px;">Q5. 건축물의 높이 및 층수 산정 시 적용되는 사항으로 옳지 아니한 설명을 고르시오.</p>
+                        <div class="quiz-opt-grid" style="display: grid; grid-template-columns: 1fr; gap: 8px; margin: 12px 0;">
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-5', this, '옥상부분의 수평투영면적의 합계가 해당 건축물의 건축면적의 1/8 이상인 경우 그 부분의 높이가 12m를 넘는 부분만 높이에 산입한다.')" style="text-align: left; padding: 10px;">원칙적으로 건축물의 높이는 지표면으로부터 해당 건축물 상단까지의 높이로 한다.</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-5', this, '옥상부분의 수평투영면적의 합계가 해당 건축물의 건축면적의 1/8 이상인 경우 그 부분의 높이가 12m를 넘는 부분만 높이에 산입한다.')" style="text-align: left; padding: 10px;">건축물의 높이에 옥상돌출물(지붕 마루장식·굴뚝·방화벽)은 산입하지 않는다.</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-5', this, '옥상부분의 수평투영면적의 합계가 해당 건축물의 건축면적의 1/8 이상인 경우 그 부분의 높이가 12m를 넘는 부분만 높이에 산입한다.')" style="text-align: left; padding: 10px;">옥상부분의 수평투영면적의 합계가 해당 건축물의 건축면적의 1/8 이상인 경우 그 부분의 높이가 12m를 넘는 부분만 높이에 산입한다.</button>
+                            <button class="font-btn opt-btn" onclick="checkAnswerByText('ch112-5', this, '옥상부분의 수평투영면적의 합계가 해당 건축물의 건축면적의 1/8 이상인 경우 그 부분의 높이가 12m를 넘는 부분만 높이에 산입한다.')" style="text-align: left; padding: 10px;">층의 구분이 명확하지 아니한 건축물은 높이 4m마다 하나의 층으로 산정한다.</button>
+                        </div>
+                        <div id="q-result-ch112-5" style="margin-top: 10px; font-weight: bold; display: none;"></div>
+                        <div id="q-expl-ch112-5" class="note" style="margin-top: 10px; display: none;">
+                            <b>💡 해설:</b> 옥상부분(승강기탑, 계단탑, 옥탑 등)의 수평투영면적 합계가 건축면적의 1/8 <b>'이하'</b>인 경우에만 그 부분의 높이가 12m를 넘는 부분만 건축물 높이에 산입합니다. <b>'이상'</b>이라고 서술한 ③번이 옳지 않습니다. (참고로 1/8을 넘는 경우에는 그 부분의 높이 전부를 건축물 높이에 산입합니다.)
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- 모의고사 탭 -->
         <div id="tab-ch3" class="tab-content">
             <h1>소방안전관리자 2급 - <br>모의고사</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V5.8.9</span>
+                <span>만든이: 꾸누</span> | <span>버전: V5.9.0</span>
             </div>
 
             <div id="ch3-page-menu">
