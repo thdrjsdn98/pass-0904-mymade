@@ -660,6 +660,7 @@
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='18' font-size='18'>%E2%9C%8F%EF%B8%8F</text></svg>") 0 20, text;
         }
 
+        /* 🖊️ 단원 본문 펜 필기 래퍼 */
         .unit-body-wrap {
             position: relative;
             touch-action: pan-y;
@@ -672,33 +673,59 @@
             touch-action: none;
             z-index: 5;
         }
+
+        /* 🌟 다기능 필기 툴바 (펜, 형광펜, 색상 선택기) */
         .unit-pen-toolbar {
             position: absolute;
-            top: 2px;
-            right: 2px;
+            top: -10px;
+            right: 0;
             z-index: 6;
-            display: flex;
-            gap: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3px 8px;
+            box-shadow: var(--shadow-sm);
+            max-width: 95vw;
+            flex-wrap: wrap;
         }
-        .unit-pen-mode-btn,
-        .unit-pen-clear-btn {
+        .unit-pen-btn {
             font-size: 0.72em;
-            padding: 3px 9px;
-            border-radius: 12px;
+            padding: 2px 7px;
+            border-radius: 10px;
             border: 1px solid var(--border-color);
             background-color: var(--card-bg);
             color: var(--text-sub);
-            opacity: 0.75;
             cursor: pointer;
+            font-weight: 700;
         }
-        .unit-pen-mode-btn.erasing {
-            background-color: #fef3c7;
-            border-color: #f59e0b;
-            color: #92400e;
-            opacity: 1;
+        .unit-pen-btn.active {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
         }
-        .unit-pen-mode-btn:hover,
-        .unit-pen-clear-btn:hover { opacity: 1; }
+        .unit-pen-color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.1s;
+        }
+        .unit-pen-color-dot.active {
+            border-color: var(--text-color);
+            transform: scale(1.15);
+        }
+        .unit-pen-divider {
+            width: 1px;
+            height: 12px;
+            background: var(--border-color);
+            margin: 0 2px;
+        }
+
         .page-memo-title span::after {
             content: " (✏️ 펜으로만 필기 가능)";
             font-size: 0.85em;
@@ -879,11 +906,7 @@
 
         .box { background-color: var(--box-bg); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); margin: 16px 0; font-size: 0.96em; }
 
-        /* ============================================================
-           🌟 [방법 1] 완벽 적용: 가로 스크롤 완전 제거 및 모바일/태블릿 반응형 카드 변환
-           - overflow-x: visible 로 스크롤러 자체를 파괴하여 브라우저의 펜 가로팬 제스처 방지
-           - 화면 폭에 맞춰 셀들이 자동 래핑되거나 블록 카드로 전환
-           ============================================================ */
+        /* 표 반응형 카드 스타일 (가로 스크롤 없음) */
         .table-wrapper { 
             width: 100% !important; 
             overflow-x: visible !important; 
@@ -915,7 +938,6 @@
             font-weight: 700; 
         }
 
-        /* 📱 좁은 화면/태블릿 세로 모드: 표를 카드(블록)형태로 재배치 */
         @media (max-width: 650px) {
             .table, .table tbody, .table tr, .table td, .table th {
                 display: block !important;
@@ -923,7 +945,7 @@
                 box-sizing: border-box !important;
             }
             .table thead {
-                display: none !important; /* 상단 고정 헤더 숨김 */
+                display: none !important;
             }
             .table tr {
                 margin-bottom: 12px;
