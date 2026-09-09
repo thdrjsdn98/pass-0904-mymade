@@ -277,13 +277,13 @@ var currentSubPage = 0;
             var toggleBtn = document.createElement('button');
             toggleBtn.innerText = '🐛';
             toggleBtn.style.cssText =
-                'position:fixed;left:8px;bottom:8px;z-index:100000;width:36px;height:36px;' +
+                'position:fixed;left:20px;bottom:74px;z-index:100000;width:36px;height:36px;' +
                 'border-radius:50%;border:1px solid #999;background:#fff;opacity:0.55;font-size:16px;';
             document.body.appendChild(toggleBtn);
 
             var panel = document.createElement('div');
             panel.style.cssText =
-                'position:fixed;left:8px;right:8px;bottom:52px;z-index:100000;max-height:45vh;' +
+                'position:fixed;left:8px;right:8px;bottom:118px;z-index:100000;max-height:45vh;' +
                 'background:rgba(0,0,0,0.9);border-radius:8px;display:none;';
             document.body.appendChild(panel);
 
