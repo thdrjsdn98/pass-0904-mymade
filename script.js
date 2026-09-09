@@ -37,6 +37,7 @@ var currentSubPage = 0;
             setupMemorizeClickEvents();
             setupPenOnlyMemoInputs();
             setupPenAnnotationOverlays();
+            disablePenScrollGlobally();
             updateProgress();
             calculateDDay();
             renderHourlyBibleQuote();
@@ -259,6 +260,29 @@ var currentSubPage = 0;
 
         function isMemoTextarea(el) {
             return !!(el && el.classList && el.classList.contains('page-memo-textarea'));
+        }
+
+        // ============================================================
+        // 🖊️ 펜으로는 화면(표, 본문, 목록 등 어디서든) 스크롤이 절대 되지 않도록 전역 차단
+        // 손가락 스크롤에는 영향 없음. 표(가로 스크롤 테이블) 포함 모든 영역 대상.
+        // ============================================================
+        function disablePenScrollGlobally() {
+            if (disablePenScrollGlobally._bound) return;
+            disablePenScrollGlobally._bound = true;
+
+            document.addEventListener('pointermove', function(e) {
+                if (e.pointerType === 'pen') {
+                    e.preventDefault();
+                }
+            }, { capture: true, passive: false });
+
+            // 사파리 등 일부 브라우저의 스타일러스 호환 처리
+            document.addEventListener('touchmove', function(e) {
+                var t = e.touches && e.touches[0];
+                if (t && t.touchType === 'stylus') {
+                    e.preventDefault();
+                }
+            }, { capture: true, passive: false });
         }
 
         function setupPenOnlyMemoInputs() {
