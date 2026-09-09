@@ -71,11 +71,11 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
-            padding: 14px;
+            padding: 12px 14px;
             box-shadow: var(--shadow-sm);
         }
 
@@ -85,10 +85,10 @@
             align-items: center;
             cursor: pointer;
             user-select: none;
-            padding-bottom: 4px;
+            padding-bottom: 2px;
         }
         .panel-toggle-title {
-            font-size: 0.95em;
+            font-size: 0.88em;
             font-weight: 800;
             color: var(--text-color);
             display: flex;
@@ -96,7 +96,7 @@
             gap: 6px;
         }
         .panel-toggle-btn {
-            font-size: 0.8em;
+            font-size: 0.75em;
             font-weight: 700;
             color: var(--primary);
             background: none;
@@ -583,7 +583,9 @@
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -1060,16 +1062,12 @@
 }
 .sub-nav-num-badge {
     flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: #ffffff;
-    font-size: 0.75em;
+    min-width: 24px;
+    text-align: right;
+    color: var(--text-sub);
+    font-size: 0.85em;
     font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-variant-numeric: tabular-nums;
 }
 .sub-nav-icon {
     flex-shrink: 0;
@@ -1098,4 +1096,55 @@
     .table tr:nth-child(even) {
         background: var(--box-bg) !important;
     }
+}
+
+/* 📑 파트 선택 카드 - PART 라벨 + 부제 위계 */
+.sub-nav-card.part-card > span:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+.part-card-label {
+    font-size: 0.72em;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: 0.04em;
+}
+.part-card-subtitle {
+    font-size: 1em;
+    font-weight: 700;
+    color: var(--text-color);
+    white-space: normal;
+    line-height: 1.35;
+}
+.part-card-dot {
+    color: var(--text-sub);
+    font-weight: 400;
+    margin: 0 3px;
+}
+
+/* 📖 본문 제목(h2) - 번호/제목/부제 위계 구조 */
+h2.content-h2-structured {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.content-h2-num {
+    font-size: 0.65em;
+    font-weight: 800;
+    color: var(--text-sub);
+    letter-spacing: 0.06em;
+}
+.content-h2-title {
+    font-size: 1.05em;
+    font-weight: 800;
+    color: var(--primary);
+}
+.content-h2-sub {
+    font-size: 0.78em;
+    font-weight: 600;
+    color: var(--text-sub);
 }

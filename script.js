@@ -38,6 +38,7 @@ var currentSubPage = 0;
             setupPenScrollGuard();
             setupPenDebugPanel();
             enhanceSubNavCards();
+            enhancePartSelectCards();
             updateProgress();
             calculateDDay();
             renderHourlyBibleQuote();
@@ -1050,6 +1051,7 @@ var currentSubPage = 0;
                 setupPenOnlyMemoInputs();
                 setupPenAnnotationOverlays();
                 enhanceSubNavCards();
+                enhanceContentHeadings();
 
                 return true;
             } catch (err) {
@@ -1390,6 +1392,7 @@ var currentSubPage = 0;
                 setupMemorizeClickEvents();
                 setupPenOnlyMemoInputs();
                 setupPenAnnotationOverlays();
+                enhanceContentHeadings();
 
                 return true;
             } catch (err) {
@@ -2296,11 +2299,63 @@ function enhanceSubNavCards() {
         var m = text.match(/^\s*(\d+)\.\s*(.*)$/);
         if (!m) return;
         card.setAttribute('data-enhanced', '1');
-        var num = m[1];
+        var num = m[1].length < 2 ? ('0' + m[1]) : m[1];
         var title = m[2];
         span.innerHTML =
             '<span class="sub-nav-num-badge">' + num + '</span>' +
             '<span class="sub-nav-icon">📘</span>' +
             '<span class="sub-nav-title-text">' + title + '</span>';
+    });
+}
+
+/* ============================================================
+   📑 파트 선택 카드 - PART 라벨 + 부제 자동 구조화
+   ============================================================ */
+function enhancePartSelectCards() {
+    document.querySelectorAll('.sub-nav-card').forEach(function(card) {
+        if (card.getAttribute('data-part-enhanced') === '1') return;
+        var span = card.querySelector('span');
+        if (!span) return;
+        var text = span.textContent || '';
+        var m = text.match(/^\s*Part\s*([0-9]+(?:-[0-9]+)?)\.\s*(.+?)(?:\s*\(([^)]+)\))?\s*$/);
+        if (!m) return;
+        card.setAttribute('data-part-enhanced', '1');
+        card.classList.add('part-card');
+        var partNum = m[1];
+        var title = m[2].trim();
+        var extra = m[3] ? m[3].trim() : '';
+        var subtitleHtml = extra
+            ? title + '<span class="part-card-dot">·</span>' + extra
+            : title;
+        span.innerHTML =
+            '<span class="part-card-label">PART ' + partNum + '</span>' +
+            '<span class="part-card-subtitle">' + subtitleHtml + '</span>';
+    });
+}
+
+/* ============================================================
+   📖 본문 제목(h2) - 번호/제목/부제 구조화
+   ============================================================ */
+function enhanceContentHeadings() {
+    document.querySelectorAll('.sub-page h2').forEach(function(h2) {
+        if (h2.getAttribute('data-enhanced') === '1') return;
+        var text = h2.textContent || '';
+        var m = text.match(/^\s*(\d+)\.\s*(.+?)\s*(?:[\[\(]([^\]\)]+)[\]\)])?\s*$/);
+        if (!m) return;
+        h2.setAttribute('data-enhanced', '1');
+        var num = m[1].length < 2 ? ('0' + m[1]) : m[1];
+        var title = m[2].trim();
+        var suffix = m[3] ? m[3].trim() : '';
+        if (suffix.indexOf('/') !== -1) {
+            suffix = suffix.split('/').join(' · ');
+        }
+        var html =
+            '<span class="content-h2-num">' + num + '</span>' +
+            '<span class="content-h2-title">' + title + '</span>';
+        if (suffix) {
+            html += '<span class="content-h2-sub">' + suffix + '</span>';
+        }
+        h2.innerHTML = html;
+        h2.classList.add('content-h2-structured');
     });
 }
