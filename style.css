@@ -538,7 +538,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 8px;
             padding: 8px 12px;
             background-color: var(--box-bg);
             border-radius: var(--radius-md);
@@ -576,6 +576,66 @@
             border-radius: 20px;
             border: 1px solid var(--border-color);
             display: inline-block;
+        }
+
+        /* 🌟 단원 목록 밑 라운드 알약형 필기 툴바 컨테이너 */
+        .unit-pen-toolbar-row {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .unit-pen-toolbar-row::-webkit-scrollbar { display: none; }
+
+        .unit-pen-toolbar {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4px 10px;
+            box-shadow: var(--shadow-sm);
+            white-space: nowrap;
+        }
+        .unit-pen-btn {
+            font-size: 0.76em;
+            padding: 3px 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-sub);
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.1s ease;
+        }
+        .unit-pen-btn.active {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .unit-pen-color-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.1s;
+        }
+        .unit-pen-color-dot.active {
+            border-color: var(--text-color);
+            transform: scale(1.2);
+        }
+        .unit-pen-divider {
+            width: 1px;
+            height: 14px;
+            background: var(--border-color);
+            margin: 0 3px;
         }
 
         .quiz-section {
@@ -666,7 +726,6 @@
             touch-action: pan-y;
         }
         
-        /* 🌟 형광펜 아래 글씨 투과를 위한 mix-blend-mode 추가 */
         .unit-pen-canvas {
             position: absolute;
             top: 0;
@@ -675,58 +734,6 @@
             touch-action: none;
             z-index: 5;
             mix-blend-mode: multiply;
-        }
-
-        /* 🌟 다기능 필기 툴바 (펜, 형광펜, 색상 선택기) */
-        .unit-pen-toolbar {
-            position: absolute;
-            top: -10px;
-            right: 0;
-            z-index: 6;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 3px 8px;
-            box-shadow: var(--shadow-sm);
-            max-width: 95vw;
-            flex-wrap: wrap;
-        }
-        .unit-pen-btn {
-            font-size: 0.72em;
-            padding: 2px 7px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            background-color: var(--card-bg);
-            color: var(--text-sub);
-            cursor: pointer;
-            font-weight: 700;
-        }
-        .unit-pen-btn.active {
-            background-color: var(--primary-light);
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-        .unit-pen-color-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            cursor: pointer;
-            display: inline-block;
-            transition: transform 0.1s;
-        }
-        .unit-pen-color-dot.active {
-            border-color: var(--text-color);
-            transform: scale(1.15);
-        }
-        .unit-pen-divider {
-            width: 1px;
-            height: 12px;
-            background: var(--border-color);
-            margin: 0 2px;
         }
 
         .page-memo-title span::after {
@@ -809,7 +816,7 @@
         }
 
         h1 { font-size: 1.3em; color: var(--text-color); border-bottom: 2px solid var(--primary); padding-bottom: 8px; margin-top: 6px; }
-        h2 { font-size: 1.1em; color: var(--primary); background: var(--primary-light); padding: 10px 14px; border-left: 4px solid var(--primary); border-radius: var(--radius-sm); margin-top: 14px; }
+        h2 { font-size: 1.1em; color: var(--primary); background: var(--primary-light); padding: 10px 14px; border-left: 4px solid var(--primary); border-radius: var(--radius-sm); margin-top: 6px; }
         ul { padding-left: 20px; margin-bottom: 16px; }
         li { margin-bottom: 8px; font-size: 0.98em; }
         
@@ -909,7 +916,6 @@
 
         .box { background-color: var(--box-bg); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); margin: 16px 0; font-size: 0.96em; }
 
-        /* 표 반응형 카드 스타일 (가로 스크롤 없음) */
         .table-wrapper { 
             width: 100% !important; 
             overflow-x: visible !important; 
