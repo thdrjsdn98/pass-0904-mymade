@@ -336,6 +336,7 @@ var currentSubPage = 0;
                 // 펜의 물리적 지우개 버튼(있는 경우) 또는 화면의 "지우개 모드" 토글 중 하나라도 해당되면 지우개로 동작
                 strokeIsEraser = getEraserMode() || (e.buttons & 32) === 32 || e.button === 5;
                 try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+                wrap.style.touchAction = 'none'; // 필기/지우개 중에는 펜으로 상하좌우 스크롤/이동 되지 않도록 차단
                 var pos = getPos(e);
                 ctx.globalCompositeOperation = strokeIsEraser ? 'destination-out' : 'source-over';
                 ctx.lineWidth = strokeIsEraser ? 24 : (1.2 + (e.pressure || 0.5) * 2.5);
@@ -359,6 +360,7 @@ var currentSubPage = 0;
                 if (!drawing || e.pointerType !== 'pen') return;
                 drawing = false;
                 ctx.globalCompositeOperation = 'source-over';
+                wrap.style.touchAction = ''; // 필기가 끝나면 다시 정상 스크롤 가능하도록 복구
                 try { wrap.releasePointerCapture(e.pointerId); } catch (err) {}
                 scheduleSave();
             }
