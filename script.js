@@ -54,6 +54,15 @@ var currentSubPage = 0;
             }
         });
 
+        function toggleChangelog() {
+            var panel = document.getElementById('changelog-panel');
+            var btn = document.getElementById('changelog-toggle-btn');
+            if (!panel) return;
+            var isHidden = (panel.style.display === 'none' || panel.style.display === '');
+            panel.style.display = isHidden ? 'block' : 'none';
+            if (btn) btn.innerText = isHidden ? '📋 업데이트 내역 닫기' : '📋 업데이트 내역 보기';
+        }
+
         function toggleTopPanel() {
             var content = document.getElementById("collapsible-control-content");
             var btnText = document.getElementById("panel-toggle-btn-text");

@@ -143,7 +143,57 @@
                 <div class="cover-info">
                     <p>만든이: 꾸누</p>
                     <p>목표 시험일: 2026.10.02</p>
-                    <p>버전: V5.9.2 (로딩 실패 시 다시시도 버튼 추가)</p>
+                    <p>버전: V5.9.3 (업데이트 내역 탭 신설)</p>
+                </div>
+                <div style="margin-top: 14px;">
+                    <button class="font-btn" id="changelog-toggle-btn" onclick="toggleChangelog()" style="font-size: 0.85em; padding: 8px 16px;">📋 업데이트 내역 보기</button>
+                </div>
+                <div id="changelog-panel" class="box" style="display: none; margin-top: 14px; text-align: left; max-width: 480px; margin-left: auto; margin-right: auto;">
+                    <div style="font-weight: 700; margin-bottom: 10px; color: var(--primary);">📋 업데이트 내역 (V5.x)</div>
+
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-weight: 700; font-size: 0.95em;">V5.9.3 <span style="font-weight:400; color:var(--text-sub); font-size:0.85em;">- 업데이트 내역 탭 신설</span></div>
+                        <ul style="margin: 4px 0 0 0; padding-left: 18px; font-size: 0.88em; color: var(--text-sub);">
+                            <li>표지에서 바로 볼 수 있는 업데이트 내역 패널 추가</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-weight: 700; font-size: 0.95em;">V5.9.2 <span style="font-weight:400; color:var(--text-sub); font-size:0.85em;">- 로딩 안정성 개선</span></div>
+                        <ul style="margin: 4px 0 0 0; padding-left: 18px; font-size: 0.88em; color: var(--text-sub);">
+                            <li>이론·모의고사·복습예제 로딩 실패 시 "🔄 다시 시도" 버튼 즉시 표출</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-weight: 700; font-size: 0.95em;">V5.9.1 <span style="font-weight:400; color:var(--text-sub); font-size:0.85em;">- 로딩 속도 최적화</span></div>
+                        <ul style="margin: 4px 0 0 0; padding-left: 18px; font-size: 0.88em; color: var(--text-sub);">
+                            <li>복습예제(Part1-1, 1-2)·모의고사(01~04회차) 전체를 클릭 시에만 불러오도록 전환</li>
+                            <li>초기 로딩 용량 대폭 감소</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-weight: 700; font-size: 0.95em;">V5.9.0 <span style="font-weight:400; color:var(--text-sub); font-size:0.85em;">- 복습예제 확장</span></div>
+                        <ul style="margin: 4px 0 0 0; padding-left: 18px; font-size: 0.88em; color: var(--text-sub);">
+                            <li>Ⅰ.복습예제에 "Part1-2. 건축관계법령" 5문항 신규 추가</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <div style="font-weight: 700; font-size: 0.95em;">V5.8.9 <span style="font-weight:400; color:var(--text-sub); font-size:0.85em;">- 복습예제 보강</span></div>
+                        <ul style="margin: 4px 0 0 0; padding-left: 18px; font-size: 0.88em; color: var(--text-sub);">
+                            <li>Ⅰ.복습예제 Part1-1(소방관계법령) 4문항 → 10문항으로 전체 보강</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 0;">
+                        <div style="font-weight: 700; font-size: 0.95em;">V5.8.7 ~ V5.8.8 <span style="font-weight:400; color:var(--text-sub); font-size:0.85em;">- 초기 최적화</span></div>
+                        <ul style="margin: 4px 0 0 0; padding-left: 18px; font-size: 0.88em; color: var(--text-sub);">
+                            <li>모의고사 03·04회차, 랜덤 문제은행(199문항), 명언 데이터를 별도 파일로 분리</li>
+                            <li>2-1챕터 10단원 "자위소방대 구성(TYPE별)" 원본 교재 대조 후 보강</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -236,7 +286,7 @@
         <div id="tab-ch1-1" class="tab-content">
             <h1>소방안전관리자 2급 - <br>I. 복습예제</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V5.9.2</span>
+                <span>만든이: 꾸누</span> | <span>버전: V5.9.3</span>
             </div>
 
             <div id="ch1-1-main-menu">
@@ -276,7 +326,7 @@
         <div id="tab-ch3" class="tab-content">
             <h1>소방안전관리자 2급 - <br>모의고사</h1>
             <div style="text-align: right; font-size: 0.8em; color: var(--text-sub); margin-top: 4px; margin-bottom: 12px;">
-                <span>만든이: 꾸누</span> | <span>버전: V5.9.2</span>
+                <span>만든이: 꾸누</span> | <span>버전: V5.9.3</span>
             </div>
 
             <div id="ch3-page-menu">
