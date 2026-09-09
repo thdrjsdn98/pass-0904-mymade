@@ -440,7 +440,6 @@
             color: var(--primary);
         }
 
-        /* 📑 탭 메뉴 일자형 모드 */
         body.flat-tab-menu .tab-dropdown-toggle { display: none; }
         body.flat-tab-menu .tab-dropdown-list {
             display: flex !important;
@@ -661,7 +660,6 @@
             cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><text y='18' font-size='18'>%E2%9C%8F%EF%B8%8F</text></svg>") 0 20, text;
         }
 
-        /* 🖊️ 단원 본문 펜 필기 오버레이 및 제스처 억제 */
         .unit-body-wrap {
             position: relative;
             touch-action: pan-y;
@@ -880,27 +878,78 @@
         }
 
         .box { background-color: var(--box-bg); border: 1px solid var(--border-color); padding: 16px; border-radius: var(--radius-md); margin: 16px 0; font-size: 0.96em; }
-        
-        /* 🌟 표 영역 터치 제스처 보완: 손가락 제스처는 가로/세로 이동을 허용하되, S펜 필기 모드에서는 스크롤 충돌을 막음 */
+
+        /* ============================================================
+           🌟 [방법 1] 완벽 적용: 가로 스크롤 완전 제거 및 모바일/태블릿 반응형 카드 변환
+           - overflow-x: visible 로 스크롤러 자체를 파괴하여 브라우저의 펜 가로팬 제스처 방지
+           - 화면 폭에 맞춰 셀들이 자동 래핑되거나 블록 카드로 전환
+           ============================================================ */
         .table-wrapper { 
-            width: 100%; 
-            overflow-x: auto; 
-            -webkit-overflow-scrolling: touch; 
+            width: 100% !important; 
+            overflow-x: visible !important; 
+            -webkit-overflow-scrolling: auto !important; 
             margin: 14px 0; 
-            border-radius: var(--radius-sm); 
+            border-radius: var(--radius-md); 
             border: 1px solid var(--border-color); 
-            touch-action: pan-x pan-y;
+            touch-action: pan-y !important;
+            background: var(--card-bg);
         }
 
-        /* 🌟 펜 드로잉 중 표 스크롤 잠금 클래스 */
-        .unit-body-wrap.pen-drawing-active .table-wrapper {
-            overflow-x: hidden !important;
-            touch-action: none !important;
+        .table { 
+            width: 100% !important; 
+            min-width: unset !important; 
+            border-collapse: collapse; 
+            background: transparent; 
         }
 
-        .table { width: 100%; min-width: 480px; border-collapse: collapse; background: var(--card-bg); }
-        .table th, .table td { border: 1px solid var(--border-color); padding: 11px; text-align: left; font-size: 0.9em; }
-        .table th { background-color: var(--box-bg); color: var(--text-color); font-weight: 700; }
+        .table th, .table td { 
+            border: 1px solid var(--border-color); 
+            padding: 10px 12px; 
+            text-align: left; 
+            font-size: 0.9em; 
+            word-break: keep-all;
+        }
+        .table th { 
+            background-color: var(--box-bg); 
+            color: var(--text-color); 
+            font-weight: 700; 
+        }
+
+        /* 📱 좁은 화면/태블릿 세로 모드: 표를 카드(블록)형태로 재배치 */
+        @media (max-width: 650px) {
+            .table, .table tbody, .table tr, .table td, .table th {
+                display: block !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .table thead {
+                display: none !important; /* 상단 고정 헤더 숨김 */
+            }
+            .table tr {
+                margin-bottom: 12px;
+                border: 1px solid var(--border-color);
+                border-radius: var(--radius-sm);
+                background: var(--card-bg);
+                overflow: hidden;
+            }
+            .table tr:last-child {
+                margin-bottom: 0;
+            }
+            .table td, .table th {
+                border: none !important;
+                border-bottom: 1px solid var(--border-color) !important;
+                padding: 10px 12px !important;
+            }
+            .table td:last-child {
+                border-bottom: none !important;
+            }
+            .table th {
+                background-color: var(--primary-light) !important;
+                color: var(--primary) !important;
+                font-weight: 800;
+            }
+        }
+
         .note { background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; color: #991b1b; margin: 14px 0; border-radius: 6px; font-size: 0.9em; }
         body.dark-mode .note { background-color: #7f1d1d !important; color: #fee2e2 !important; border-left-color: #f87171; }
 
@@ -930,7 +979,6 @@
             100% { background-color: transparent; }
         }
 
-        /* 오답노트 전용 스타일 */
         .wrong-note-card {
             transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
@@ -938,7 +986,6 @@
             box-shadow: var(--shadow-md);
         }
 
-        /* 뒤로가기 종료 확인 팝업 */
         .exit-confirm-overlay {
             position: fixed;
             top: 0; left: 0;

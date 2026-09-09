@@ -395,39 +395,17 @@ var currentSubPage = 0;
 
             var guardActive = false;
             var lockedWindowX = 0, lockedWindowY = 0;
-            var lockedEls = [];
             var releaseTimer = null;
-
-            function isScrollable(el) {
-                if (!el || el.nodeType !== 1) return false;
-                var style = window.getComputedStyle(el);
-                var canY = (style.overflowY === 'auto' || style.overflowY === 'scroll') && el.scrollHeight > el.clientHeight;
-                var canX = (style.overflowX === 'auto' || style.overflowX === 'scroll') && el.scrollWidth > el.clientWidth;
-                return canY || canX;
-            }
-
-            function collectScrollables(target) {
-                lockedEls = [];
-                var node = target;
-                while (node && node !== document.documentElement) {
-                    if (isScrollable(node)) {
-                        lockedEls.push({ el: node, top: node.scrollTop, left: node.scrollLeft });
-                    }
-                    node = node.parentElement;
-                }
-            }
 
             function startGuard(e) {
                 clearTimeout(releaseTimer);
                 guardActive = true;
                 lockedWindowX = window.scrollX;
                 lockedWindowY = window.scrollY;
-                collectScrollables(e.target);
             }
 
             function stopGuardNow() {
                 guardActive = false;
-                lockedEls = [];
                 clearTimeout(guardWatchdog);
                 clearTimeout(releaseTimer);
             }
@@ -442,7 +420,6 @@ var currentSubPage = 0;
                 clearTimeout(guardWatchdog);
                 guardWatchdog = setTimeout(function() {
                     if (guardActive) {
-                        if (penDebugLogFn) penDebugLogFn('⏱️ 워치독: 스크롤 가드 강제 해제');
                         stopGuardNow();
                     }
                 }, 4000);
@@ -453,17 +430,7 @@ var currentSubPage = 0;
                 var target = e.target;
                 if (target === document) {
                     if (window.scrollX !== lockedWindowX || window.scrollY !== lockedWindowY) {
-                        if (penDebugLogFn) penDebugLogFn('🔁 창 스크롤 되돌림 (' + Math.round(window.scrollY) + ' -> ' + lockedWindowY + ')');
                         window.scrollTo(lockedWindowX, lockedWindowY);
-                    }
-                    return;
-                }
-                for (var i = 0; i < lockedEls.length; i++) {
-                    if (lockedEls[i].el === target) {
-                        if (penDebugLogFn) penDebugLogFn('🔁 요소 스크롤 되돌림');
-                        target.scrollTop = lockedEls[i].top;
-                        target.scrollLeft = lockedEls[i].left;
-                        return;
                     }
                 }
             }, true);
@@ -474,15 +441,6 @@ var currentSubPage = 0;
             document.addEventListener('pointermove', function(e) {
                 if (e.pointerType === 'pen') {
                     if (!guardActive) { startGuard(e); }
-                    else {
-                        var node = e.target;
-                        while (node && node !== document.documentElement) {
-                            if (isScrollable(node) && !lockedEls.some(function(o) { return o.el === node; })) {
-                                lockedEls.push({ el: node, top: node.scrollTop, left: node.scrollLeft });
-                            }
-                            node = node.parentElement;
-                        }
-                    }
                     armWatchdog();
                 }
             }, true);
@@ -490,10 +448,7 @@ var currentSubPage = 0;
                 if (e.pointerType === 'pen') scheduleRelease(200);
             }, true);
             document.addEventListener('pointercancel', function(e) {
-                if (e.pointerType === 'pen') {
-                    if (penDebugLogFn) penDebugLogFn('⚠️ pointercancel 발생 - 가드 유지하며 유예 해제');
-                    scheduleRelease(700);
-                }
+                if (e.pointerType === 'pen') scheduleRelease(500);
             }, true);
             document.addEventListener('touchend', function() {
                 if (guardActive) scheduleRelease(150);
@@ -540,16 +495,10 @@ var currentSubPage = 0;
                 if (e.pointerType === 'pen') scheduleUnlock(200);
             }, true);
             document.addEventListener('pointercancel', function(e) {
-                if (e.pointerType === 'pen') scheduleUnlock(700);
+                if (e.pointerType === 'pen') scheduleUnlock(500);
             }, true);
             document.addEventListener('touchend', function() {
                 if (penLocked) scheduleUnlock(150);
-            }, true);
-            document.addEventListener('pointerdown', function(e) {
-                if (e.pointerType === 'pen') {
-                    clearTimeout(disablePenScrollGlobally._watchdog);
-                    disablePenScrollGlobally._watchdog = setTimeout(unlockScrollNow, 4000);
-                }
             }, true);
 
             document.addEventListener('touchmove', function(e) {
@@ -591,9 +540,6 @@ var currentSubPage = 0;
             }, { passive: false, capture: true });
         }
 
-        // ============================================================
-        // 🖊️ 단원 본문 위에 S펜으로 직접 필기하는 기능
-        // ============================================================
         var PEN_INK_COLOR = '#2b6cb0';
 
         function createPenCanvasForPage(page) {
@@ -716,16 +662,12 @@ var currentSubPage = 0;
                 return [e.clientX - rect.left, e.clientY - rect.top];
             }
 
-            // 🌟 펜 필기 시작: 표 내부에서 터치되어도 표 스크롤 제스처로 넘어가지 않도록 방어
             wrap.addEventListener('pointerdown', function(e) {
                 if (e.pointerType !== 'pen') return;
                 if (e.target && e.target.closest && (e.target.closest('.unit-pen-clear-btn') || e.target.closest('.unit-pen-mode-btn'))) return;
                 
                 e.preventDefault();
                 e.stopPropagation();
-
-                // 필기 진행 중 표 스크롤 잠금 활성화
-                wrap.classList.add('pen-drawing-active');
 
                 var strokeIsEraser = isEraserMode || (e.buttons & 32) === 32 || e.button === 5;
                 var lineWidth = strokeIsEraser ? 24 : (1.2 + (e.pressure || 0.5) * 2.5);
@@ -752,7 +694,6 @@ var currentSubPage = 0;
 
             function endStroke(e) {
                 if (!currentStroke || e.pointerType !== 'pen') return;
-                wrap.classList.remove('pen-drawing-active');
                 ctx.globalCompositeOperation = 'source-over';
                 try { wrap.releasePointerCapture(e.pointerId); } catch (err) {}
                 if (currentStroke.pts.length >= 2) {
@@ -833,9 +774,7 @@ var currentSubPage = 0;
                     await writable.close();
                     alert("💾 백업 파일이 저장되었습니다! (소방관계법령 + 건축관계법령 + 소방훈련·계획 전체 포함)");
                 } catch (err) {
-                    if (err && err.name === 'AbortError') {
-                        return;
-                    }
+                    if (err && err.name === 'AbortError') return;
                     alert("❌ 백업 저장 중 오류가 발생했습니다.");
                 }
                 return;
