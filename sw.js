@@ -1,6 +1,6 @@
 // 간단한 오프라인 캐시용 서비스워커 (네트워크 우선 방식)
 // 버전을 올리면(CACHE_NAME 변경) 예전 캐시를 지우고 새 파일로 갱신됩니다.
-const CACHE_NAME = 'sobang2gup-cache-v7';
+const CACHE_NAME = 'sobang2gup-cache-v8';
 const FILES_TO_CACHE = [
   './',
   './index.html',
@@ -15,6 +15,10 @@ const FILES_TO_CACHE = [
   './parts/part2-1.html',
   './parts/part3-1.html',
   './parts/part3-2.html',
+  './parts/part3-3.html',
+  './parts/part3-4.html',
+  './parts/review1-1.html',
+  './parts/review1-2.html',
   './parts/questionPool.json',
   './parts/bibleQuotes.json'
 ];

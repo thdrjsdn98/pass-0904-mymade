@@ -1303,14 +1303,38 @@ var currentSubPage = 0;
         }
 
         var ch11PartContainerIds = { 'part1-1': 'ch1-1-part1-1-container', 'part1-2': 'ch1-1-part1-2-container' };
+        var ch11WrapIdMap = { 'part1-1': 'ch1-1-questions-wrap', 'part1-2': 'ch1-1-2-questions-wrap' };
+        var ch11PartFileMap = { 'part1-1': 'parts/review1-1.html', 'part1-2': 'parts/review1-2.html' };
+        var loadedCh11Parts = {};
 
-        function showCh11Part(partName) {
+        async function loadCh11PartIfNeeded(partName) {
+            if (!ch11PartFileMap[partName] || loadedCh11Parts[partName]) return true;
+
+            var wrap = document.getElementById(ch11WrapIdMap[partName]);
+            if (!wrap) return false;
+            wrap.innerHTML = '<div style="text-align:center; padding:60px 0; color:var(--text-sub);">📦 불러오는 중...</div>';
+
+            try {
+                var resp = await fetch(ch11PartFileMap[partName]);
+                if (!resp.ok) throw new Error('응답 실패');
+                var html = await resp.text();
+                wrap.innerHTML = html;
+                loadedCh11Parts[partName] = true;
+                return true;
+            } catch (err) {
+                wrap.innerHTML = '<div style="text-align:center; padding:60px 20px; color:#dc2626;">⚠️ 콘텐츠를 불러오지 못했습니다.<br>인터넷 연결을 확인하고 다시 시도해주세요.</div>';
+                return false;
+            }
+        }
+
+        async function showCh11Part(partName) {
             document.getElementById("ch1-1-main-menu").style.display = "none";
             for (var key in ch11PartContainerIds) {
                 var el = document.getElementById(ch11PartContainerIds[key]);
                 if (el) el.style.display = (key === partName) ? "block" : "none";
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
+            await loadCh11PartIfNeeded(partName);
         }
 
         function showCh11MainMenu() {
@@ -1324,8 +1348,10 @@ var currentSubPage = 0;
 
         var loadedCh3Parts = {};
         var ch3PartFileMap = {
-            3: 'parts/part3-1.html',
-            4: 'parts/part3-2.html'
+            1: 'parts/part3-1.html',
+            2: 'parts/part3-2.html',
+            3: 'parts/part3-3.html',
+            4: 'parts/part3-4.html'
         };
 
         async function loadCh3PartIfNeeded(pageNum) {
@@ -1368,9 +1394,7 @@ var currentSubPage = 0;
             }
             window.scrollTo({ top: 0, behavior: 'instant' });
 
-            if (pageNum === 3 || pageNum === 4) {
-                await loadCh3PartIfNeeded(pageNum);
-            }
+            await loadCh3PartIfNeeded(pageNum);
         }
 
         function showCh3Menu() {
