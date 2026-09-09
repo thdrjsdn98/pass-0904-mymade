@@ -265,16 +265,47 @@ var currentSubPage = 0;
         // ============================================================
         // 🖊️ 펜으로는 화면(표, 본문, 목록 등 어디서든) 스크롤이 절대 되지 않도록 전역 차단
         // 손가락 스크롤에는 영향 없음. 표(가로 스크롤 테이블) 포함 모든 영역 대상.
+        //
+        // (중요) 단순히 pointermove에서 preventDefault()만 호출하면 브라우저가
+        // touch-action 값에 따라 그 이벤트를 이미 "취소 불가능(non-cancelable)"으로
+        // 처리해버려 무시되는 경우가 많다. 그래서 펜이 눌리는 순간 문서 전체의
+        // touch-action을 'none'으로 바꿔서 스크롤/패닝 자체가 시작되지 못하게 막고,
+        // 펜을 떼면 즉시 원래대로 되돌린다.
         // ============================================================
         function disablePenScrollGlobally() {
             if (disablePenScrollGlobally._bound) return;
             disablePenScrollGlobally._bound = true;
 
+            var activePenId = null;
+
+            function lockScroll() {
+                document.documentElement.style.touchAction = 'none';
+                document.body.style.touchAction = 'none';
+            }
+            function unlockScroll() {
+                document.documentElement.style.touchAction = '';
+                document.body.style.touchAction = '';
+            }
+
+            document.addEventListener('pointerdown', function(e) {
+                if (e.pointerType !== 'pen') return;
+                activePenId = e.pointerId;
+                lockScroll();
+            }, true);
+
             document.addEventListener('pointermove', function(e) {
-                if (e.pointerType === 'pen') {
-                    e.preventDefault();
-                }
+                if (e.pointerType === 'pen') e.preventDefault();
             }, { capture: true, passive: false });
+
+            function releaseIfPen(e) {
+                if (e.pointerType !== 'pen') return;
+                if (activePenId !== null && e.pointerId !== activePenId) return;
+                activePenId = null;
+                unlockScroll();
+            }
+            document.addEventListener('pointerup', releaseIfPen, true);
+            document.addEventListener('pointercancel', releaseIfPen, true);
+            document.addEventListener('pointerleave', releaseIfPen, true);
 
             // 사파리 등 일부 브라우저의 스타일러스 호환 처리
             document.addEventListener('touchmove', function(e) {
