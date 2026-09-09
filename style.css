@@ -665,6 +665,8 @@
             position: relative;
             touch-action: pan-y;
         }
+        
+        /* 🌟 형광펜 아래 글씨 투과를 위한 mix-blend-mode 추가 */
         .unit-pen-canvas {
             position: absolute;
             top: 0;
@@ -672,6 +674,7 @@
             pointer-events: none;
             touch-action: none;
             z-index: 5;
+            mix-blend-mode: multiply;
         }
 
         /* 🌟 다기능 필기 툴바 (펜, 형광펜, 색상 선택기) */
