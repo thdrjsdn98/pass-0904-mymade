@@ -2303,7 +2303,7 @@ function enhanceSubNavCards() {
         var title = m[2];
         span.innerHTML =
             '<span class="sub-nav-num-badge">' + num + '</span>' +
-            '<span class="sub-nav-icon">📘</span>' +
+            '<span class="sub-nav-icon">' + pickUnitIcon(title) + '</span>' +
             '<span class="sub-nav-title-text">' + title + '</span>';
     });
 }
@@ -2358,4 +2358,28 @@ function enhanceContentHeadings() {
         h2.innerHTML = html;
         h2.classList.add('content-h2-structured');
     });
+}
+
+/* ============================================================
+   🎯 단원 제목 키워드 기반 아이콘 자동 선택
+   ============================================================ */
+function pickUnitIcon(title) {
+    var rules = [
+        [/법령|기준|규정|신고|벌칙|제정|허가|자격|계약/, "⚖️"],
+        [/안전관리|대상물|관리자|자위소방대|무창층/, "🛡️"],
+        [/계획|수립|예시|서류/, "📋"],
+        [/훈련|교육|실습/, "🎓"],
+        [/점검|설비|장치|기기|설치|시공/, "🛠️"],
+        [/화재|방화|피난|연소|발화|스프링클러/, "🔥"],
+        [/자기|자속|인덕턴스|자기장|코일|결합/, "🧲"],
+        [/교류|파형|주파수|위상|정현파|비정현파|고조파/, "🌊"],
+        [/전력|전력량|역률|와트/, "🔋"],
+        [/전달함수|라플라스|제어|블록선도|과도현상|시정수/, "🎛️"],
+        [/전압|전류|저항|옴|키르히호프|회로|휘스톤|배율기|분류기|전지|단자망|좌표법|대칭|콘덴서|커패시터/, "⚡"],
+        [/용어|정의|개념/, "📖"]
+    ];
+    for (var i = 0; i < rules.length; i++) {
+        if (rules[i][0].test(title)) return rules[i][1];
+    }
+    return "📘";
 }
